@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  ai-research-system:
+    build: .
+    container_name: ai-research-system
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      # Add Twilio credentials if needed
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - TWILIO_PHONE_NUMBER=${TWILIO_PHONE_NUMBER}
+    volumes:
+      # Optional: Mount a volume for cache persistence
+      - ./cache:/app/cache
+    # For production, consider using a named volume for better persistence
+    # volumes:
+    #  - ai-research-cache:/app/cache
+
+# For production, use named volumes
+# volumes:
+#  ai-research-cache:

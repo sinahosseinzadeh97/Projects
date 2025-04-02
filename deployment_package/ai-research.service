@@ -1,0 +1,25 @@
+[Unit]
+Description=AI Research System - Streamlit App
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=your_username
+Group=your_username
+WorkingDirectory=/path/to/app
+ExecStart=/path/to/app/venv/bin/streamlit run app.py --server.port=5000
+Restart=always
+RestartSec=10
+Environment="OPENAI_API_KEY=your_openai_api_key_here"
+# Add other environment variables if needed
+# Environment="TWILIO_ACCOUNT_SID=your_twilio_sid_here"
+# Environment="TWILIO_AUTH_TOKEN=your_twilio_token_here"
+# Environment="TWILIO_PHONE_NUMBER=your_twilio_phone_number_here"
+
+# Optional: Limit resources
+# CPUQuota=80%
+# MemoryLimit=2G
+
+[Install]
+WantedBy=multi-user.target
