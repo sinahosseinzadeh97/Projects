@@ -1,0 +1,115 @@
+The goal is to develop modular AI agents and workflows capable of extracting structured and unstructured information from the Internet based on a given input (e.g., a person’s name). These agents will function as intelligent mini-researchers, pulling targeted data points such as biographical facts, professions, related content (images, opinions, work history), etc.
+
+The project will start with small MVPs and evolve through testing and iteration to reach high-performance prototypes.
+🧠 Use Case Example
+
+Input: "Brad Pitt"
+Expected Output:
+
+    Date of Birth
+
+    Place of Birth
+
+    Profession(s)
+
+    Movies acted in
+
+    Reviews or opinions
+
+    Related images
+
+    Summarized content from multiple sources
+
+🧩 Functional Requirements
+1. Agent Input & Trigger
+
+    Accept a text input (e.g., a person’s name)
+
+    Trigger relevant workflows based on entity type
+
+2. Modular AI Agents
+
+Each AI agent should serve a specific function:
+
+    Fact Extractor Agent: Birth details, profession
+
+    Media Fetcher Agent: Image & video links
+
+    Content Aggregator Agent: Articles, reviews
+
+    Summarizer Agent: Condense long-form content
+
+    Source Validator Agent: Rank credibility of information
+
+3. External Integrations
+
+    Support testing with multiple APIs/frameworks:
+
+        LLM APIs: Perplexity, Gemini, OpenAI
+
+        Frameworks: LangChain, LlamaIndex
+
+        Data Validators: Pydantic or schema validation tools
+
+4. Output Format
+
+    Unified JSON structure per input
+
+    Each field must include:
+
+        value
+
+        source(s)
+
+        confidence score (if possible)
+
+Example:
+
+{
+  "name": "Brad Pitt",
+  "date_of_birth": {
+    "value": "December 18, 1963",
+    "source": "Wikipedia",
+    "confidence": 0.95
+  },
+  "profession": ["Actor", "Producer"],
+  "related_images": ["image_url_1", "image_url_2"]
+}
+
+🔁 Iterative Testing & Improvement
+Requirements:
+
+    Build, test, and document MVPs
+
+    Evaluate results across multiple APIs
+
+    Adjust prompt engineering or chain logic to improve relevance and accuracy
+
+    Use minimal GUI or CLI where applicable for input/output control
+
+⚙️ Non-Functional Requirements
+
+    Code must be modular and maintainable
+
+    Clear separation between logic, APIs, and config
+
+    Commented and documented code (for collaboration)
+
+    Performance optimized for 10–100 queries/hour
+
+👨‍💻 Developer Role Overview
+You Will:
+
+    Build proof-of-concept AI agents using Python
+
+    Experiment with multiple AI and search integrations
+
+    Iterate based on performance feedback
+
+    Work collaboratively with another developer (project owner)
+
+Requirements:
+
+    Intermediate+ Python proficiency
+
+    Strong interest or background in AI/ML/NL
