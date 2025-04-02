@@ -18,6 +18,53 @@ st.set_page_config(
     layout="wide"
 )
 
+# Custom CSS for improved styling
+st.markdown("""
+<style>
+    .main-title {
+        font-size: 3rem !important;
+        font-weight: 700 !important;
+        color: #1E88E5 !important;
+        margin-bottom: 1rem !important;
+        text-align: center;
+    }
+    .subtitle {
+        font-size: 1.2rem !important;
+        font-weight: 400 !important;
+        color: #424242 !important;
+        margin-bottom: 2rem !important;
+        text-align: center;
+    }
+    .stTextInput > div > div > input {
+        border-radius: 10px;
+        padding: 12px 15px;
+        font-size: 16px;
+        border: 2px solid #E0E0E0;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .stTextInput > div > div > input:focus {
+        border-color: #4CAF50;
+        box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+    }
+    .stTabs [data-baseweb="tab-list"] {
+        background-color: white;
+        border-radius: 10px;
+        padding: 5px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        gap: 1px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 5px;
+        padding: 8px 16px;
+        font-weight: 600;
+    }
+    .stTabs [aria-selected="true"] {
+        background-color: #E3F2FD;
+        color: #1E88E5;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # Initialize session state for the orchestrator
 if "orchestrator" not in st.session_state:
     st.session_state.orchestrator = AgentOrchestrator(
@@ -34,42 +81,109 @@ if "loading" not in st.session_state:
 if "entity_type" not in st.session_state:
     st.session_state.entity_type = "person"
 
+# Custom CSS for sidebar
+st.markdown("""
+<style>
+    .sidebar-title {
+        font-size: 1.5rem !important;
+        font-weight: 700 !important;
+        color: #1E88E5 !important;
+        margin-bottom: 1rem !important;
+    }
+    .sidebar-section {
+        background-color: #F5F5F5;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .sidebar-header {
+        font-weight: 600;
+        color: #424242;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #1E88E5;
+        padding-bottom: 5px;
+    }
+    .sidebar-text {
+        font-size: 0.9rem;
+        color: #616161;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # Sidebar
 with st.sidebar:
-    st.title("AI Research System")
-    st.write("A modular AI research system that extracts structured information about entities from the internet.")
+    st.markdown('<p class="sidebar-title">AI Research System</p>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-text">A modular AI research system that extracts structured information about entities from the internet.</div>', unsafe_allow_html=True)
     
     # Entity type selection
-    entity_type = st.radio("Entity Type", ["Person", "Company"], index=0)
+    st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-header">Entity Type</div>', unsafe_allow_html=True)
+    entity_type = st.radio("Select Type", ["Person", "Company"], index=0, label_visibility="collapsed")
     st.session_state.entity_type = entity_type.lower()
+    st.markdown('</div>', unsafe_allow_html=True)
     
     # Cache management
-    st.subheader("Cache Management")
+    st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-header">Cache Management</div>', unsafe_allow_html=True)
     if st.button("Clear Cache"):
         cache_manager.clear()
         st.success("Cache cleared!")
+    st.markdown('</div>', unsafe_allow_html=True)
     
     # About section
-    st.subheader("About")
-    st.write("""
+    st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-header">About</div>', unsafe_allow_html=True)
+    st.markdown("""
+    <div class="sidebar-text">
     This system uses AI agents to extract information about entities:
-    - **Fact Extractor**: Gets basic facts
-    - **Media Fetcher**: Finds related media
-    - **Content Aggregator**: Collects reviews and articles
-    - **Summarizer**: Creates concise summaries
-    """)
+    <ul>
+      <li><strong>Fact Extractor</strong>: Gets basic facts</li>
+      <li><strong>Media Fetcher</strong>: Finds related media</li>
+      <li><strong>Content Aggregator</strong>: Collects reviews and articles</li>
+      <li><strong>Summarizer</strong>: Creates concise summaries</li>
+    </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # Main content
-st.title("🔍 AI Entity Research")
-st.write("Enter a name to research information about a person or company")
+st.markdown('<h1 class="main-title">🔍 AI Entity Research</h1>', unsafe_allow_html=True)
+st.markdown('<p class="subtitle">Enter a name to discover comprehensive information about a person or company</p>', unsafe_allow_html=True)
 
 # Input form
 with st.form("research_form"):
     query = st.text_input("Enter a name to research:", placeholder="e.g., Brad Pitt or Apple Inc.")
     
+    # Custom CSS for a beautiful button
+    st.markdown("""
+    <style>
+        div.stButton > button {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            border-radius: 10px;
+            border: none;
+            padding: 12px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+        div.stButton > button:hover {
+            background-color: #45a049;
+            box-shadow: 0 12px 20px 0 rgba(0,0,0,0.24);
+        }
+    </style>
+    """, unsafe_allow_html=True)
+    
     col1, col2 = st.columns([1, 5])
     with col1:
-        submit_button = st.form_submit_button("Research")
+        submit_button = st.form_submit_button("🔍 Research")
     with col2:
         if st.session_state.loading:
             st.info("Researching... This may take a minute.")
