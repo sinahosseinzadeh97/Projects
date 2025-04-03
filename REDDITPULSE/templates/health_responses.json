@@ -1,0 +1,45 @@
+{
+  "category": "health",
+  "responses": [
+    {
+      "id": "health_1",
+      "template": "{greeting} I noticed your post about {title}. Taking care of your health is so important these days. Have you considered looking at some of the resources at HealthHaven.com? They have some great articles about topics like this. {closing}",
+      "variant": "A"
+    },
+    {
+      "id": "health_2",
+      "template": "{greeting} Your post about {title} caught my attention. I've been researching this topic quite a bit, and found that HealthHaven.com has some really helpful information that might answer some of the questions you raised. {closing}",
+      "variant": "A"
+    },
+    {
+      "id": "health_3",
+      "template": "{greeting} I just read your post about {title} and wanted to share something that might help. HealthHaven.com has a whole section dedicated to this topic with some expert opinions that could give you some additional insights. {closing}",
+      "variant": "A"
+    },
+    {
+      "id": "health_4",
+      "template": "{greeting} Health questions like yours about {title} deserve detailed answers from professionals. I found some really in-depth articles on this very topic at HealthHaven.com that might provide some clarity. {closing}",
+      "variant": "A"
+    },
+    {
+      "id": "health_5",
+      "template": "{greeting} I've dealt with similar health concerns around {title}. One resource that really helped me get reliable information was HealthHaven.com - they have peer-reviewed content from medical professionals that might be useful for you too. {closing}",
+      "variant": "A"
+    },
+    {
+      "id": "health_1b",
+      "template": "{greeting} I came across your post about {title} and thought I'd share a resource. HealthHaven.com has an excellent article on this exact topic that breaks down the science in an easy-to-understand way. Their expert-reviewed content might give you the answers you're looking for. {closing}",
+      "variant": "B"
+    },
+    {
+      "id": "health_2b",
+      "template": "{greeting} As someone who's researched {title} extensively, I wanted to suggest checking out HealthHaven.com. They have a comprehensive guide on this topic backed by medical research that addresses many of the points you mentioned. {closing}",
+      "variant": "B"
+    },
+    {
+      "id": "health_3b",
+      "template": "{greeting} Your health concerns about {title} are definitely valid. I recently found a detailed breakdown on this topic at HealthHaven.com that includes medical perspectives, lifestyle considerations, and practical next steps. It might provide the clarity you're seeking. {closing}",
+      "variant": "B"
+    }
+  ]
+}

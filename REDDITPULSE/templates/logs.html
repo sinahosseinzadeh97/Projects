@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+
+{% block title %}Logs - Reddit Automation Tool{% endblock %}
+
+{% block header_title %}Activity Logs{% endblock %}
+{% block header_description %}Detailed history of bot interactions and responses{% endblock %}
+
+{% block head %}
+<style>
+    .log-entry {
+        border-left: 3px solid var(--bs-secondary);
+        padding-left: 15px;
+        margin-bottom: 10px;
+    }
+    .log-entry.success {
+        border-left-color: var(--bs-success);
+    }
+    .log-entry.error {
+        border-left-color: var(--bs-danger);
+    }
+    .log-entry.warning {
+        border-left-color: var(--bs-warning);
+    }
+    .log-filters {
+        background-color: var(--bs-dark);
+        border-radius: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-list-ul me-2"></i>Activity Logs</h5>
+                <div class="d-flex gap-2">
+                    <select class="form-select form-select-sm" id="status-filter">
+                        <option value="all">All Statuses</option>
+                        <option value="success">Success</option>
+                        <option value="error">Error</option>
+                        <option value="forbidden">Forbidden</option>
+                    </select>
+                    <select class="form-select form-select-sm" id="subreddit-filter">
+                        <option value="all">All Subreddits</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="log-filters p-3 mb-4">
+                    <div class="row">
+                        <div class="col-md-3 mb-3 mb-md-0">
+                            <label for="date-range" class="form-label">Date Range</label>
+                            <select class="form-select" id="date-range">
+                                <option value="7">Last 7 days</option>
+                                <option value="30" selected>Last 30 days</option>
+                                <option value="90">Last 90 days</option>
+                                <option value="all">All time</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label for="keyword-search" class="form-label">Search</label>
+                            <input type="text" class="form-control" id="keyword-search" placeholder="Search by keywords, post titles, or response text">
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="button" class="btn btn-primary w-100" id="apply-filters">Apply Filters</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="logs-container">
+                    <div class="d-flex justify-content-center py-5">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <nav aria-label="Log pagination">
+                    <ul class="pagination justify-content-center" id="pagination">
+                        <!-- Pagination will be generated here -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fetch all logs
+        fetchAllLogs();
+        
+        // Set up event listeners
+        document.getElementById('apply-filters').addEventListener('click', applyFilters);
+        document.getElementById('status-filter').addEventListener('change', applyFilters);
+        document.getElementById('subreddit-filter').addEventListener('change', applyFilters);
+        document.getElementById('date-range').addEventListener('change', applyFilters);
+        document.getElementById('keyword-search').addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                applyFilters();
+            }
+        });
+    });
+    
+    // Function to fetch all logs
+    function fetchAllLogs() {
+        fetch('/api/logs/recent')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Populate logs
+                    displayLogs(data.data);
+                    
+                    // Get unique subreddits for filter
+                    populateSubredditFilter(data.data);
+                } else {
+                    showError("Failed to load logs");
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching logs:', error);
+                showError("Error loading logs. Please try again.");
+            });
+    }
+    
+    // Function to populate the subreddit filter
+    function populateSubredditFilter(logs) {
+        const subreddits = new Set();
+        logs.forEach(log => {
+            if (log.subreddit) {
+                subreddits.add(log.subreddit);
+            }
+        });
+        
+        const subredditFilter = document.getElementById('subreddit-filter');
+        subreddits.forEach(subreddit => {
+            const option = document.createElement('option');
+            option.value = subreddit;
+            option.textContent = 'r/' + subreddit;
+            subredditFilter.appendChild(option);
+        });
+    }
+    
+    // Function to display logs
+    function displayLogs(logs) {
+        const container = document.getElementById('logs-container');
+        container.innerHTML = '';
+        
+        if (logs.length === 0) {
+            container.innerHTML = '<div class="text-center py-5 text-muted">No logs found matching the selected filters.</div>';
+            return;
+        }
+        
+        logs.forEach(log => {
+            const statusClass = log.status === 'success' ? 'success' : 
+                              log.status === 'error' ? 'error' : 
+                              log.status === 'forbidden' ? 'warning' : '';
+            
+            const logDate = new Date(log.timestamp);
+            const formattedDate = logDate.toLocaleString();
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${statusClass} mb-4 pb-3 border-bottom`;
+            
+            let errorDetails = '';
+            if (log.error && log.error !== 'N/A') {
+                errorDetails = `<div class="text-danger mt-2"><strong>Error:</strong> ${log.error}</div>`;
+            }
+            
+            let commentText = '';
+            if (log.comment_text) {
+                // Truncate comment text if it's too long
+                const truncated = log.comment_text.length > 150 ? 
+                    log.comment_text.substring(0, 150) + '...' : log.comment_text;
+                commentText = `<div class="mt-2"><strong>Response:</strong> <span class="text-muted">${truncated}</span></div>`;
+            }
+            
+            logEntry.innerHTML = `
+                <div class="d-flex justify-content-between align-items-start">
+                    <h6 class="mb-1">
+                        ${log.post_title || 'Untitled Post'}
+                        <span class="badge bg-secondary">r/${log.subreddit || 'unknown'}</span>
+                        ${log.status === 'success' ? '<span class="badge bg-success">Success</span>' : ''}
+                        ${log.status === 'error' ? '<span class="badge bg-danger">Error</span>' : ''}
+                        ${log.status === 'forbidden' ? '<span class="badge bg-warning">Forbidden</span>' : ''}
+                    </h6>
+                    <small class="text-muted">${formattedDate}</small>
+                </div>
+                <div class="mt-1">
+                    <strong>Post ID:</strong> ${log.post_id || 'N/A'}
+                    ${log.comment_id ? `<strong class="ms-3">Comment ID:</strong> ${log.comment_id}` : ''}
+                </div>
+                <div class="mt-1">
+                    <strong>Relevance Score:</strong> ${log.relevance_score || '0'}
+                    <strong class="ms-3">Keywords:</strong> ${log.keywords || 'None'}
+                </div>
+                ${commentText}
+                ${errorDetails}
+            `;
+            
+            container.appendChild(logEntry);
+        });
+    }
+    
+    // Function to apply filters
+    function applyFilters() {
+        const statusFilter = document.getElementById('status-filter').value;
+        const subredditFilter = document.getElementById('subreddit-filter').value;
+        const dateRangeFilter = document.getElementById('date-range').value;
+        const keywordSearch = document.getElementById('keyword-search').value.toLowerCase();
+        
+        // Show loading spinner
+        document.getElementById('logs-container').innerHTML = `
+            <div class="d-flex justify-content-center py-5">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>`;
+        
+        // Fetch all logs and then filter client-side
+        fetch('/api/logs/recent')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    let filteredLogs = data.data;
+                    
+                    // Apply status filter
+                    if (statusFilter !== 'all') {
+                        filteredLogs = filteredLogs.filter(log => log.status === statusFilter);
+                    }
+                    
+                    // Apply subreddit filter
+                    if (subredditFilter !== 'all') {
+                        filteredLogs = filteredLogs.filter(log => log.subreddit === subredditFilter);
+                    }
+                    
+                    // Apply date range filter
+                    if (dateRangeFilter !== 'all') {
+                        const days = parseInt(dateRangeFilter);
+                        const cutoffDate = new Date();
+                        cutoffDate.setDate(cutoffDate.getDate() - days);
+                        
+                        filteredLogs = filteredLogs.filter(log => {
+                            const logDate = new Date(log.timestamp);
+                            return logDate >= cutoffDate;
+                        });
+                    }
+                    
+                    // Apply keyword search
+                    if (keywordSearch) {
+                        filteredLogs = filteredLogs.filter(log => {
+                            return (
+                                (log.post_title && log.post_title.toLowerCase().includes(keywordSearch)) ||
+                                (log.comment_text && log.comment_text.toLowerCase().includes(keywordSearch)) ||
+                                (log.keywords && log.keywords.toLowerCase().includes(keywordSearch)) ||
+                                (log.subreddit && log.subreddit.toLowerCase().includes(keywordSearch))
+                            );
+                        });
+                    }
+                    
+                    // Display filtered logs
+                    displayLogs(filteredLogs);
+                } else {
+                    showError("Failed to load logs");
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching logs:', error);
+                showError("Error loading logs. Please try again.");
+            });
+    }
+    
+    // Function to show error message
+    function showError(message) {
+        const container = document.getElementById('logs-container');
+        container.innerHTML = `
+            <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                ${message}
+            </div>`;
+    }
+</script>
+{% endblock %}

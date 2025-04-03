@@ -1,0 +1,590 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Reddit Automation Tool{% endblock %}
+
+{% block header_title %}Reddit Bot Dashboard{% endblock %}
+{% block header_description %}Real-time monitoring and analytics for your Reddit automation campaigns.{% endblock %}
+
+{% block head %}
+<style>
+    .metric-card {
+        border-left: 4px solid;
+        transition: transform 0.2s;
+    }
+    .metric-card:hover {
+        transform: translateY(-5px);
+    }
+    .metric-card.primary {
+        border-color: var(--bs-primary);
+    }
+    .metric-card.success {
+        border-color: var(--bs-success);
+    }
+    .metric-card.warning {
+        border-color: var(--bs-warning);
+    }
+    .metric-card.info {
+        border-color: var(--bs-info);
+    }
+    .chart-container {
+        height: 300px;
+        margin-bottom: 20px;
+    }
+    .log-entry {
+        border-left: 3px solid var(--bs-secondary);
+        padding-left: 15px;
+        margin-bottom: 10px;
+    }
+    .log-entry.success {
+        border-left-color: var(--bs-success);
+    }
+    .log-entry.error {
+        border-left-color: var(--bs-danger);
+    }
+    .log-entry.warning {
+        border-left-color: var(--bs-warning);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card metric-card primary h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-primary fw-bold">Total Responses</h6>
+                        <h2 class="mb-0 fw-bold" id="total-responses">--</h2>
+                    </div>
+                    <div class="fs-1 text-primary opacity-50">
+                        <i class="bi bi-chat-dots"></i>
+                    </div>
+                </div>
+                <p class="text-muted small mt-2" id="total-responses-change">Last 7 days</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card metric-card success h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-success fw-bold">Success Rate</h6>
+                        <h2 class="mb-0 fw-bold" id="success-rate">--</h2>
+                    </div>
+                    <div class="fs-1 text-success opacity-50">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                </div>
+                <p class="text-muted small mt-2" id="success-rate-change">Last 7 days</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card metric-card warning h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-warning fw-bold">Avg Relevance</h6>
+                        <h2 class="mb-0 fw-bold" id="avg-relevance">--</h2>
+                    </div>
+                    <div class="fs-1 text-warning opacity-50">
+                        <i class="bi bi-stars"></i>
+                    </div>
+                </div>
+                <p class="text-muted small mt-2" id="avg-relevance-change">Last 7 days</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card metric-card info h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-info fw-bold">Tracked Subreddits</h6>
+                        <h2 class="mb-0 fw-bold" id="tracked-subreddits">--</h2>
+                    </div>
+                    <div class="fs-1 text-info opacity-50">
+                        <i class="bi bi-reddit"></i>
+                    </div>
+                </div>
+                <p class="text-muted small mt-2">Active monitoring</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Daily Activity</h5>
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-outline-secondary active" data-period="7d">7 Days</button>
+                    <button type="button" class="btn btn-outline-secondary" data-period="30d">30 Days</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="activity-chart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Subreddit Performance</h5>
+                <select class="form-select form-select-sm w-auto" id="performance-metric">
+                    <option value="responses">Total Responses</option>
+                    <option value="relevance">Avg Relevance</option>
+                    <option value="success">Success Rate</option>
+                </select>
+            </div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="subreddit-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Recent Activity</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush" id="recent-logs">
+                    <div class="list-group-item text-center text-muted py-5">
+                        <div class="spinner-border spinner-border-sm me-2" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Loading activity...
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <a href="/logs" class="btn btn-sm btn-outline-primary">View All Logs</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Top Keywords</h5>
+            </div>
+            <div class="card-body">
+                <div id="keywords-cloud" class="py-3">
+                    <!-- Keyword cloud will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-bar-chart-fill me-2"></i>A/B Testing Results</h5>
+                <select class="form-select form-select-sm w-auto" id="ab-category">
+                    <option value="all">All Categories</option>
+                    <option value="health">Health</option>
+                    <option value="wellness">Wellness</option>
+                    <option value="alternative_medicine">Alternative Medicine</option>
+                </select>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card border-0 bg-dark mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="bi bi-thermometer-half me-2"></i>Variant A</h5>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><i class="bi bi-chat-dots-fill me-2 small"></i>Responses:</span>
+                                    <span class="fw-bold" id="variant-a-responses">--</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><i class="bi bi-check-circle-fill me-2 small text-success"></i>Success Rate:</span>
+                                    <span class="fw-bold" id="variant-a-success">--</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span><i class="bi bi-stars me-2 small text-warning"></i>Avg. Relevance:</span>
+                                    <span class="fw-bold" id="variant-a-relevance">--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card border-0 bg-dark mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="bi bi-lightning-charge me-2"></i>Variant B</h5>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><i class="bi bi-chat-dots-fill me-2 small"></i>Responses:</span>
+                                    <span class="fw-bold" id="variant-b-responses">--</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><i class="bi bi-check-circle-fill me-2 small text-success"></i>Success Rate:</span>
+                                    <span class="fw-bold" id="variant-b-success">--</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span><i class="bi bi-stars me-2 small text-warning"></i>Avg. Relevance:</span>
+                                    <span class="fw-bold" id="variant-b-relevance">--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <canvas id="ab-chart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Fetch dashboard data periodically
+    function fetchDashboardData() {
+        fetch('/api/stats')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    updateMetrics(data.data);
+                    updateActivityChart(data.data);
+                    updateSubredditChart(data.data);
+                } else if (data.status === 'error') {
+                    console.error('API returned error:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching dashboard data:', error);
+            });
+    }
+    
+    // Fetch recent logs
+    function fetchRecentLogs() {
+        fetch('/api/logs/recent')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    updateRecentLogs(data.data);
+                } else if (data.status === 'error') {
+                    console.error('API returned error:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching recent logs:', error);
+            });
+    }
+    
+    // Fetch A/B testing data
+    function fetchABTestingData() {
+        const category = document.getElementById('ab-category').value;
+        fetch(`/api/ab-testing?category=${category}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    updateABTestingResults(data.data);
+                } else if (data.status === 'error') {
+                    console.error('API returned error:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching A/B testing data:', error);
+            });
+    }
+    
+    // Update metrics cards
+    function updateMetrics(data) {
+        document.getElementById('total-responses').textContent = data.total_responses || 0;
+        document.getElementById('success-rate').textContent = data.success_rate ? `${data.success_rate}%` : '0%';
+        document.getElementById('avg-relevance').textContent = data.avg_relevance ? data.avg_relevance.toFixed(2) : '0.00';
+        document.getElementById('tracked-subreddits').textContent = data.tracked_subreddits || 0;
+        
+        // Update change indicators
+        document.getElementById('total-responses-change').textContent = 
+            data.response_change > 0 ? `↑ ${data.response_change} from last week` : 
+            data.response_change < 0 ? `↓ ${Math.abs(data.response_change)} from last week` : 
+            'No change from last week';
+            
+        // Check if we have success rate change data
+        if ('success_rate_change' in data) {
+            document.getElementById('success-rate-change').textContent = 
+                data.success_rate_change > 0 ? `↑ ${data.success_rate_change}% from last week` : 
+                data.success_rate_change < 0 ? `↓ ${Math.abs(data.success_rate_change)}% from last week` : 
+                'No change from last week';
+        }
+    }
+    
+    // Update activity chart
+    function updateActivityChart(data) {
+        if (!data.daily_activity || Object.keys(data.daily_activity).length === 0) {
+            return;
+        }
+        
+        const ctx = document.getElementById('activity-chart').getContext('2d');
+        
+        // Convert daily activity object to arrays for Chart.js
+        const dates = Object.keys(data.daily_activity).sort();
+        const counts = dates.map(date => data.daily_activity[date]);
+        
+        // Format dates for display
+        const formattedDates = dates.map(date => {
+            const dateObj = new Date(date);
+            return dateObj.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+        });
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: formattedDates,
+                datasets: [{
+                    label: 'Daily Responses',
+                    data: counts,
+                    borderColor: '#6e48aa',
+                    backgroundColor: 'rgba(110, 72, 170, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Update subreddit chart
+    function updateSubredditChart(data) {
+        if (!data.subreddit_activity || Object.keys(data.subreddit_activity).length === 0) {
+            return;
+        }
+        
+        const ctx = document.getElementById('subreddit-chart').getContext('2d');
+        
+        // Get the subreddits with the most activity
+        const subreddits = Object.keys(data.subreddit_activity).sort((a, b) => 
+            data.subreddit_activity[b] - data.subreddit_activity[a]).slice(0, 10);
+            
+        const counts = subreddits.map(subreddit => data.subreddit_activity[subreddit]);
+        
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: subreddits,
+                datasets: [{
+                    label: 'Responses',
+                    data: counts,
+                    backgroundColor: '#9d50bb',
+                    borderColor: '#6e48aa',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Update A/B testing results
+    function updateABTestingResults(data) {
+        if (!data || !data.overall) {
+            return;
+        }
+        
+        // Update the overall metrics
+        const variantA = data.overall.variant_a;
+        const variantB = data.overall.variant_b;
+        
+        document.getElementById('variant-a-responses').textContent = variantA.count;
+        document.getElementById('variant-a-success').textContent = `${variantA.success_rate}%`;
+        document.getElementById('variant-a-relevance').textContent = variantA.avg_relevance.toFixed(2);
+        
+        document.getElementById('variant-b-responses').textContent = variantB.count;
+        document.getElementById('variant-b-success').textContent = `${variantB.success_rate}%`;
+        document.getElementById('variant-b-relevance').textContent = variantB.avg_relevance.toFixed(2);
+        
+        // Create a chart comparing success rates
+        const ctx = document.getElementById('ab-chart').getContext('2d');
+        
+        // Get categories (or use "Overall" if no categories)
+        let categories = Object.keys(data.categories);
+        if (categories.length === 0) {
+            categories = ['Overall'];
+        }
+        
+        // Prepare data for chart
+        const variantAData = categories.map(cat => {
+            if (cat === 'Overall') {
+                return variantA.success_rate;
+            }
+            return data.categories[cat].variant_a.success_rate;
+        });
+        
+        const variantBData = categories.map(cat => {
+            if (cat === 'Overall') {
+                return variantB.success_rate;
+            }
+            return data.categories[cat].variant_b.success_rate;
+        });
+        
+        // Create chart
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: categories.map(cat => cat.replace('_', ' ')),
+                datasets: [
+                    {
+                        label: 'Variant A',
+                        data: variantAData,
+                        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Variant B',
+                        data: variantBData,
+                        backgroundColor: 'rgba(153, 102, 255, 0.7)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Success Rate by Variant (%)'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    }
+    
+    // Update recent logs
+    function updateRecentLogs(logs) {
+        const logsContainer = document.getElementById('recent-logs');
+        logsContainer.innerHTML = '';
+        
+        if (!logs || logs.length === 0) {
+            logsContainer.innerHTML = `
+                <div class="list-group-item text-center text-muted py-4">
+                    No recent activity found
+                </div>
+            `;
+            return;
+        }
+        
+        logs.forEach(log => {
+            const statusClass = log.status === 'success' ? 'success' : 
+                              log.status === 'error' ? 'error' : 'warning';
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = `list-group-item`;
+            
+            let templateInfo = '';
+            if (log.template_id && log.variant) {
+                templateInfo = `<small class="d-block text-muted">Template: ${log.template_id} (Variant ${log.variant})</small>`;
+            }
+            
+            logEntry.innerHTML = `
+                <div class="log-entry ${statusClass}">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h6 class="mb-1 text-truncate" title="${log.post_title}">${log.post_title || 'Unnamed post'}</h6>
+                        <span class="badge bg-${log.status === 'success' ? 'success' : log.status === 'error' ? 'danger' : 'warning'} rounded-pill">${log.status}</span>
+                    </div>
+                    <p class="mb-1 small text-muted">r/${log.subreddit} • Relevance: ${log.relevance_score.toFixed(2)}</p>
+                    ${templateInfo}
+                    <small class="text-muted">${new Date(log.timestamp).toLocaleString()}</small>
+                </div>
+            `;
+            
+            logsContainer.appendChild(logEntry);
+        });
+    }
+    
+    // Handle A/B testing category changes
+    function initABTestingControls() {
+        const categorySelect = document.getElementById('ab-category');
+        if (categorySelect) {
+            categorySelect.addEventListener('change', fetchABTestingData);
+        }
+    }
+    
+    // Initialize dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchDashboardData();
+        fetchRecentLogs();
+        fetchABTestingData();
+        initABTestingControls();
+        
+        // Set up periodic refresh
+        setInterval(fetchDashboardData, 60000); // Refresh data every minute
+        setInterval(fetchRecentLogs, 30000); // Refresh logs every 30 seconds
+        setInterval(fetchABTestingData, 60000); // Refresh A/B testing data every minute
+    });
+</script>
+{% endblock %}
