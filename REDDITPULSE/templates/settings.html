@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - Reddit Automation Tool{% endblock %}
+
+{% block header_title %}Bot Settings{% endblock %}
+{% block header_description %}Configure your Reddit automation settings and preferences{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-gear me-2"></i>General Settings</h5>
+            </div>
+            <div class="card-body">
+                <form id="general-settings-form">
+                    <div class="mb-3">
+                        <label for="scan-interval" class="form-label">Scan Interval (minutes)</label>
+                        <input type="number" class="form-control" id="scan-interval" min="5" max="60" value="15">
+                        <div class="form-text">How often to check for new posts</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="response-limit" class="form-label">Daily Response Limit</label>
+                        <input type="number" class="form-control" id="response-limit" min="1" max="100" value="20">
+                        <div class="form-text">Maximum responses per day</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="relevance-threshold" class="form-label">Relevance Threshold</label>
+                        <input type="range" class="form-range" id="relevance-threshold" min="0" max="1" step="0.1" value="0.5">
+                        <div class="d-flex justify-content-between">
+                            <span>Low (0.0)</span>
+                            <span id="relevance-value">0.5</span>
+                            <span>High (1.0)</span>
+                        </div>
+                        <div class="form-text">Minimum relevance score required to respond</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save General Settings</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-reddit me-2"></i>Subreddit Configuration</h5>
+            </div>
+            <div class="card-body">
+                <form id="subreddit-form">
+                    <div class="mb-3">
+                        <label for="tracked-subreddits" class="form-label">Tracked Subreddits</label>
+                        <textarea class="form-control" id="tracked-subreddits" rows="8" placeholder="One subreddit per line (e.g., healthremedies)"></textarea>
+                        <div class="form-text">List the subreddits to monitor (without r/)</div>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="auto-discover" checked>
+                        <label class="form-check-label" for="auto-discover">
+                            Auto-discover related subreddits
+                        </label>
+                        <div class="form-text">Automatically find and add related subreddits</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Subreddit Settings</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-sliders me-2"></i>A/B Testing Settings</h5>
+            </div>
+            <div class="card-body">
+                <form id="ab-testing-form">
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="enable-ab-testing" checked>
+                        <label class="form-check-label" for="enable-ab-testing">
+                            Enable A/B Testing
+                        </label>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ab-variant-ratio" class="form-label">Variant A/B Ratio: <span id="ratio-display">50/50</span></label>
+                        <input type="range" class="form-range" id="ab-variant-ratio" min="0" max="100" step="10" value="50">
+                        <div class="form-text">Distribution between variants A and B</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="target-metric" class="form-label">Target Optimization Metric</label>
+                        <select class="form-select" id="target-metric">
+                            <option value="response_rate">Response Rate</option>
+                            <option value="upvotes">Upvotes</option>
+                            <option value="engagement">Comment Engagement</option>
+                        </select>
+                        <div class="form-text">What to optimize for in A/B testing</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save A/B Settings</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-key me-2"></i>API Credentials</h5>
+            </div>
+            <div class="card-body">
+                <form id="api-credentials-form">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="client-id" class="form-label">Reddit Client ID</label>
+                            <input type="text" class="form-control" id="client-id" placeholder="Enter Reddit Client ID">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="client-secret" class="form-label">Reddit Client Secret</label>
+                            <input type="password" class="form-control" id="client-secret" placeholder="Enter Reddit Client Secret">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username" class="form-label">Reddit Username</label>
+                            <input type="text" class="form-control" id="username" placeholder="Enter Reddit Username">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Reddit Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="Enter Reddit Password">
+                        </div>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="test-mode" checked>
+                        <label class="form-check-label" for="test-mode">
+                            Use Test Mode
+                        </label>
+                        <div class="form-text">Run without actual Reddit API calls (for development/testing)</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save API Credentials</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize settings values
+        loadSettings();
+        
+        // Set up event listeners
+        document.getElementById('relevance-threshold').addEventListener('input', function() {
+            document.getElementById('relevance-value').textContent = this.value;
+        });
+        
+        document.getElementById('ab-variant-ratio').addEventListener('input', function() {
+            const ratio = this.value;
+            document.getElementById('ratio-display').textContent = `${ratio}/${100-ratio}`;
+        });
+        
+        // Form submissions
+        document.getElementById('general-settings-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // In a real implementation, we would save these settings via API
+            showToast('General settings saved successfully!');
+        });
+        
+        document.getElementById('subreddit-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // In a real implementation, we would save these settings via API
+            showToast('Subreddit settings saved successfully!');
+        });
+        
+        document.getElementById('ab-testing-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // In a real implementation, we would save these settings via API
+            showToast('A/B testing settings saved successfully!');
+        });
+        
+        document.getElementById('api-credentials-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // In a real implementation, we would save these settings via API
+            showToast('API credentials saved successfully!');
+        });
+    });
+    
+    // Function to load settings
+    function loadSettings() {
+        // In a real implementation, we would load these from the server
+        // For now, we'll just use defaults
+        
+        // Subreddits
+        document.getElementById('tracked-subreddits').value = 
+            'health\nwellness\nalternativemedicine\nholistichealth\nnaturalremedies\nherbalism\nayurveda\nmeditationtechniques\nmindfulness\nyoga';
+    }
+    
+    // Function to show a toast message
+    function showToast(message) {
+        // Create toast container if it doesn't exist
+        let toastContainer = document.getElementById('toast-container');
+        if (!toastContainer) {
+            toastContainer = document.createElement('div');
+            toastContainer.id = 'toast-container';
+            toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+            document.body.appendChild(toastContainer);
+        }
+        
+        // Create toast
+        const toastId = 'toast-' + Date.now();
+        const toastHtml = `
+            <div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Reddit Automation Tool</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    ${message}
+                </div>
+            </div>
+        `;
+        
+        // Add toast to container
+        toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+        
+        // Initialize and show toast
+        const toastElement = document.getElementById(toastId);
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
+        
+        // Remove toast after it's hidden
+        toastElement.addEventListener('hidden.bs.toast', function() {
+            toastElement.remove();
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,54 @@
+
+Job details
+Job Post: Python Developer for Social Media Automation Project
+
+    AI Integration
+    Posted Apr 2, 2025 
+
+Overview
+- We're seeking an experienced Python developer to implement a custom social media engagement tool that will monitor relevant discussions on Reddit and automatically post helpful responses. 
+
+Project Scope
+- Develop a Python-based automation system that will:
+- Monitor specific subreddits for relevant discussions in health, wellness, and alternative medicine niches
+- Analyze post content for relevance to our products
+- Generate contextually appropriate responses
+- Post comments according to configurable scheduling rules
+- Track performance and maintain activity logs
+
+Required Skills & Experience
+- Strong Python programming skills (3+ years experience)
+- Experience with Reddit API and PRAW library
+- Knowledge of automation and scheduling in Python
+- Experience with content analysis and text generation
+- Familiarity with deployment on Linux servers
+- Strong attention to detail and problem-solving abilities
+
+Nice-to-Have Skills
+- Experience with social media marketing or engagement
+- Basic NLP or text analysis background
+- DevOps experience (Docker, CI/CD)
+- Testing experience with pytest or similar
+
+Deliverables
+- Fully functional Reddit monitoring and commenting system
+- Complete source code with documentation
+- Deployment instructions and configuration guide
+- Basic user documentation
+
+Project Structure
+- We have prepared a detailed implementation plan and code templates to accelerate development. The successful candidate will be provided with these resources upon project start.
+
+*Application Process
+Please include in your application:
+1. Your relevant experience with Reddit API and automation projects
+2. Examples of similar projects you've complete
+3. Your estimated timeline for completing this project
+4. Your approach to ensuring the comments appear natural and not automated
+5. How you would handle Reddit's rate limiting and API restrictions
+RATE IS NEGOTIABLE BASE ON YOUR EXPERIENCE AND EXPERTISE
+
+Selection Criteria
+Candidates will be evaluated based on relevant experience, understanding of the requirements, realistic time estimates, approach to quality assurance, and competitive pricing.
+
+We look forward to working with a skilled developer who can deliver a high-quality solution efficiently within our timeline constraints
