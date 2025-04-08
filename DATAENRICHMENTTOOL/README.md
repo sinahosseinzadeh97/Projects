@@ -114,7 +114,7 @@ Looking for a skilled developer to build intelligent data solutions for your bus
 - **Custom software solutions** tailored to your specific business needs
 
 📧 **Contact:** [sinahosseinzadeh97@gmail.com](mailto:sinahosseinzadeh97@gmail.com)
-🔗 **LinkedIn:** [sinahosseinzadeh](https://www.linkedin.com/in/sinahosseinzadeh/)
+🔗 **LinkedIn:** [sinahosseinzadeh](https://www.linkedin.com/in/sina-hosseinzade20?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app)
 🌐 **Portfolio:** [sinahosseinzadeh.com](https://sinahosseinzadeh.com)
 
 ## 📝 License
