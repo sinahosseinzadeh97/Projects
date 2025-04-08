@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Product Data Enrichment Tool | SinaMohammadHosseinZadeh</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #7209b7;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 6rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255, 255, 255, 0.1)" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,213.3C1248,235,1344,213,1392,202.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-position: bottom;
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 0.6;
+        }
+        
+        .feature-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .api-card {
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        
+        .api-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .api-card-header {
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .api-card-body {
+            padding: 1.5rem;
+        }
+        
+        .openai-card .api-card-header {
+            background-color: #10a37f;
+            color: white;
+        }
+        
+        .huggingface-card .api-card-header {
+            background-color: #ffbd59;
+            color: black;
+        }
+        
+        .google-card .api-card-header {
+            background-color: #4285f4;
+            color: white;
+        }
+        
+        .cta-section {
+            background-color: var(--light-color);
+            padding: 5rem 0;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .section-title {
+            position: relative;
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 3rem 0;
+        }
+        
+        .developer-info {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .resource-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .resource-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .resource-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .resource-list i {
+            margin-right: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 4rem 0;
+            }
+            
+            .feature-card, .api-card {
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-database me-2"></i>
+                Advanced Data Enrichment
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#ai-capabilities">AI Capabilities</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#resources">Resources</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#developer">Developer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary ms-lg-3 px-4" href="http://localhost:8501" target="_blank">Launch App</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center position-relative">
+            <h1 class="display-4 fw-bold mb-4">Advanced Product Data Enrichment Tool</h1>
+            <p class="lead mb-5">Enhance your product research workflows with AI-powered data processing and enrichment</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="http://localhost:8501" target="_blank" class="btn btn-light btn-lg px-4 py-2">
+                    <i class="fas fa-rocket me-2"></i>Launch Application
+                </a>
+                <a href="#features" class="btn btn-outline-light btn-lg px-4 py-2">
+                    <i class="fas fa-info-circle me-2"></i>Learn More
+                </a>
+            </div>
+            <div class="mt-4">
+                <p class="mb-0">Developed by <strong>SinaMohammadHosseinZadeh</strong></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-5" id="features">
+        <div class="container py-5">
+            <h2 class="text-center section-title">Key Features</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card p-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>NLP-Powered Keyword Extraction</h3>
+                        <p>Extract meaningful keywords from product descriptions and technical specifications using advanced natural language processing techniques.</p>
+                        <ul class="mt-3">
+                            <li>TF-IDF and LDA approaches</li>
+                            <li>OpenAI-powered extraction</li>
+                            <li>Relevance scoring</li>
+                            <li>Multi-field analysis</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card p-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-filter"></i>
+                        </div>
+                        <h3>Advanced Data Filtering</h3>
+                        <p>Filter records based on sophisticated classification rules and AI-generated metadata to create clean, enriched datasets.</p>
+                        <ul class="mt-3">
+                            <li>Category-based filtering</li>
+                            <li>Relevance score thresholds</li>
+                            <li>Keyword presence detection</li>
+                            <li>AI classification filters</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card p-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>Reverse Lookup Tool</h3>
+                        <p>Input a product identifier (ASIN, SKU, UPC) and trace it to upstream data with enriched related records.</p>
+                        <ul class="mt-3">
+                            <li>Multiple identifier support</li>
+                            <li>Source data tracing</li>
+                            <li>Related product connections</li>
+                            <li>Historical version tracking</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card p-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-export"></i>
+                        </div>
+                        <h3>Enriched CSV Exports</h3>
+                        <p>Generate enriched CSV exports with search-friendly metadata for internal use and analysis.</p>
+                        <ul class="mt-3">
+                            <li>Primary enriched data export</li>
+                            <li>Secondary metadata helper files</li>
+                            <li>Custom SQL query exports</li>
+                            <li>Filtered dataset exports</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card p-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3>Structured Data Processing</h3>
+                        <p>Process and enrich structured data from various formats including CSV, JSON, and XML.</p>
+                        <ul class="mt-3">
+                            <li>Multi-format support</li>
+                            <li>Batch processing</li>
+                            <li>Data validation</li>
+                            <li>Schema flexibility</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card p-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <h3>Intuitive User Interface</h3>
+                        <p>Browse, search, upload, and export results through a simple and powerful Streamlit dashboard.</p>
+                        <ul class="mt-3">
+                            <li>User-friendly navigation</li>
+                            <li>Interactive data visualization</li>
+                            <li>Real-time processing</li>
+                            <li>Responsive design</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Capabilities Section -->
+    <section class="py-5 bg-light" id="ai-capabilities">
+        <div class="container py-5">
+            <h2 class="text-center section-title">Advanced AI Capabilities</h2>
+            <p class="text-center mb-5">Leverage the power of multiple AI services to enhance your product data</p>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="api-card openai-card">
+                        <div class="api-card-header">
+                            <h3>OpenAI Integration</h3>
+                        </div>
+                        <div class="api-card-body">
+                            <p>Harness the power of OpenAI's advanced language models for sophisticated data enrichment.</p>
+                            <h5 class="mt-4">Capabilities:</h5>
+                            <ul>
+                                <li>Advanced keyword extraction with relevance scoring</li>
+                                <li>Detailed product classification</li>
+                                <li>Enhanced product description generation</li>
+                                <li>Sentiment analysis with aspect extraction</li>
+                                <li>Contextual understanding of product features</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="api-card huggingface-card">
+                        <div class="api-card-header">
+                            <h3>Hugging Face Integration</h3>
+                        </div>
+                        <div class="api-card-body">
+                            <p>Utilize specialized NLP models from Hugging Face for targeted analysis tasks.</p>
+                            <h5 class="mt-4">Capabilities:</h5>
+                            <ul>
+                                <li>Sentiment analysis using specialized models</li>
+                                <li>Named entity recognition and extraction</li>
+                                <li>Language detection for multi-language support</li>
+                                <li>Zero-shot product classification</li>
+                                <li>Domain-specific model application</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="api-card google-card">
+                        <div class="api-card-header">
+                            <h3>Google API Integration</h3>
+                        </div>
+                        <div class="api-card-body">
+                            <p>Enhance your data with Google's powerful APIs for comprehensive analysis.</p>
+  
+(Content truncated due to size limit. Use line ranges to read in chunks)
