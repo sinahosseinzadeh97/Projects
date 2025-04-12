@@ -1,0 +1,158 @@
+🔥 AI-Ready Full Ecommerce Website PRD (Product Requirements Document)
+🧩 Project Name: NovaCart – Modern Ecommerce Platform
+🧭 Overview:
+
+We need a full-featured ecommerce platform designed for performance, usability, and scalability. It must include a customer-facing frontend, an admin dashboard, and a REST API backend with secure payment and user management.
+🎯 Goals:
+
+    Allow customers to browse, filter, and purchase products.
+
+    Admins can manage inventory, orders, and analytics.
+
+    Platform must be mobile-first, fast, secure, and SEO-friendly.
+
+👥 Target Users:
+
+    Customers: Age 18-45, global, tech-savvy.
+
+    Admins: Manage products, orders, content, and analytics.
+
+💡 Tech Stack:
+
+    Frontend: React.js or Next.js (Tailwind CSS for styling)
+
+    Backend: Django (Django REST Framework) or Node.js (Express.js)
+
+    Database: PostgreSQL (preferred) or MongoDB
+
+    Auth: JWT for users, session or admin token for backend
+
+    Payments: Stripe (preferred) or PayPal
+
+    Deployment: Vercel (frontend), Heroku/AWS (backend)
+
+    Analytics: Google Analytics
+
+    Email: SMTP or SendGrid for order confirmations
+
+🧑‍💻 Frontend User Features:
+
+    Home Page
+
+        Hero banner, featured categories/products
+
+        Newsletter signup
+
+    Product Listing Page
+
+        Category-based filtering, price sorting
+
+        Search bar (with live suggestions)
+
+    Product Detail Page
+
+        Images carousel, variants (size/color), stock indicator
+
+        Add to cart, wishlist
+
+    Shopping Cart
+
+        Add/remove/update quantity
+
+        Subtotal + total price
+
+    Checkout Page
+
+        Address form, shipping methods
+
+        Payment gateway integration
+
+        Order summary + confirmation
+
+    User Account
+
+        Register/login (JWT auth)
+
+        View/edit profile
+
+        Order history
+
+        Wishlist
+
+🛠 Admin Dashboard Features:
+
+    Login with admin token
+
+    Product Management
+
+        Add/edit/delete products
+
+        Upload images
+
+        Inventory control
+
+    Order Management
+
+        View orders by status
+
+        Change order status (processing, shipped, delivered)
+
+    Dashboard Analytics
+
+        Daily/monthly sales
+
+        Top products
+
+        Customer count
+
+    Content Management
+
+        Manage homepage banners and text
+
+        Newsletter email export
+
+📦 API Endpoints (if using Django REST or Express.js):
+
+    GET /api/products/
+
+    GET /api/products/:id/
+
+    POST /api/users/register/
+
+    POST /api/users/login/
+
+    GET /api/users/profile/
+
+    POST /api/orders/
+
+    GET /api/orders/user/
+
+    GET /api/admin/orders/
+
+    POST /api/admin/products/
+
+    PUT /api/admin/products/:id/
+
+    DELETE /api/admin/products/:id/
+
+    POST /api/payment/stripe/checkout/
+
+🔐 Security Requirements:
+
+    JWT token validation on every protected route
+
+    Admin API endpoints protected by admin role
+
+    HTTPS, input validation, CSRF protection, password hashing
+
+📱 UI/UX Requirements:
+
+    Fully responsive (mobile-first design)
+
+    Clean, modern layout (like Shopify or Amazon)
+
+    Fast load time (<2s)
+
+    Accessible (WCAG 2.1)
+
+    SEO-ready (title/meta, alt tags)

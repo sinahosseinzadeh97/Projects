@@ -1,0 +1,254 @@
+1. Overview
+
+The Custom Buy/Sell Bot is a fully automated trading solution designed to track and execute transactions across various wallet transfers. It monitors transfers from a parent wallet through multiple layers (up to a depth of 5) and performs buys/sells automatically based on customizable parameters. The bot supports different transaction types (including normal transactions, Raydium swaps, and WSOL buys) and provides robust error handling, auto-retry logic, and real-time feedback.
+2. Objectives
+
+    Fully Automated Trading:
+    Implement a bot that automatically tracks transactions and executes buy/sell orders without manual intervention.
+
+    Comprehensive Transaction Tracking:
+    Monitor wallet transfers—including multi-step (wallet-to-wallet-to-wallet) transactions—and capture key metrics such as volume, market cap, token age, and purchase details.
+
+    Customizable Trading Logic:
+    Allow users to define trading parameters (e.g., minimum/maximum amounts, volume thresholds, token age) and rules (e.g., “if volume is 2.5M, MC is 1M, and token age is 30 minutes, then buy 1 SOL” or “if price increases 30%, then sell”).
+
+    Robust Error Handling and Feedback:
+    Provide real-time status updates and notifications when the bot stops or fails, including auto-retry mechanisms for both buy and sell orders.
+
+    Feature Parity with Tradewiz:
+    Incorporate all features offered by Tradewiz (and additional custom requirements) to ensure comprehensive transaction support, including anti-MEV options.
+
+    Modern UI:
+    Develop a responsive, intuitive user interface using shadcn components to ensure a visually appealing and consistent experience.
+
+    Platform Setup Assistance:
+    Provide support and documentation for setting up the bot on Mac and Virtual Machine environments.
+
+3. Target Users
+
+    Crypto Traders and Automated Trading Enthusiasts:
+    Individuals and teams seeking an automated trading bot for cryptocurrency transactions.
+
+    Developers & Technical Operators:
+    Technical users who require an advanced, customizable tool to monitor and execute trades based on wallet activity.
+
+    Administrators:
+    Users who need detailed feedback, logs, and the ability to adjust parameters in real time.
+
+4. Functional Requirements
+4.1 Bot Configuration & Inputs
+
+    User Inputs:
+
+        Parent wallet address.
+
+        Minimum and maximum transaction amounts.
+
+        Tip, gas fees, and anti-MEV settings.
+
+    UI Elements:
+
+        A configuration dashboard built with shadcn components to ensure a modern, intuitive interface.
+
+4.2 Transaction Tracking
+
+    Multi-Layer Tracking:
+
+        Monitor transfers from wallet to wallet (and wallet-to-wallet-to-wallet) with a tracking depth of at least 5 levels.
+
+    Transaction Types:
+
+        Detect various buy types such as normal buys, Raydium swaps, and WSOL buys.
+
+    Data Extraction:
+
+        Capture key metrics such as volume, market cap (MC), token age, and the time elapsed since purchase.
+
+4.3 Automated Trading Logic
+
+    Buy Logic:
+
+        Execute buy orders based on defined parameters, e.g., “If volume is 2.5M, MC is 1M, and token age is 30 minutes, then buy 1 SOL.”
+
+        Auto-retry buy logic if an order fails.
+
+        Detect large buys and trigger immediate sell orders.
+
+    Sell Logic:
+
+        Execute sell orders when conditions are met, e.g., “If price increases 30%, then sell” or “If more than 10 SOL is bought, autosell.”
+
+        Auto-retry sell operations in case of failures.
+
+4.4 Feedback and Monitoring
+
+    Real-Time Status Updates:
+
+        Display notifications when the bot stops, fails, or completes transactions.
+
+        Provide detailed logs and error reports.
+
+    User Notifications:
+
+        Alert users about important events (e.g., auto-sell triggered, transaction failures).
+
+4.5 Support for Diverse Transaction Scenarios
+
+    Multiple Transaction Flows:
+
+        Handle various scenarios:
+
+            Some coins purchased via Raydium swaps.
+
+            Some coins bought after wallet-to-wallet-to-wallet transfers (using WSOL).
+
+            Others via simple wallet-to-wallet transfers (using SOL).
+
+4.6 Administrative Tools
+
+    Admin Dashboard:
+
+        Monitor active transactions.
+
+        Adjust parameters dynamically.
+
+        View system performance, error logs, and transaction history.
+
+5. Non-Functional Requirements
+
+    Tech-Stack Agnostic:
+
+        The solution must be implementable on a flexible tech stack that meets performance, scalability, and maintainability requirements.
+
+    Performance & Scalability:
+
+        Must handle high-frequency transactions with minimal latency.
+
+        Scalable to support monitoring of multiple wallets simultaneously.
+
+    Reliability & Robustness:
+
+        Incorporate auto-retry mechanisms and robust error detection.
+
+        Ensure continuous operation under various network and market conditions.
+
+    Security:
+
+        Secure handling of wallet inputs and transaction data.
+
+        Integration of anti-MEV features to prevent front-running and other exploitative practices.
+
+    Modern UI:
+
+        Use shadcn components to create a clean, responsive, and intuitive interface.
+
+        Ensure consistency across devices (desktop and mobile).
+
+    Deployment & Setup:
+
+        Provide clear documentation and assistance for deployment on Mac and VM environments.
+
+6. Technical Requirements
+6.1 Backend Development
+
+    APIs:
+
+        Develop RESTful or GraphQL APIs for transaction tracking, order execution, and configuration management.
+
+    Blockchain Integration:
+
+        Integrate with blockchain APIs for real-time tracking of wallet transfers and transaction data.
+
+    Trading Engine:
+
+        Implement the logic for automatic buy/sell orders, including auto-retry and error handling features.
+
+6.2 Frontend Development
+
+    User Interface:
+
+        Build a responsive web application using modern UI frameworks.
+
+        Use shadcn components for a polished, consistent design.
+
+    Dashboard:
+
+        Create an interactive dashboard for configuration, monitoring, and logging.
+
+6.3 Third-Party Integrations
+
+    Blockchain & Transaction APIs:
+
+        Integrate with external services to monitor wallet transfers and execute trades.
+
+    Anti-MEV Integration:
+
+        Implement mechanisms or tools to detect and mitigate MEV (Miner Extractable Value) risks.
+
+7. Milestones & Timeline
+
+    Requirements Finalization & Design (Day 1-2):
+
+        Confirm all parameters and design the overall architecture.
+
+        Create UI/UX mockups using shadcn components.
+
+    Development Phase (Day 3-5):
+
+        Backend: Develop transaction tracking, automated trading logic, API integrations, and error handling.
+
+        Frontend: Build the configuration dashboard, status monitoring UI, and integrate real-time feedback features.
+
+    Testing & Deployment (Day 6):
+
+        Conduct unit and integration tests for all functionalities.
+
+        Deploy the solution on Mac/VM and validate various transaction scenarios.
+
+    Final Review & Handoff (Day 7):
+
+        Perform final adjustments based on feedback.
+
+        Complete documentation and provide setup assistance.
+
+8. Constraints & Dependencies
+
+    Time Constraint:
+
+        The entire project must be delivered within 1 week.
+
+    Budget:
+
+        The project budget is fixed; proposals must comply with this limitation.
+
+    External Dependencies:
+
+        Dependence on blockchain APIs and trading platforms.
+
+        Must account for potential rate limits and API changes.
+
+    Feature Parity:
+
+        The bot must support all features of Tradewiz, along with the additional custom requirements.
+
+9. Success Metrics
+
+    Accuracy:
+
+        High accuracy in tracking transactions and executing orders as per defined rules.
+
+    Automation Effectiveness:
+
+        Successful auto-execution of buy/sell orders and auto-retry in case of failures.
+
+    User Feedback:
+
+        Positive feedback on system reliability, UI design, and real-time notifications.
+
+    Performance:
+
+        Low latency in transaction monitoring and order execution.
+
+    Security:
+
+        Secure handling of wallet data and robust protection against MEV risks.

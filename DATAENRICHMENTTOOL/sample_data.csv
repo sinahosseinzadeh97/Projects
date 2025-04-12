@@ -1,0 +1,11 @@
+product_id,product_name,description,category,brand,price,stock
+P001,Smart Watch Pro,"Advanced smartwatch with heart rate monitoring, GPS, and fitness tracking. Water resistant up to 50m.",Electronics,TechGear,199.99,45
+P002,Organic Coffee Beans,"Premium organic coffee beans sourced from high-altitude farms in Colombia. Medium roast with notes of chocolate and caramel.",Food & Beverage,MountainBrew,14.99,120
+P003,Wireless Noise-Cancelling Headphones,"Over-ear headphones with active noise cancellation technology. Bluetooth 5.0, 30-hour battery life, and comfortable memory foam ear cushions.",Electronics,AudioMax,149.99,32
+P004,Yoga Mat,"Non-slip yoga mat made from eco-friendly TPE material. Perfect for all types of yoga and pilates exercises. Includes carrying strap.",Sports & Fitness,YogaEssentials,29.99,78
+P005,Ceramic Dutch Oven,"5-quart ceramic dutch oven with cast iron core. Perfect for slow cooking, braising, and baking bread. Dishwasher safe.",Kitchen & Home,ChefCraft,89.99,15
+P006,Facial Moisturizer,"Hydrating facial moisturizer with hyaluronic acid, vitamin E, and aloe vera. Suitable for all skin types. Fragrance-free and non-comedogenic.",Beauty & Personal Care,PureSkin,24.99,62
+P007,Portable Bluetooth Speaker,"Compact waterproof speaker with 360-degree sound, 12-hour battery life, and built-in microphone for calls. Available in multiple colors.",Electronics,SoundWave,79.99,51
+P008,Multi-Tool Pocket Knife,"18-in-1 stainless steel multi-tool with knife, pliers, screwdrivers, bottle opener, and more. Includes nylon carrying case.",Tools & Hardware,OutdoorPro,39.99,27
+P009,Organic Cotton T-Shirt,"Classic fit t-shirt made from 100% organic cotton. Pre-shrunk, soft, and breathable fabric. Available in sizes S-XXL.",Clothing,EcoWear,19.99,93
+P010,Stainless Steel Water Bottle,"Vacuum insulated water bottle that keeps beverages cold for 24 hours or hot for 12 hours. Leak-proof lid and BPA-free construction.",Sports & Fitness,HydroTech,34.99,40 

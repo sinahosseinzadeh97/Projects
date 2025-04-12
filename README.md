@@ -1,4 +1,11 @@
-# AI Fitness Video Analysis System
+# Projects Repository
+
+This repository contains various projects showcasing different technologies and applications:
+
+## WORKOUTWITHAI
+A video analysis and enhancement platform using deep learning models to analyze workout videos, provide form feedback, and enhance video quality. The project leverages transformer-based models for movement recognition and personalized feedback generation.
+
+## AI Fitness Video Analysis System
 
 A comprehensive cloud-based deep learning system that analyzes fitness videos to provide personalized form feedback, AR overlays, and audio guidance using transformer-based models.
 
@@ -272,14 +279,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - [OpenAI](https://openai.com/) for natural language capabilities
 - [FastAPI](https://fastapi.tiangolo.com/) for the API framework
 - [Celery](https://docs.celeryproject.org/) for distributed task processing
-
-# Projects Repository
-
-This repository contains various projects showcasing different technologies and applications:
-
-## WORKOUTWITHAI
-A video analysis and enhancement platform using deep learning models to analyze workout videos, provide form feedback, and enhance video quality. The project leverages transformer-based models for movement recognition and personalized feedback generation.
-
----
-
-Created with ❤️ by Sina Mohammad Hosseinzadeh 
