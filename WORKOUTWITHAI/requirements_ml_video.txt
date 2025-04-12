@@ -1,0 +1,17 @@
+opencv-python
+mediapipe
+numpy
+gradio
+torch
+torchvision
+openai
+transformers
+huggingface-hub
+moviepy
+timesformer-pytorch
+einops
+scipy
+tqdm
+matplotlib
+pillow
+boto3 
