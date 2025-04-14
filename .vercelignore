@@ -31,29 +31,43 @@ loan_env/
 *.swp
 *.swo
 
-# Data files
-*.csv
-*.xlsx
-*.xls
-*.db
-*.sqlite3
+# Git
+.git/
+.gitignore
 
-# Large files
-*.zip
-*.tar.gz
-*.rar
+# Data and Models
+data/
+*.pkl
+*.model
+*.h5
+*.hdf5
 
 # Logs
 *.log
+logs/
 
-# System files
+# Local development
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Testing
+tests/
+test_*.py
+*.test.py
+
+# Misc
 .DS_Store
-Thumbs.db
-
-# Test files
-*.test
-*.spec
-*.pyc
+*.zip
+*.tar.gz
+*.rar
 
 # Exclude only large files and cache
 *.zip

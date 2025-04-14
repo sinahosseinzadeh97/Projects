@@ -11,23 +11,27 @@ os.makedirs('templates', exist_ok=True)
 os.makedirs('static/css', exist_ok=True)
 os.makedirs('static/js', exist_ok=True)
 
-# Load configuration
-config_path = 'config/config.json'
-if os.path.exists(config_path):
-    with open(config_path, 'r') as f:
-        config = json.load(f)
-else:
-    config = {
-        "app_name": "Loan Prediction System",
-        "version": "1.0.0",
-        "features": {
-            "geographic_analysis": {"enabled": True},
-            "time_based_analysis": {"enabled": True},
-            "competitive_analysis": {"enabled": True},
-            "risk_segmentation": {"enabled": True},
-            "financial_planning": {"enabled": True}
-        }
+# Default configuration
+config = {
+    "app_name": "Loan Prediction System",
+    "version": "1.0.0",
+    "features": {
+        "geographic_analysis": {"enabled": True},
+        "time_based_analysis": {"enabled": True},
+        "competitive_analysis": {"enabled": True},
+        "risk_segmentation": {"enabled": True},
+        "financial_planning": {"enabled": True}
     }
+}
+
+# Try to load configuration if available
+try:
+    config_path = 'config/config.json'
+    if os.path.exists(config_path):
+        with open(config_path, 'r') as f:
+            config = json.load(f)
+except Exception as e:
+    print(f"Warning: Could not load config file: {e}")
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -354,6 +358,14 @@ def competitive_analysis():
                           lender_market_data=lender_market_data,
                           industry_benchmarks=industry_benchmarks,
                           alternative_lenders=alternative_lenders)
+
+@app.route('/test')
+def test():
+    return jsonify({
+        "status": "success",
+        "message": "API is working",
+        "config": config
+    })
 
 # Error handlers
 @app.errorhandler(404)
