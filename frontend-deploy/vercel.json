@@ -2,16 +2,11 @@
   "version": 2,
   "builds": [
     {
-      "src": "app.py",
-      "use": "@vercel/python",
-      "config": { "runtime": "python3.12" }
-    },
-    {
-      "src": "static/**",
+      "src": "templates/**",
       "use": "@vercel/static"
     },
     {
-      "src": "templates/**",
+      "src": "static/**",
       "use": "@vercel/static"
     }
   ],
@@ -25,12 +20,8 @@
       "dest": "/templates/$1"
     },
     {
-      "src": "/api/(.*)",
-      "dest": "app.py"
-    },
-    {
       "src": "/(.*)",
-      "dest": "app.py"
+      "dest": "/templates/index.html"
     }
   ]
 } 

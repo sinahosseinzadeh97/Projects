@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geographic Analysis - {{ config.app_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>{{ config.app_name }}</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('documentation') }}">Documentation</a></li>
+                {% if config.features.geographic_analysis.enabled %}
+                <li><a href="{{ url_for('geographic_analysis') }}">Geographic Analysis</a></li>
+                {% endif %}
+                {% if config.features.time_based_analysis.enabled %}
+                <li><a href="{{ url_for('time_based_analysis') }}">Time-Based Analysis</a></li>
+                {% endif %}
+                {% if config.features.risk_segmentation.enabled %}
+                <li><a href="{{ url_for('risk_segmentation') }}">Risk Segmentation</a></li>
+                {% endif %}
+                {% if config.features.financial_planning.enabled %}
+                <li><a href="{{ url_for('financial_planning') }}">Financial Planning</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="feature-section">
+            <h2>Geographic Analysis</h2>
+            
+            <div class="content-container">
+                <h3>Regional Economic Indicators</h3>
+                <p>Analysis of economic indicators by region and their impact on loan performance.</p>
+                
+                <div class="data-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Region</th>
+                                <th>Unemployment Rate</th>
+                                <th>Median Income</th>
+                                <th>Housing Price Index</th>
+                                <th>Economic Growth</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for region, data in regional_economic_data.regions.items() %}
+                            <tr>
+                                <td>{{ region }}</td>
+                                <td>{{ data.unemployment_rate }}%</td>
+                                <td>${{ "{:,.0f}".format(data.median_income) }}</td>
+                                <td>{{ data.housing_price_index }}</td>
+                                <td>{{ data.economic_growth }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3>State Default Rates</h3>
+                <p>Analysis of loan default rates by state.</p>
+                
+                <div class="data-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>State</th>
+                                <th>Default Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for state, rate in state_default_rates.states.items() %}
+                            <tr>
+                                <td>{{ state }}</td>
+                                <td>{{ "%.2f"|format(rate * 100) }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3>Geographic Risk Analysis</h3>
+                <p>The geographic risk analysis shows how location factors influence loan performance.</p>
+                
+                <div class="content-container">
+                    <h4>Key Findings:</h4>
+                    <ul>
+                        <li>Areas with higher unemployment rates tend to have higher default rates</li>
+                        <li>Median income is inversely correlated with default risk</li>
+                        <li>Housing price stability is a strong predictor of loan performance</li>
+                        <li>Economic growth rates can indicate future loan performance trends</li>
+                    </ul>
+                    
+                    <h4>Recommendations:</h4>
+                    <ul>
+                        <li>Consider regional economic factors when assessing loan applications</li>
+                        <li>Adjust risk models to account for geographic variation</li>
+                        <li>Monitor economic indicators for early warning signs of increased default risk</li>
+                        <li>Diversify loan portfolios across different geographic regions</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 {{ config.app_name }} v{{ config.version }}</p>
+    </footer>
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html> 
