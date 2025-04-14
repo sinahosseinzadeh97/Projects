@@ -4,6 +4,11 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import os
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 # More permissive CORS configuration
@@ -11,17 +16,24 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/')
 def index():
-    return jsonify({"status": "ok", "message": "Welcome to Loan Prediction API"})
+    try:
+        logger.info("Accessing root endpoint")
+        return jsonify({"status": "ok", "message": "Welcome to Loan Prediction API"})
+    except Exception as e:
+        logger.error(f"Error in root endpoint: {str(e)}")
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/api/health')
 def health_check():
     try:
+        logger.info("Accessing health check endpoint")
         return jsonify({
             "status": "healthy",
             "message": "API is running",
             "version": "1.0.0"
         })
     except Exception as e:
+        logger.error(f"Error in health check: {str(e)}")
         return jsonify({
             "status": "error",
             "message": str(e)
