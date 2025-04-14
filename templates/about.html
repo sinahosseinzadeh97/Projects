@@ -3,80 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - {{ config.app_name }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>About - Loan Prediction System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .about-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .btn-back {
+            background-color: #4e73df;
+            border: none;
+            padding: 10px 30px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .feature-importance-img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>{{ config.app_name }}</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('about') }}">About</a></li>
-                <li><a href="{{ url_for('documentation') }}">Documentation</a></li>
-                {% if config.features.geographic_analysis.enabled %}
-                <li><a href="{{ url_for('geographic_analysis') }}">Geographic Analysis</a></li>
-                {% endif %}
-                {% if config.features.time_based_analysis.enabled %}
-                <li><a href="{{ url_for('time_based_analysis') }}">Time-Based Analysis</a></li>
-                {% endif %}
-                {% if config.features.risk_segmentation.enabled %}
-                <li><a href="{{ url_for('risk_segmentation') }}">Risk Segmentation</a></li>
-                {% endif %}
-                {% if config.features.financial_planning.enabled %}
-                <li><a href="{{ url_for('financial_planning') }}">Financial Planning</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-    </header>
-    
-    <main>
-        <section class="feature-section">
-            <h2>About the Loan Prediction System</h2>
-            
-            <div class="content-container">
-                <h3>Overview</h3>
-                <p>The Loan Prediction System is an advanced analytics platform designed to assess borrower risk and predict loan performance based on historical lending data.</p>
-                
-                <h3>Key Features</h3>
-                <ul>
-                    <li><strong>Loan Performance Prediction:</strong> Machine learning algorithms that predict loan outcomes based on borrower characteristics.</li>
-                    <li><strong>Geographic Analysis:</strong> Analysis of loan performance across different geographic regions and economic conditions.</li>
-                    <li><strong>Time-Based Analysis:</strong> Analysis of seasonal trends and long-term patterns in loan performance.</li>
-                    <li><strong>Risk Segmentation:</strong> Categorization of borrowers into risk tiers for targeted lending strategies.</li>
-                    <li><strong>Financial Planning:</strong> Personalized financial planning tools for borrowers based on their profile.</li>
-                </ul>
-                
-                <h3>Technology Stack</h3>
-                <p>The Loan Prediction System is built using the following technologies:</p>
-                <ul>
-                    <li>Python for backend data processing and machine learning</li>
-                    <li>Flask web framework for API and user interface</li>
-                    <li>Scikit-learn for machine learning algorithms</li>
-                    <li>Pandas and NumPy for data manipulation</li>
-                    <li>Matplotlib and Seaborn for data visualization</li>
-                    <li>HTML, CSS, and JavaScript for frontend user interface</li>
-                </ul>
-                
-                <h3>Data Sources</h3>
-                <p>The system is trained on historical lending data, including:</p>
-                <ul>
-                    <li>Loan applications and outcomes</li>
-                    <li>Borrower demographic information</li>
-                    <li>Credit history and financial metrics</li>
-                    <li>Economic indicators and regional data</li>
-                </ul>
-                
-                <h3>Development Team</h3>
-                <p>The Loan Prediction System was developed by a team of data scientists, financial analysts, and software engineers with expertise in lending risk assessment and machine learning.</p>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="header">
+                    <h1>About the Loan Prediction System</h1>
+                    <p class="lead">Understanding the technology behind our predictions</p>
+                </div>
             </div>
-        </section>
-    </main>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="about-container">
+                    <div class="section">
+                        <h2>Project Overview</h2>
+                        <p>This loan prediction system was developed to help predict the status of loans based on historical lending data. The system uses machine learning to analyze various factors that influence loan outcomes and provides predictions on whether a loan will remain in good standing or has a risk of default.</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Data and Methodology</h2>
+                        <p>The system was trained on a dataset containing 10,000 loan records with 55 different variables from Lending Club. The data was carefully processed and analyzed to identify patterns and relationships between loan features and outcomes.</p>
+                        <p>Key steps in our approach included:</p>
+                        <ul>
+                            <li>Comprehensive data exploration and visualization</li>
+                            <li>Handling missing values and encoding categorical variables</li>
+                            <li>Feature selection to identify the most predictive factors</li>
+                            <li>Development and comparison of multiple machine learning models</li>
+                            <li>Model optimization and performance evaluation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Model Performance</h2>
+                        <p>We evaluated several machine learning models including Logistic Regression, Naive Bayes, Random Forest, and Neural Networks. The Random Forest model achieved the best performance with near-perfect accuracy (AUROC = 0.9999).</p>
+                        <p>The model was optimized through:</p>
+                        <ul>
+                            <li>Hyperparameter tuning</li>
+                            <li>Threshold optimization</li>
+                            <li>Cross-validation to ensure robustness</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Key Predictive Features</h2>
+                        <p>Based on our analysis, these are the most important factors in predicting loan status:</p>
+                        <ol>
+                            <li><strong>Paid Principal</strong> - Amount of principal paid so far</li>
+                            <li><strong>Paid Total</strong> - Total amount paid so far</li>
+                            <li><strong>Interest Rate</strong> - The interest rate on the loan</li>
+                            <li><strong>Issue Month/Year</strong> - When the loan was issued</li>
+                            <li><strong>State</strong> - Borrower's state of residence</li>
+                        </ol>
+                        <p>The chart below shows the relative importance of the top features in our model:</p>
+                        <img src="/static/random_forest_feature_importance.png" alt="Feature Importance Chart" class="feature-importance-img">
+                    </div>
+                    
+                    <div class="section">
+                        <h2>How to Use the System</h2>
+                        <p>To use the loan prediction system:</p>
+                        <ol>
+                            <li>Enter the loan details in the form on the home page</li>
+                            <li>Click "Predict Loan Status" to submit the information</li>
+                            <li>Review the prediction result and confidence level</li>
+                        </ol>
+                        <p>The system will provide a prediction of whether the loan will remain in good standing or has a risk of default, along with a confidence score.</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h2>Limitations and Considerations</h2>
+                        <p>While our model performs with high accuracy, it's important to note:</p>
+                        <ul>
+                            <li>Predictions are based on historical data and patterns</li>
+                            <li>The model should be used as a decision support tool, not as the sole decision maker</li>
+                            <li>Regular model updates are recommended as lending patterns evolve</li>
+                            <li>Individual circumstances may vary and should be considered alongside model predictions</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="text-center">
+                        <a href="/" class="btn btn-primary btn-back">Back to Prediction Form</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
-    <footer>
-        <p>&copy; 2023 {{ config.app_name }} v{{ config.version }}</p>
-    </footer>
-    
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html> 
+</html>

@@ -3,137 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Time-Based Analysis - {{ config.app_name }}</title>
+    <title>Time-Based Analysis - {{ config.app.name }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <header>
-        <h1>{{ config.app_name }}</h1>
+        <h1>Time-Based Analysis</h1>
         <nav>
             <ul>
                 <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
                 <li><a href="{{ url_for('about') }}">About</a></li>
                 <li><a href="{{ url_for('documentation') }}">Documentation</a></li>
-                {% if config.features.geographic_analysis.enabled %}
-                <li><a href="{{ url_for('geographic_analysis') }}">Geographic Analysis</a></li>
-                {% endif %}
-                {% if config.features.time_based_analysis.enabled %}
-                <li><a href="{{ url_for('time_based_analysis') }}">Time-Based Analysis</a></li>
-                {% endif %}
-                {% if config.features.risk_segmentation.enabled %}
-                <li><a href="{{ url_for('risk_segmentation') }}">Risk Segmentation</a></li>
-                {% endif %}
-                {% if config.features.financial_planning.enabled %}
-                <li><a href="{{ url_for('financial_planning') }}">Financial Planning</a></li>
-                {% endif %}
-                {% if config.features.competitive_analysis.enabled %}
-                <li><a href="{{ url_for('competitive_analysis') }}">Competitive Analysis</a></li>
-                {% endif %}
             </ul>
         </nav>
     </header>
-    
+
     <main>
         <section class="feature-section">
-            <h2>Time-Based Analysis</h2>
-            
-            <div class="content-container">
-                <h3>Seasonal Default Rate Trends</h3>
-                <p>Analysis of default rates by month shows seasonal patterns.</p>
-                
-                <div class="data-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Month</th>
-                                <th>Default Rate</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for i in range(forecast_results.months|length) %}
-                            <tr>
-                                <td>{{ forecast_results.months[i] }}</td>
-                                <td>{{ "%.2f"|format(forecast_results.default_rates[i] * 100) }}%</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+            <h2>Seasonal Trend Detection</h2>
+            <div class="visualization-container">
+                <img src="{{ url_for('static', filename='img/time_based/seasonal_loan_trends.png') }}" alt="Seasonal Loan Trends">
+            </div>
+            <div class="data-container">
+                <h3>Monthly Seasonal Patterns</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Default Rate</th>
+                            <th>Approval Rate</th>
+                            <th>Interest Rate</th>
+                            <th>Loan Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for trend in seasonal_trends %}
+                        <tr>
+                            <td>{{ trend.month_name }}</td>
+                            <td>{{ trend.default_rate|round(2) }}%</td>
+                            <td>{{ trend.approval_rate|round(2) }}%</td>
+                            <td>{{ trend.interest_rate|round(2) }}%</td>
+                            <td>${{ trend.loan_amount|int }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="feature-section">
+            <h2>Loan Performance Forecasting</h2>
+            <div class="visualization-container">
+                <img src="{{ url_for('static', filename='img/time_based/forecast_default_rate.png') }}" alt="Default Rate Forecast">
+            </div>
+            <div class="visualization-container">
+                <img src="{{ url_for('static', filename='img/time_based/forecast_approval_rate.png') }}" alt="Approval Rate Forecast">
+            </div>
+            <div class="data-container">
+                <h3>12-Month Forecast</h3>
+                <div class="tabs">
+                    <div class="tab-header">
+                        <div class="tab-btn active" data-tab="default-rate">Default Rate</div>
+                        <div class="tab-btn" data-tab="approval-rate">Approval Rate</div>
+                        <div class="tab-btn" data-tab="interest-rate">Interest Rate</div>
+                        <div class="tab-btn" data-tab="loan-amount">Loan Amount</div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="default-rate">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Month</th>
+                                        <th>Forecasted Default Rate</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in range(forecast_results.default_rate.dates|length) %}
+                                    <tr>
+                                        <td>{{ forecast_results.default_rate.dates[i] }}</td>
+                                        <td>{{ forecast_results.default_rate.values[i]|round(2) }}%</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Other tab panes would be similar -->
+                    </div>
                 </div>
-                
-                <h3>Seasonal Application Volume</h3>
-                <p>Loan application volume varies by season.</p>
-                
-                <div class="data-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Season</th>
-                                <th>Application Volume</th>
-                                <th>Approval Rate</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for i in range(seasonal_trends.seasons|length) %}
-                            <tr>
-                                <td>{{ seasonal_trends.seasons[i] }}</td>
-                                <td>{{ seasonal_trends.application_volume[i] }}</td>
-                                <td>{{ "%.2f"|format(seasonal_trends.approval_rates[i] * 100) }}%</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                
-                <h3>Default Rate Timeline</h3>
-                <p>Analysis of default rates over the lifetime of a loan.</p>
-                
-                <div class="data-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Months Since Origination</th>
-                                <th>Cumulative Default Rate</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for i in range(repayment_timeline_results.months_since_origination|length) %}
-                            <tr>
-                                <td>{{ repayment_timeline_results.months_since_origination[i] }}</td>
-                                <td>{{ "%.2f"|format(repayment_timeline_results.cumulative_default_rate[i] * 100) }}%</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                
-                <h3>Time-Based Risk Analysis</h3>
-                <p>Key insights from time-based analysis of loan performance.</p>
-                
-                <div class="content-container">
-                    <h4>Key Findings:</h4>
-                    <ul>
-                        <li>Default rates tend to peak during summer months</li>
-                        <li>Application volume is highest in summer and lowest in winter</li>
-                        <li>Most defaults occur within the first 12 months of loan origination</li>
-                        <li>Approval rates are highest in summer when volume is highest</li>
-                    </ul>
-                    
-                    <h4>Recommendations:</h4>
-                    <ul>
-                        <li>Consider seasonal factors when evaluating loan applications</li>
-                        <li>Implement additional verification during high-risk periods</li>
-                        <li>Focus monitoring efforts on the first year of loan performance</li>
-                        <li>Plan for staffing adjustments to handle seasonal volume changes</li>
-                    </ul>
+            </div>
+        </section>
+
+        <section class="feature-section">
+            <h2>Repayment Timeline Projections</h2>
+            <div class="visualization-container">
+                <img src="{{ url_for('static', filename='img/time_based/repayment_timeline_20000_7.5_60.png') }}" alt="Repayment Timeline">
+            </div>
+            <div class="data-container">
+                <h3>Loan Repayment Calculator</h3>
+                <form id="repayment-calculator">
+                    <div class="form-group">
+                        <label for="loan-amount">Loan Amount ($):</label>
+                        <input type="number" id="loan-amount" name="loan-amount" min="1000" max="100000" step="1000" value="20000">
+                    </div>
+                    <div class="form-group">
+                        <label for="interest-rate">Interest Rate (%):</label>
+                        <input type="number" id="interest-rate" name="interest-rate" min="1" max="30" step="0.1" value="7.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="term">Term (months):</label>
+                        <select id="term" name="term">
+                            <option value="36">36 months (3 years)</option>
+                            <option value="60" selected>60 months (5 years)</option>
+                            <option value="120">120 months (10 years)</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn" onclick="calculateRepayment()">Calculate</button>
+                </form>
+                <div id="repayment-results" class="results-container">
+                    <h4>Repayment Summary</h4>
+                    <div class="result-item">
+                        <span>Monthly Payment:</span>
+                        <span id="monthly-payment">$400.76</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Total Payment:</span>
+                        <span id="total-payment">$24,045.60</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Total Interest:</span>
+                        <span id="total-interest">$4,045.60</span>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
-    
+
     <footer>
-        <p>&copy; 2023 {{ config.app_name }} v{{ config.version }}</p>
+        <p>&copy; {{ config.app.name }} {{ config.app.version }}</p>
     </footer>
-    
+
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        function calculateRepayment() {
+            const loanAmount = parseFloat(document.getElementById('loan-amount').value);
+            const interestRate = parseFloat(document.getElementById('interest-rate').value);
+            const term = parseInt(document.getElementById('term').value);
+            
+            const monthlyRate = interestRate / 100 / 12;
+            const monthlyPayment = loanAmount * monthlyRate * Math.pow(1 + monthlyRate, term) / (Math.pow(1 + monthlyRate, term) - 1);
+            const totalPayment = monthlyPayment * term;
+            const totalInterest = totalPayment - loanAmount;
+            
+            document.getElementById('monthly-payment').textContent = '$' + monthlyPayment.toFixed(2);
+            document.getElementById('total-payment').textContent = '$' + totalPayment.toFixed(2);
+            document.getElementById('total-interest').textContent = '$' + totalInterest.toFixed(2);
+        }
+        
+        // Tab functionality
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and panes
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Show corresponding pane
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    </script>
 </body>
-</html> 
+</html>

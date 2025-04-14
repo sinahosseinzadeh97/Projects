@@ -178,6 +178,14 @@ footer {
     color: #f8f9fa;
 }
 
+.author {
+    text-align: center;
+    font-size: 1.2em;
+    color: #666;
+    margin: 0.5em 0;
+    font-style: italic;
+}
+
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
     nav ul {
