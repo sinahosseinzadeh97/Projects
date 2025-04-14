@@ -1,7 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+loan_env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Data files
+*.csv
+*.xlsx
+*.xls
+*.db
+*.sqlite3
+
+# Large files
+*.zip
+*.tar.gz
+*.rar
+
+# Logs
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Test files
+*.test
+*.spec
+*.pyc
+
 # Exclude only large files and cache
 *.zip
-loan_env/
-__pycache__/
 *.pyc
 *.pyo
 *.pyd
