@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Competitive Analysis - {{ config.app.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Competitive Analysis</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('documentation') }}">Documentation</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="feature-section">
+            <h2>Market Comparison</h2>
+            <div class="visualization-container">
+                <img src="{{ url_for('static', filename='img/competitive/lender_radar_comparison.png') }}" alt="Lender Comparison Radar Chart">
+            </div>
+            <div class="visualization-container">
+                <img src="{{ url_for('static', filename='img/competitive/market_comparison_average_interest_rate.png') }}" alt="Interest Rate Comparison">
+            </div>
+            <div class="data-container">
+                <h3>Lender Market Data</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Lender Type</th>
+                            <th>Avg. Interest Rate</th>
+                            <th>Avg. Loan Amount</th>
+                            <th>Approval Rate</th>
+                            <th>Processing Time</th>
+                            <th>Customer Satisfaction</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lender, data in lender_market_data.items() %}
+                        <tr>
+                            <td>{{ lender }}</td>
+                            <td>{{ data.average_interest_rate }}%</td>
+                            <td>${{ data.average_loan_amount|int }}</td>
+                            <td>{{ data.approval_rate }}%</td>
+                            <td>{{ data.processing_time_days }} days</td>
+                            <td>{{ data.customer_satisfaction }}/5</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="feature-section">
+            <h2>Industry Benchmarks</h2>
+            <div class="visualization-container">
+                <img src="{{ url_for('static', filename='img/competitive/benchmark_heatmap.png') }}" alt="Industry Benchmark Heatmap">
+            </div>
+            <div class="data-container">
+                <h3>Benchmarks by Loan Type</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Loan Type</th>
+                            <th>Avg. Interest Rate</th>
+                            <th>Avg. Loan Amount</th>
+                            <th>Avg. Term (months)</th>
+                            <th>Approval Rate</th>
+                            <th>Default Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for loan_type, data in industry_benchmarks.items() %}
+                        <tr>
+                            <td>{{ loan_type }}</td>
+                            <td>{{ data.average_interest_rate }}%</td>
+                            <td>${{ data.average_loan_amount|int }}</td>
+                            <td>{{ data.average_term_months }}</td>
+                            <td>{{ data.approval_rate }}%</td>
+                            <td>{{ data.default_rate }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="feature-section">
+            <h2>Alternative Lender Recommendations</h2>
+            <div class="visualization-container">
+                <img src="{{ url_for('static', filename='img/competitive/lender_specialties.png') }}" alt="Lender Specialties">
+            </div>
+            <div class="visualization-container">
+                <img src="{{ url_for('static', filename='img/competitive/interest_rate_ranges.png') }}" alt="Interest Rate Ranges">
+            </div>
+            <div class="data-container">
+                <h3>Alternative Lender Options</h3>
+                <div class="lender-cards">
+                    {% for lender_name, lender_data in alternative_lenders.items() %}
+                    <div class="lender-card">
+                        <h4>{{ lender_name }}</h4>
+                        <div class="lender-details">
+                            <p><strong>Specialties:</strong> {{ lender_data.specialties|join(', ') }}</p>
+                            <p><strong>Interest Rate Range:</strong> {{ lender_data.interest_rate_range }}</p>
+                            <p><strong>Loan Amount Range:</strong> {{ lender_data.loan_amount_range }}</p>
+                            <p><strong>Min. Credit Score:</strong> {{ lender_data.min_credit_score }}</p>
+                        </div>
+                        <div class="lender-pros-cons">
+                            <div class="pros">
+                                <h5>Pros</h5>
+                                <ul>
+                                    {% for pro in lender_data.pros %}
+                                    <li>{{ pro }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="cons">
+                                <h5>Cons</h5>
+                                <ul>
+                                    {% for con in lender_data.cons %}
+                                    <li>{{ con }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <section class="feature-section">
+            <h2>Competitive Analysis for Your Loan</h2>
+            <div class="form-container">
+                <form id="competitive-analysis-form">
+                    <div class="form-group">
+                        <label for="loan-type">Loan Type:</label>
+                        <select id="loan-type" name="loan-type">
+                            {% for loan_type in industry_benchmarks.keys() %}
+                            <option value="{{ loan_type }}">{{ loan_type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="loan-amount">Loan Amount ($):</label>
+                        <input type="number" id="loan-amount" name="loan-amount" min="1000" max="100000" step="1000" value="20000">
+                    </div>
+                    <div class="form-group">
+                        <label for="interest-rate">Interest Rate (%):</label>
+                        <input type="number" id="interest-rate" name="interest-rate" min="1" max="30" step="0.1" value="7.5">
+                    </div>
+                    <button type="button" class="btn" onclick="analyzeCompetitiveness()">Analyze Competitiveness</button>
+                </form>
+                <div id="competitive-analysis-results" class="results-container">
+                    <h4>Competitive Analysis Results</h4>
+                    <div id="competitive-results">
+                        <!-- Results will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; {{ config.app.name }} {{ config.app.version }}</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        function analyzeCompetitiveness() {
+            const loanType = document.getElementById('loan-type').value;
+            const loanAmount = parseFloat(document.getElementById('loan-amount').value);
+            const interestRate = parseFloat(document.getElementById('interest-rate').value);
+            
+            // Get industry benchmarks for selected loan type
+            const benchmarks = {
+                {% for loan_type, data in industry_benchmarks.items() %}
+                "{{ loan_type }}": {
+                    "average_interest_rate": {{ data.average_interest_rate }},
+                    "average_loan_amount": {{ data.average_loan_amount }},
+                    "average_term_months": {{ data.average_term_months }},
+                    "approval_rate": {{ data.approval_rate }},
+                    "default_rate": {{ data.default_rate }}
+                },
+                {% endfor %}
+            };
+            
+            const selectedBenchmark = benchmarks[loanType];
+            
+            // Compare with benchmarks
+            const interestComparison = interestRate - selectedBenchmark.average_interest_rate;
+            const amountComparison = loanAmount - selectedBenchmark.average_loan_amount;
+            
+            // Generate results HTML
+            let resultsHTML = `
+                <div class="comparison-result">
+                    <h5>Interest Rate Comparison</h5>
+                    <p>Your rate: ${interestRate}% | Industry average: ${selectedBenchmark.average_interest_rate}%</p>
+                    <p class="${interestComparison <= 0 ? 'positive' : 'negative'}">
+                        ${interestComparison <= 0 ? 'Better than average by ' + Math.abs(interestComparison).toFixed(2) + '%' : 
+                                                   'Worse than average by ' + interestComparison.toFixed(2) + '%'}
+                    </p>
+                </div>
+                <div class="comparison-result">
+                    <h5>Loan Amount Comparison</h5>
+                    <p>Your amount: $${loanAmount.toFixed(2)} | Industry average: $${selectedBenchmark.average_loan_amount.toFixed(2)}</p>
+                    <p>
+                        ${Math.abs(amountComparison) < 5000 ? 'Close to average amount' : 
+                          amountComparison > 0 ? 'Higher than average by $' + amountComparison.toFixed(2) : 
+                                               'Lower than average by $' + Math.abs(amountComparison).toFixed(2)}
+                    </p>
+                </div>
+                <div class="recommendation">
+                    <h5>Recommended Lenders</h5>
+                    <ul>
+                        ${getRecommendedLenders(loanType, interestRate, loanAmount)}
+                    </ul>
+                </div>
+            `;
+            
+            document.getElementById('competitive-results').innerHTML = resultsHTML;
+        }
+        
+        function getRecommendedLenders(loanType, interestRate, loanAmount) {
+            // This would normally use the alternative_lenders data to make recommendations
+            // For this example, we'll return some static recommendations
+            return `
+                <li>Best overall match: CreditUnion Plus</li>
+                <li>Lowest interest rate: EasyFinance</li>
+                <li>Fastest approval: MobileLender</li>
+            `;
+        }
+    </script>
+</body>
+</html>

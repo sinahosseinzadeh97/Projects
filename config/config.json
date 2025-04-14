@@ -1,0 +1,38 @@
+{
+    "app_name": "Loan Prediction System",
+    "version": "1.0.0",
+    "features": {
+        "geographic_analysis": {
+            "enabled": true,
+            "description": "Analyze loan performance across different geographic regions"
+        },
+        "time_based_analysis": {
+            "enabled": true,
+            "description": "Analyze loan performance over time, including seasonal trends"
+        },
+        "competitive_analysis": {
+            "enabled": true,
+            "description": "Compare loan terms and performance with competitive offerings"
+        },
+        "risk_segmentation": {
+            "enabled": true,
+            "description": "Segment borrowers by risk tier for targeted lending strategies"
+        },
+        "financial_planning": {
+            "enabled": true,
+            "description": "Provide personalized financial planning tools for borrowers"
+        }
+    },
+    "model_settings": {
+        "default_threshold": 0.5,
+        "prediction_classes": ["Default Risk", "Good Standing"],
+        "allowed_model_types": ["random_forest", "gradient_boosting", "logistic_regression"]
+    },
+    "ui_settings": {
+        "primary_color": "#17a2b8",
+        "secondary_color": "#343a40",
+        "accent_color": "#28a745",
+        "warning_color": "#dc3545",
+        "info_color": "#007bff"
+    }
+} 

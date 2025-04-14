@@ -1,0 +1,28 @@
+{
+    "regions": {
+        "Northeast": {
+            "unemployment_rate": 5.2,
+            "median_income": 72500,
+            "housing_price_index": 342,
+            "economic_growth": 1.8
+        },
+        "Midwest": {
+            "unemployment_rate": 4.8,
+            "median_income": 65400,
+            "housing_price_index": 285,
+            "economic_growth": 2.1
+        },
+        "South": {
+            "unemployment_rate": 5.1,
+            "median_income": 61200,
+            "housing_price_index": 265,
+            "economic_growth": 2.4
+        },
+        "West": {
+            "unemployment_rate": 4.9,
+            "median_income": 78300,
+            "housing_price_index": 395,
+            "economic_growth": 2.2
+        }
+    }
+} 

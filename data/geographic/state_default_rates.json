@@ -1,0 +1,14 @@
+{
+    "states": {
+        "California": 0.074,
+        "Texas": 0.081,
+        "New York": 0.068,
+        "Florida": 0.092,
+        "Illinois": 0.078,
+        "Pennsylvania": 0.072,
+        "Ohio": 0.085,
+        "Georgia": 0.089,
+        "Michigan": 0.083,
+        "North Carolina": 0.076
+    }
+} 

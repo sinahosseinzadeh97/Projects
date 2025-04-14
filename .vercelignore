@@ -1,0 +1,52 @@
+# Exclude only large files and cache
+*.zip
+loan_env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.git
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Keep essential project files
+!templates/
+!static/
+!data/
+!*.json
+!*.png
+!README.md
+
+# Exclude data files
+*.csv
+*.json
+*.zip
+*.png
+*.jpg
+*.jpeg
+
+# Exclude directories
+data/
+static/
+templates/
+loan_env/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Exclude development files
+*.ipynb
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.git
+.gitignore
+README.md
+todo.md
+*.md 
