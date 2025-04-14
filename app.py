@@ -6,17 +6,8 @@ from flask_cors import CORS
 import os
 
 app = Flask(__name__)
-CORS(app, resources={
-    r"/api/*": {
-        "origins": [
-            "http://localhost:3000",
-            "https://loan-prediction-frontend.vercel.app",
-            "https://historical-lending-data-analysis-and-loan-prediction-b5utw5emm.vercel.app"
-        ],
-        "methods": ["GET", "POST", "OPTIONS"],
-        "allow_headers": ["Content-Type"]
-    }
-})
+# More permissive CORS configuration
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/')
 def index():
@@ -24,7 +15,17 @@ def index():
 
 @app.route('/api/health')
 def health_check():
-    return jsonify({"status": "healthy", "message": "API is running"})
+    try:
+        return jsonify({
+            "status": "healthy",
+            "message": "API is running",
+            "version": "1.0.0"
+        })
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
 
 @app.route('/api/predict', methods=['POST'])
 def predict():
