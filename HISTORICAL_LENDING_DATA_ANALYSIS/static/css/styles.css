@@ -1,0 +1,191 @@
+/* Main Styles for Loan Prediction System */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+header {
+    background-color: #343a40;
+    color: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin-bottom: 0.5rem;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-right: 1.5rem;
+}
+
+nav ul li a {
+    color: #f8f9fa;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: #17a2b8;
+}
+
+main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.feature-section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.feature-section h2 {
+    color: #343a40;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #f8f9fa;
+    padding-bottom: 0.5rem;
+}
+
+.visualization-container {
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.visualization-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.data-container {
+    margin: 1.5rem 0;
+}
+
+.data-container h3 {
+    margin-bottom: 1rem;
+    color: #495057;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+table th, table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+}
+
+table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.form-container {
+    margin: 1.5rem 0;
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 4px;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #17a2b8;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.btn:hover {
+    background-color: #138496;
+}
+
+.results-container {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 4px;
+    border-left: 4px solid #17a2b8;
+}
+
+.positive {
+    color: #28a745;
+}
+
+.negative {
+    color: #dc3545;
+}
+
+.highlight {
+    background-color: #fff3cd;
+    padding: 0.2rem 0.4rem;
+    border-radius: 2px;
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #343a40;
+    color: #f8f9fa;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+    }
+    
+    nav ul li {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+} 

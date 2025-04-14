@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ config.app_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>{{ config.app_name }}</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('documentation') }}">Documentation</a></li>
+                {% if config.features.geographic_analysis.enabled %}
+                <li><a href="{{ url_for('geographic_analysis') }}">Geographic Analysis</a></li>
+                {% endif %}
+                {% if config.features.time_based_analysis.enabled %}
+                <li><a href="{{ url_for('time_based_analysis') }}">Time-Based Analysis</a></li>
+                {% endif %}
+                {% if config.features.risk_segmentation.enabled %}
+                <li><a href="{{ url_for('risk_segmentation') }}">Risk Segmentation</a></li>
+                {% endif %}
+                {% if config.features.financial_planning.enabled %}
+                <li><a href="{{ url_for('financial_planning') }}">Financial Planning</a></li>
+                {% endif %}
+                {% if config.features.competitive_analysis.enabled %}
+                <li><a href="{{ url_for('competitive_analysis') }}">Competitive Analysis</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="feature-section">
+            <h2>Loan Prediction Tool</h2>
+            <p>Fill out the form below to predict loan performance:</p>
+            
+            <div class="form-container">
+                <form action="{{ url_for('predict') }}" method="post">
+                    <div class="form-group">
+                        <label for="loan_amount">Loan Amount ($):</label>
+                        <input type="number" id="loan_amount" name="loan_amount" required min="1000" max="100000" step="100">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="interest_rate">Interest Rate (%):</label>
+                        <input type="number" id="interest_rate" name="interest_rate" required min="1" max="30" step="0.1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="term">Term (months):</label>
+                        <input type="number" id="term" name="term" required min="12" max="360">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="grade">Loan Grade:</label>
+                        <select id="grade" name="grade" required>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="emp_length">Employment Length (years):</label>
+                        <input type="number" id="emp_length" name="emp_length" required min="0" max="50">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="annual_income">Annual Income ($):</label>
+                        <input type="number" id="annual_income" name="annual_income" required min="10000" max="500000" step="1000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="debt_to_income">Debt-to-Income Ratio (%):</label>
+                        <input type="number" id="debt_to_income" name="debt_to_income" required min="0" max="100" step="0.1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="verified_income">Income Verification Status:</label>
+                        <select id="verified_income" name="verified_income" required>
+                            <option value="Not Verified">Not Verified</option>
+                            <option value="Verified">Verified</option>
+                            <option value="Source Verified">Source Verified</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="homeownership">Home Ownership:</label>
+                        <select id="homeownership" name="homeownership" required>
+                            <option value="RENT">Rent</option>
+                            <option value="OWN">Own</option>
+                            <option value="MORTGAGE">Mortgage</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="total_credit_lines">Total Credit Lines:</label>
+                        <input type="number" id="total_credit_lines" name="total_credit_lines" required min="0" max="100">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="open_credit_lines">Open Credit Lines:</label>
+                        <input type="number" id="open_credit_lines" name="open_credit_lines" required min="0" max="50">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="num_mort_accounts">Number of Mortgage Accounts:</label>
+                        <input type="number" id="num_mort_accounts" name="num_mort_accounts" required min="0" max="20">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="paid_principal">Paid Principal ($):</label>
+                        <input type="number" id="paid_principal" name="paid_principal" required min="0" max="1000000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="paid_total">Paid Total ($):</label>
+                        <input type="number" id="paid_total" name="paid_total" required min="0" max="1000000">
+                    </div>
+                    
+                    <button type="submit" class="btn">Predict Loan Performance</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 {{ config.app_name }} v{{ config.version }}</p>
+    </footer>
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html> 
