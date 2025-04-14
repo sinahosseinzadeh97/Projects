@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Prediction System - Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+            padding-bottom: 40px;
+        }
+        .doc-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .btn-back {
+            background-color: #4e73df;
+            border: none;
+            padding: 10px 30px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .toc {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="header">
+                    <h1>Loan Prediction System - Documentation</h1>
+                    <p class="lead">Technical documentation for deployment and maintenance</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="doc-container">
+                    <div class="toc">
+                        <h3>Table of Contents</h3>
+                        <ol>
+                            <li><a href="#overview">System Overview</a></li>
+                            <li><a href="#architecture">Architecture</a></li>
+                            <li><a href="#installation">Installation</a></li>
+                            <li><a href="#deployment">Deployment</a></li>
+                            <li><a href="#maintenance">Maintenance</a></li>
+                            <li><a href="#troubleshooting">Troubleshooting</a></li>
+                        </ol>
+                    </div>
+                    
+                    <div id="overview" class="section">
+                        <h2>1. System Overview</h2>
+                        <p>The Loan Prediction System is a web application that uses machine learning to predict loan status based on historical lending data. The system is built with Python, Flask, and scikit-learn, and uses a Random Forest model to make predictions.</p>
+                        <p>Key components:</p>
+                        <ul>
+                            <li>Flask web application</li>
+                            <li>Random Forest machine learning model</li>
+                            <li>Feature selection and preprocessing pipeline</li>
+                            <li>Bootstrap-based responsive UI</li>
+                        </ul>
+                    </div>
+                    
+                    <div id="architecture" class="section">
+                        <h2>2. Architecture</h2>
+                        <p>The application follows a standard web application architecture:</p>
+                        <ul>
+                            <li><strong>Web Server</strong>: Nginx serves as the front-facing web server</li>
+                            <li><strong>Application Server</strong>: Gunicorn runs the Flask application</li>
+                            <li><strong>Application</strong>: Flask handles routing and business logic</li>
+                            <li><strong>Model</strong>: Scikit-learn Random Forest model makes predictions</li>
+                        </ul>
+                        <p>File structure:</p>
+                        <pre>
+loan_prediction_project/
+├── production_app.py         # Main Flask application
+├── requirements.txt          # Python dependencies
+├── gunicorn.conf.py          # Gunicorn configuration
+├── nginx.conf                # Nginx configuration
+├── optimized_models.pkl      # Trained machine learning models
+├── static/                   # Static files (images, CSS, JS)
+│   └── random_forest_feature_importance.png
+├── templates/                # HTML templates
+│   ├── index.html            # Home page with prediction form
+│   ├── result.html           # Prediction results page
+│   ├── error.html            # Error page
+│   └── about.html            # About page
+└── logs/                     # Application logs
+        </pre>
+                    </div>
+                    
+                    <div id="installation" class="section">
+                        <h2>3. Installation</h2>
+                        <p>To install the application on a new server:</p>
+                        <ol>
+                            <li>Clone the repository or upload the files to the server</li>
+                            <li>Install Python 3.10 or higher</li>
+                            <li>Install required packages:</li>
+                        </ol>
+                        <pre>pip install -r requirements.txt</pre>
+                        <p>Install Nginx:</p>
+                        <pre>sudo apt update
+sudo apt install nginx</pre>
+                        <p>Configure Nginx with the provided configuration:</p>
+                        <pre>sudo cp nginx.conf /etc/nginx/sites-available/loan_prediction
+sudo ln -s /etc/nginx/sites-available/loan_prediction /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx</pre>
+                    </div>
+                    
+                    <div id="deployment" class="section">
+                        <h2>4. Deployment</h2>
+                        <p>To deploy the application:</p>
+                        <ol>
+                            <li>Create logs directory:</li>
+                        </ol>
+                        <pre>mkdir -p logs</pre>
+                        <ol start="2">
+                            <li>Start the application with Gunicorn:</li>
+                        </ol>
+                        <pre>gunicorn -c gunicorn.conf.py production_app:app</pre>
+                        <p>For production deployment, it's recommended to set up a systemd service:</p>
+                        <pre>
+[Unit]
+Description=Loan Prediction Gunicorn Daemon
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/loan_prediction_project
+ExecStart=/usr/local/bin/gunicorn -c gunicorn.conf.py production_app:app
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target</pre>
+                        <p>Save this as <code>/etc/systemd/system/loan-prediction.service</code> and enable it:</p>
+                        <pre>sudo systemctl enable loan-prediction
+sudo systemctl start loan-prediction</pre>
+                    </div>
+                    
+                    <div id="maintenance" class="section">
+                        <h2>5. Maintenance</h2>
+                        <p>Regular maintenance tasks:</p>
+                        <ul>
+                            <li><strong>Log Rotation</strong>: Logs are automatically rotated by the application, but monitor disk space</li>
+                            <li><strong>Model Updates</strong>: Periodically retrain the model with new data to maintain accuracy</li>
+                            <li><strong>Security Updates</strong>: Keep all dependencies updated to patch security vulnerabilities</li>
+                        </ul>
+                        <p>To update the application:</p>
+                        <ol>
+                            <li>Pull the latest code or upload new files</li>
+                            <li>Update dependencies if needed:</li>
+                        </ol>
+                        <pre>pip install -r requirements.txt --upgrade</pre>
+                        <ol start="3">
+                            <li>Restart the application:</li>
+                        </ol>
+                        <pre>sudo systemctl restart loan-prediction</pre>
+                    </div>
+                    
+                    <div id="troubleshooting" class="section">
+                        <h2>6. Troubleshooting</h2>
+                        <p>Common issues and solutions:</p>
+                        <ul>
+                            <li><strong>Application not starting</strong>: Check logs in the logs directory</li>
+                            <li><strong>Model loading errors</strong>: Ensure optimized_models.pkl is in the correct location</li>
+                            <li><strong>Nginx errors</strong>: Check Nginx error logs with <code>sudo tail -f /var/log/nginx/error.log</code></li>
+                            <li><strong>Permission issues</strong>: Ensure proper file permissions for all application files</li>
+                        </ul>
+                        <p>To check application status:</p>
+                        <pre>sudo systemctl status loan-prediction</pre>
+                        <p>To view application logs:</p>
+                        <pre>tail -f logs/loan_prediction_app.log</pre>
+                    </div>
+                    
+                    <div class="text-center">
+                        <a href="/" class="btn btn-primary btn-back">Back to Application</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

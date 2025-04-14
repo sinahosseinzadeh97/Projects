@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Prediction System</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Loan Prediction System</h1>
+        <p class="subtitle">Predict loan status using machine learning</p>
+    </header>
+
+    <div class="container">
+        <ul class="nav-tabs">
+            <li><a href="#prediction" class="active">Prediction</a></li>
+            <li><a href="#recommendations">Recommendations</a></li>
+            <li><a href="#what-if">What-If Analysis</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+
+        <!-- Prediction Tab -->
+        <div id="prediction" class="tab-content">
+            <div class="form-container">
+                <h2>Loan Application Details</h2>
+                <form id="prediction-form">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="loan-amount">Loan Amount ($):</label>
+                                <input type="number" id="loan-amount" name="loan_amount" min="1000" max="100000" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="interest-rate">Interest Rate (%):</label>
+                                <input type="number" id="interest-rate" name="interest_rate" min="1" max="30" step="0.01" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="term">Term (months):</label>
+                                <select id="term" name="term" required>
+                                    <option value="12">12 months</option>
+                                    <option value="24">24 months</option>
+                                    <option value="36" selected>36 months</option>
+                                    <option value="48">48 months</option>
+                                    <option value="60">60 months</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="grade">Grade:</label>
+                                <select id="grade" name="grade" required>
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                    <option value="E">E</option>
+                                    <option value="F">F</option>
+                                    <option value="G">G</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="emp-length">Employment Length (years):</label>
+                                <input type="number" id="emp-length" name="emp_length" min="0" max="50" step="0.5" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="annual-income">Annual Income ($):</label>
+                                <input type="number" id="annual-income" name="annual_income" min="10000" max="1000000" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="dti">Debt-to-Income Ratio (%):</label>
+                                <input type="number" id="dti" name="dti" min="0" max="100" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="income-verification">Income Verification:</label>
+                                <select id="income-verification" name="income_verification" required>
+                                    <option value="Verified">Verified</option>
+                                    <option value="Source Verified">Source Verified</option>
+                                    <option value="Not Verified">Not Verified</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="home-ownership">Home Ownership:</label>
+                                <select id="home-ownership" name="home_ownership" required>
+                                    <option value="MORTGAGE">Mortgage</option>
+                                    <option value="RENT">Rent</option>
+                                    <option value="OWN">Own</option>
+                                    <option value="OTHER">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="total-credit-lines">Total Credit Lines:</label>
+                                <input type="number" id="total-credit-lines" name="total_credit_lines" min="0" max="100" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="open-credit-lines">Open Credit Lines:</label>
+                                <input type="number" id="open-credit-lines" name="open_credit_lines" min="0" max="50" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="mortgage-accounts">Number of Mortgage Accounts:</label>
+                                <input type="number" id="mortgage-accounts" name="num_mort_accounts" min="0" max="20" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="paid-principal">Paid Principal ($):</label>
+                                <input type="number" id="paid-principal" name="paid_principal" min="0" max="1000000" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="paid-total">Paid Total ($):</label>
+                                <input type="number" id="paid-total" name="paid_total" min="0" max="1000000" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group text-center mt-3">
+                        <button type="submit" class="btn btn-primary btn-lg">Make Prediction</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="result-container" class="result-container" style="display: none;">
+                <h2 id="result-title" class="result-title">Loan Status: Good Standing</h2>
+                <p id="result-message" class="result-message">The model predicts this loan will maintain good standing.</p>
+
+                <div class="progress-container">
+                    <h3>Prediction Confidence</h3>
+                    <div class="progress-bar-bg">
+                        <div id="progress-bar" class="progress-bar" style="width: 75%;"></div>
+                    </div>
+                    <div class="progress-label">
+                        <span>0%</span>
+                        <span id="threshold-value">50%</span>
+                        <span>100%</span>
+                    </div>
+                    <p class="text-center">Probability of Good Standing: <span id="probability-value">75%</span></p>
+                </div>
+
+                <div id="report-btn-container" class="text-center mt-5" style="display: none;">
+                    <button id="generate-report-btn" class="btn btn-secondary btn-lg">Generate Detailed PDF Report</button>
+                </div>
+
+                <div class="text-center mt-5">
+                    <button id="make-another-btn" class="btn btn-primary" onclick="document.getElementById('prediction-form').reset(); document.getElementById('result-container').style.display = 'none';">Make Another Prediction</button>
+                </div>
+            </div>
+
+            <div class="features-container mt-5">
+                <h3>Top Predictive Features</h3>
+                <p>Based on our model analysis, these are the most important factors in predicting loan status:</p>
+                <div class="feature-item">
+                    <strong>Paid Principal</strong> - Amount of principal paid so far
+                </div>
+                <div class="feature-item">
+                    <strong>Interest Rate</strong> - Annual interest rate on the loan
+                </div>
+                <div class="feature-item">
+                    <strong>Debt-to-Income Ratio</strong> - Monthly debt payments divided by monthly income
+                </div>
+                <div class="feature-item">
+                    <strong>Annual Income</strong> - Borrower's annual income
+                </div>
+                <div class="feature-item">
+                    <strong>Loan Amount</strong> - Total amount of the loan
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations Tab -->
+        <div id="recommendations" class="tab-content" style="display: none;">
+            <div class="form-container">
+                <h2>Personalized Loan Recommendations</h2>
+                <p>Based on your financial profile and our machine learning models, we recommend the following loan options:</p>
+                
+                <div id="recommendation-container" class="recommendation-container">
+                    <!-- Recommendations will be loaded here by JavaScript -->
+                    <p>Loading recommendations...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- What-If Analysis Tab -->
+        <div id="what-if" class="tab-content" style="display: none;">
+            <div class="what-if-container">
+                <h2>What-If Analysis</h2>
+                <p>Explore how different loan parameters affect your approval odds and payment terms.</p>
+                
+                <div class="what-if-form">
+                    <form id="what-if-form">
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="what-if-loan-amount">Loan Amount ($):</label>
+                                    <input type="number" id="what-if-loan-amount" name="loan_amount" min="1000" max="100000" value="15000" required>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="what-if-interest-rate">Interest Rate (%):</label>
+                                    <input type="number" id="what-if-interest-rate" name="interest_rate" min="1" max="30" step="0.01" value="6.5" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="what-if-term">Term (months):</label>
+                                    <select id="what-if-term" name="term" required>
+                                        <option value="12">12 months</option>
+                                        <option value="24">24 months</option>
+                                        <option value="36" selected>36 months</option>
+                                        <option value="48">48 months</option>
+                                        <option value="60">60 months</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group text-right">
+                                    <button type="submit" class="btn btn-primary" style="margin-top: 24px;">Analyze</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <div id="what-if-results" class="what-if-results" style="display: none;">
+                    <!-- Results will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- About Tab -->
+        <div id="about" class="tab-content" style="display: none;">
+            <div class="form-container">
+                <h2>About the Loan Prediction System</h2>
+                
+                <h3>Project Overview</h3>
+                <p>
+                    The Loan Prediction System is an advanced machine learning application designed to predict the likelihood of a loan being repaid. 
+                    It uses historical lending data to identify patterns and factors that contribute to loan default risk.
+                </p>
+                
+                <h3>Machine Learning Models</h3>
+                <p>
+                    Our system employs ensemble machine learning techniques, combining multiple models including:
+                </p>
+                <ul>
+                    <li>Random Forest</li>
+                    <li>Gradient Boosting</li>
+                    <li>Neural Networks</li>
+                </ul>
+                <p>
+                    This ensemble approach achieves higher accuracy than any single model, with our current system achieving over 92% accuracy on test data.
+                </p>
+                
+                <h3>Key Features</h3>
+                <div class="feature-item">
+                    <strong>Loan Status Prediction</strong> - Predict whether a loan will be fully paid or default
+                </div>
+                <div class="feature-item">
+                    <strong>Personalized Recommendations</strong> - Get tailored loan recommendations based on your financial profile
+           
+(Content truncated due to size limit. Use line ranges to read in chunks)

@@ -1,8 +1,12 @@
-# Historical Lending Data Analysis and Loan Prediction
+# Projects Repository
+
+This repository contains multiple projects, including:
+
+## Historical Lending Data Analysis and Loan Prediction
 
 A comprehensive machine learning system for analyzing historical lending data and predicting loan performance.
 
-## Project Structure
+### Project Structure
 
 ```
 Historical_Lending_Data_Analysis_Loan_Prediction/
@@ -24,7 +28,7 @@ Historical_Lending_Data_Analysis_Loan_Prediction/
 └── README.md              # Project documentation
 ```
 
-## Features
+### Features
 
 - Historical lending data analysis
 - Loan performance prediction
@@ -34,7 +38,7 @@ Historical_Lending_Data_Analysis_Loan_Prediction/
 - API integration
 - Interactive dashboard
 
-## Installation
+### Installation
 
 1. Clone the repository:
 ```bash
@@ -58,16 +62,18 @@ pip install -r requirements.txt
 python src/app.py
 ```
 
-## API Documentation
+## Other Projects
 
-Detailed API documentation can be found in `docs/api_documentation.md`.
+- AIWORKFLOWENGINE
+- DATAENRICHMENTTOOL
+- NOVACOMMERCE
+- REDDITPULSE
+- TADREESMARKETPLACE
+- TRADINGBOTPRO
+- WORKOUTWITHAI
+- YOUTUBECHANNELQA
 
-## Model Architecture
-
-The system uses multiple machine learning models:
-- Random Forest
-- Gradient Boosting (XGBoost)
-- Logistic Regression
+Each project has its own directory with its specific documentation and requirements.
 
 ## Contributing
 
