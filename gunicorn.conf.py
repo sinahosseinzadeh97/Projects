@@ -1,29 +1,27 @@
 #!/usr/bin/env python3
 # Gunicorn configuration file for Loan Prediction Application
 
-# Bind to 0.0.0.0:5000
-bind = "0.0.0.0:5000"
+import multiprocessing
+import os
 
-# Number of worker processes
-workers = 3
+# Server socket
+bind = "0.0.0.0:{}".format(int(os.environ.get("PORT", 5000)))
+workers = multiprocessing.cpu_count() * 2 + 1
+worker_class = 'sync'
+timeout = 120
+keepalive = 5
 
-# Worker class
-worker_class = "sync"
+# Logging
+accesslog = '-'
+errorlog = '-'
+loglevel = 'info'
 
-# Timeout in seconds
-timeout = 60
+# Process naming
+proc_name = 'loan_prediction_app'
 
-# Log level
-loglevel = "info"
-
-# Access log file
-accesslog = "logs/gunicorn_access.log"
-
-# Error log file
-errorlog = "logs/gunicorn_error.log"
-
-# Process name
-proc_name = "loan_prediction_app"
+# SSL
+keyfile = None
+certfile = None
 
 # Preload application
 preload_app = True

@@ -23,6 +23,7 @@ var/
 # Virtual Environment
 venv/
 ENV/
+loan_env/
 
 # IDE
 .idea/
@@ -30,15 +31,16 @@ ENV/
 *.swp
 *.swo
 
-# OS
-.DS_Store
-Thumbs.db
-
 # Logs
 *.log
+logs/
 
 # Environment variables
 .env
+
+# Heroku
+*.pyc
+.DS_Store
 
 # Jupyter Notebook
 .ipynb_checkpoints
