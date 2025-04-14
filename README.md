@@ -79,4 +79,4 @@ The system uses multiple machine learning models:
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the LICENSE file for details.

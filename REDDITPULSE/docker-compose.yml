@@ -1,0 +1,67 @@
+version: '3.8'
+
+# Reddit Automation Tool - Docker Compose Configuration
+# Created by: SinaMohammadHosseinZadeh
+
+services:
+  # Database service
+  db:
+    image: postgres:14
+    container_name: reddit_bot_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db_init.sql:/docker-entrypoint-initdb.d/db_init.sql
+      - ./db_update.sql:/docker-entrypoint-initdb.d/db_update.sql
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-redditbot_db_password}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-reddit_bot}
+    networks:
+      - reddit_bot_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  
+  # Web application service
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: reddit_bot_web
+    volumes:
+      - ./:/app
+      - ./logs:/app/logs
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-redditbot_db_password}
+      - POSTGRES_DB=${POSTGRES_DB:-reddit_bot}
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-redditbot_db_password}@db:5432/${POSTGRES_DB:-reddit_bot}
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - reddit_bot_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+networks:
+  reddit_bot_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    name: reddit_bot_postgres_data

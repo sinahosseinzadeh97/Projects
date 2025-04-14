@@ -25,6 +25,7 @@ venv/
 ENV/
 env/
 .env
+loan_env/
 
 # IDE
 .idea/
@@ -51,12 +52,21 @@ logs/
 models/*.pkl
 models/*.h5
 models/*.joblib
+*.pkl
+*.h5
+*.model
+*.joblib
 
 # Data files
 data/*.csv
 data/*.xlsx
 data/*.xls
 data/*.db
+*.csv
+*.xlsx
+*.xls
+*.db
+*.sqlite3
 
 # Coverage reports
 htmlcov/
@@ -86,3 +96,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+
+# Heroku
+*.pyc
+.vercel

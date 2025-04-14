@@ -1,0 +1,79 @@
+Tadrees.com
+Core Requirements Document
+v0.1
+Date: 10/13/2024
+Peer-to-Peer Tutoring Website: MVP Requirements Document
+1. Project Overview
+This project is a Peer-to-Peer Tutoring Website that allows students to view a list of tutors,
+read their descriptions and skills, and book a session with a tutor via Calendly. The MVP
+(Minimum Viable Product) will focus on essential functionality, including user
+authentication (login), tutor list view, and integration with Calendly for scheduling.
+Payments will be processed online, with basic payment functionality incorporated.
+2. Core Features (MVP)
+1. User Authentication (Login System)
+o Login for students and tutors: Only registered users (students or tutors) can
+access their respective dashboards.
+o Registration form: Basic user information collection (name, email,
+password).
+o Authentication method: Email and password.
+o Password reset functionality: In case a user forgets their password.
+2. Tutor List View
+o List of available tutors: Display a list of tutors with the following
+information:
+▪ Name
+▪ Profile picture (optional for MVP)
+▪ Short bio/description
+▪ Skills/subjects offered (e.g., Math, Science, Programming)
+▪ Availability (synced via Calendly)
+o Filtering: Basic filter by skills/subjects.
+o Search functionality: Search by tutor name or skill.
+3. Tutor Profile
+o Detailed view: When clicking on a tutor, students can see more detailed
+information:
+▪ Full bio/description
+▪ Skills and expertise in detail
+▪ Rate per session (optional for MVP)
+▪ Booking button linked to Calendly
+4. Booking System (via Calendly)
+o Calendly integration: Each tutor’s profile has a booking button that redirects
+to their Calendly scheduling page, where students can book a session based
+on availability.
+5. Payment Integration
+o Basic payment processing: Payment is required to complete a booking. Use
+a service such as Stripe or PayPal for basic payment functionality.
+o Simple pricing model: Each tutor can set a price per session, and students
+pay through the platform before the session.
+o Payment history: Students can see their payment history (optional for MVP).
+3. Non-Functional Requirements
+1. Security
+o All sensitive user data should be encrypted (e.g., passwords).
+o Secure payment processing via a trusted payment gateway (Stripe or PayPal).
+2. Performance
+o The website should load within 3 seconds for optimal user experience.
+o Ensure that the tutor list view is paginated to handle larger numbers of tutors.
+3. Scalability
+o The MVP should be designed with scalability in mind to handle more tutors,
+students, and bookings as the platform grows.
+4. Usability
+o The website should be mobile-responsive and accessible from all modern
+browsers.
+5. Reliability
+o Calendly integration should work seamlessly, ensuring that bookings are
+correctly scheduled and confirmed.
+4. User Stories
+• As a student, I can browse a list of tutors, view their descriptions, and filter by skills,
+so I can find the right tutor for me.
+• As a student, I can book a session with a tutor via Calendly, so I can schedule a
+session at a convenient time.
+• As a student, I can log in to my account and view my booking history.
+• As a tutor, I can create a profile that includes my bio, skills, and link to my Calendly
+for scheduling.
+• As an admin, I can manage user accounts and view transactions (optional for MVP).
+5. Future Enhancements (Beyond MVP)
+• Tutor Rating and Reviews: Students can leave ratings and reviews after sessions.
+• Advanced Filtering: Filter tutors by price, rating, availability, etc.
+• Notifications: Email or SMS notifications for session reminders.
+• Analytics Dashboard: For tutors and students to see their progress and session
+details.
+• Multiple Payment Options: Support for additional payment methods (e.g., Apple
+Pay, Google Pay).
