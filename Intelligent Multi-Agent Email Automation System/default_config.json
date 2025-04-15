@@ -1,0 +1,67 @@
+{
+    "database": {
+        "mongodb_url": "mongodb://localhost:27017",
+        "database_name": "email_automation"
+    },
+    "cache": {
+        "redis_host": "localhost",
+        "redis_port": 6379,
+        "redis_db": 0
+    },
+    "api": {
+        "host": "0.0.0.0",
+        "port": 8000,
+        "debug": true,
+        "cors_origins": ["*"]
+    },
+    "email_ingestion": {
+        "batch_size": 10,
+        "polling_interval": 300
+    },
+    "classification": {
+        "model_type": "bert",
+        "categories": ["important", "promotional", "support", "spam", "other"],
+        "threshold": 0.7
+    },
+    "summarization": {
+        "model_type": "gpt",
+        "summary_max_length": 150
+    },
+    "response_generation": {
+        "model_type": "gpt",
+        "auto_send_threshold": 0.9,
+        "templates": {
+            "important": "Thank you for your important message. I've reviewed it and {summary}. I'll {action} as requested.",
+            "support": "Thank you for reaching out to our support team. I understand that {summary}. We'll {action} to resolve this issue.",
+            "promotional": "Thank you for sharing this offer. I'll review the details about {summary} and get back to you if interested.",
+            "spam": "",
+            "other": "Thank you for your message. I've noted that {summary}. I'll get back to you soon."
+        }
+    },
+    "integration": {
+        "workflow": {
+            "auto_send_enabled": true,
+            "batch_size": 10
+        },
+        "integrations": {
+            "calendar": {
+                "enabled": true,
+                "service": "google_calendar"
+            },
+            "crm": {
+                "enabled": true,
+                "service": "salesforce"
+            },
+            "task_manager": {
+                "enabled": true,
+                "service": "asana"
+            }
+        }
+    },
+    "logging": {
+        "level": "INFO",
+        "file": "logs/email_automation.log",
+        "max_size": 10485760,
+        "backup_count": 5
+    }
+}
