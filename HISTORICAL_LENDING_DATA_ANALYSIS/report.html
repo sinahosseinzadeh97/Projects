@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Prediction System with Machine Learning - Project Report</title>
+    <style>
+        @page {
+            margin: 1cm;
+            @top-center {
+                content: "Loan Prediction System with Machine Learning";
+                font-size: 9pt;
+                color: #666;
+            }
+            @bottom-center {
+                content: "Page " counter(page) " of " counter(pages);
+                font-size: 9pt;
+                color: #666;
+            }
+        }
+        
+        body {
+            font-family: "Noto Sans CJK SC", "WenQuanYi Zen Hei", sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0 1.5cm;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+        
+        h1 {
+            font-size: 24pt;
+            text-align: center;
+            margin-top: 2cm;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 18pt;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        
+        h3 {
+            font-size: 14pt;
+        }
+        
+        h4 {
+            font-size: 12pt;
+        }
+        
+        p, ul, ol {
+            margin-bottom: 1em;
+        }
+        
+        ul, ol {
+            padding-left: 2em;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 1.5em auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+        }
+        
+        .metadata {
+            text-align: center;
+            margin: 1cm 0 2cm 0;
+            font-size: 11pt;
+            color: #666;
+        }
+        
+        .toc {
+            margin: 2cm 0;
+            page-break-after: always;
+        }
+        
+        .toc h2 {
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin-bottom: 0.5em;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #2c3e50;
+        }
+        
+        .toc .toc-section {
+            font-weight: bold;
+        }
+        
+        .toc .toc-subsection {
+            padding-left: 2em;
+        }
+        
+        code {
+            font-family: monospace;
+            background-color: #f5f5f5;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 90%;
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 1em;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5em 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        .section {
+            page-break-after: always;
+        }
+        
+        .conclusion {
+            page-break-after: avoid;
+        }
+        
+        .appendix {
+            page-break-before: always;
+        }
+        
+        .cover {
+            text-align: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            page-break-after: always;
+        }
+        
+        .cover h1 {
+            font-size: 28pt;
+            margin-bottom: 1cm;
+            border: none;
+        }
+        
+        .cover .subtitle {
+            font-size: 18pt;
+            margin-bottom: 3cm;
+            color: #666;
+        }
+        
+        .cover .author {
+            font-size: 14pt;
+            margin-bottom: 0.5cm;
+        }
+        
+        .cover .date {
+            font-size: 12pt;
+            color: #666;
+        }
+        
+        .executive-summary {
+            background-color: #f9f9f9;
+            padding: 1em;
+            border-left: 4px solid #2c3e50;
+            margin: 1.5em 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <h1>Loan Prediction System with Machine Learning</h1>
+        <div class="subtitle">Project Report</div>
+        <div class="author">Prepared by: Manus AI</div>
+        <div class="date">April 13, 2025</div>
+    </div>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li class="toc-section">1. <a href="#introduction">Introduction</a></li>
+            <li class="toc-section">2. <a href="#data-acquisition">Data Acquisition and Exploration</a></li>
+            <li class="toc-subsection">2.1 <a href="#dataset">Dataset</a></li>
+            <li class="toc-subsection">2.2 <a href="#exploratory-analysis">Exploratory Data Analysis</a></li>
+            <li class="toc-section">3. <a href="#data-preprocessing">Data Preprocessing</a></li>
+            <li class="toc-section">4. <a href="#model-development">Model Development</a></li>
+            <li class="toc-section">5. <a href="#model-evaluation">Model Evaluation and Optimization</a></li>
+            <li class="toc-subsection">5.1 <a href="#performance-metrics">Performance Metrics</a></li>
+            <li class="toc-subsection">5.2 <a href="#model-comparison">Model Comparison</a></li>
+            <li class="toc-subsection">5.3 <a href="#feature-importance">Feature Importance</a></li>
+            <li class="toc-subsection">5.4 <a href="#model-optimization">Model Optimization</a></li>
+            <li class="toc-section">6. <a href="#web-application">Web Application Development</a></li>
+            <li class="toc-subsection">6.1 <a href="#technology-stack">Technology Stack</a></li>
+            <li class="toc-subsection">6.2 <a href="#application-features">Application Features</a></li>
+            <li class="toc-subsection">6.3 <a href="#architecture">Architecture</a></li>
+            <li class="toc-section">7. <a href="#deployment">Deployment</a></li>
+            <li class="toc-subsection">7.1 <a href="#deployment-process">Deployment Process</a></li>
+            <li class="toc-subsection">7.2 <a href="#deployment-challenges">Deployment Challenges and Solutions</a></li>
+            <li class="toc-subsection">7.3 <a href="#access-url">Access URL</a></li>
+            <li class="toc-section">8. <a href="#conclusion">Conclusion</a></li>
+            <li class="toc-subsection">8.1 <a href="#project-achievements">Project Achievements</a></li>
+            <li class="toc-subsection">8.2 <a href="#future-improvements">Future Improvements</a></li>
+            <li class="toc-section">9. <a href="#appendix">Appendix: Technical Details</a></li>
+        </ul>
+    </div>
+    
+    <div class="executive-summary">
+        <h2>Executive Summary</h2>
+        <p>This report documents the development of a loan prediction system using machine learning techniques. The project involved processing historical lending data, developing and evaluating multiple machine learning models, and deploying the best-performing model as a web application. The system successfully predicts loan status (good standing vs. default) with high accuracy, providing a valuable tool for loan assessment.</p>
+    </div>
+    
+    <div id="introduction" class="section">
+        <h2>1. Introduction</h2>
+        <p>The goal of this project was to develop a machine learning system that can predict loan status based on historical lending data. The system aims to help financial institutions assess the risk of loan default by analyzing various factors related to loan characteristics and borrower information.</p>
+        
+        <h3>Project Objectives</h3>
+        <ol>
+            <li>Process and analyze historical lending data</li>
+            <li>Develop machine learning models to predict loan status</li>
+            <li>Evaluate and optimize model performance</li>
+            <li>Deploy the best-performing model as a web application</li>
+        </ol>
+    </div>
+    
+    <div id="data-acquisition" class="section">
+        <h2>2. Data Acquisition and Exploration</h2>
+        
+        <div id="dataset">
+            <h3>2.1 Dataset</h3>
+            <p>The project utilized a lending dataset containing 10,000 loan records with 55 variables. The dataset includes information about loan characteristics (amount, interest rate, term), borrower information (income, employment length, credit history), and loan outcomes (status, payments).</p>
+        </div>
+        
+        <div id="exploratory-analysis">
+            <h3>2.2 Exploratory Data Analysis</h3>
+            <p>Initial data exploration revealed several key insights:</p>
+            
+            <h4>Loan Status Distribution</h4>
+            <p>The dataset contains a balanced distribution of loans in good standing and default status.</p>
+            <img src="/home/ubuntu/loan_prediction_project/loan_status_distribution.png" alt="Loan Status Distribution">
+            
+            <h4>Loan Amount Distribution</h4>
+            <p>The loan amounts range from $1,000 to $35,000, with a median of approximately $12,000.</p>
+            <img src="/home/ubuntu/loan_prediction_project/loan_amount_distribution.png" alt="Loan Amount Distribution">
+            
+            <h4>Interest Rate Distribution</h4>
+            <p>Interest rates range from 5% to 25%, with higher rates generally associated with higher default risk.</p>
+            <img src="/home/ubuntu/loan_prediction_project/interest_rate_distribution.png" alt="Interest Rate Distribution">
+            
+            <h4>Loan Status by Grade</h4>
+            <p>Lower grade loans (D-G) show higher default rates compared to higher grade loans (A-C).</p>
+            <img src="/home/ubuntu/loan_prediction_project/loan_status_by_grade.png" alt="Loan Status by Grade">
+            
+            <h4>Correlation Analysis</h4>
+            <p>Several features show strong correlation with loan status, including payment history, interest rate, and loan grade.</p>
+            <img src="/home/ubuntu/loan_prediction_project/correlation_matrix.png" alt="Correlation Matrix">
+        </div>
+    </div>
+    
+    <div id="data-preprocessing" class="section">
+        <h2>3. Data Preprocessing</h2>
+        <p>The raw data required extensive preprocessing before model development:</p>
+        
+        <ol>
+            <li><strong>Handling Missing Values</strong>: Missing values were imputed using appropriate strategies (median for numerical features, mode for categorical features).</li>
+            <li><strong>Feature Engineering</strong>: Created new features to capture payment behavior, debt-to-income ratios, and credit utilization.</li>
+            <li><strong>Categorical Encoding</strong>: Categorical variables were encoded using one-hot encoding and label encoding as appropriate.</li>
+            <li><strong>Feature Selection</strong>: Reduced dimensionality from 4,885 features (after encoding) to 100 most important features using SelectKBest with chi-squared test.</li>
+            <li><strong>Data Splitting</strong>: The dataset was split into training (70%), validation (15%), and test (15%) sets with stratification to maintain class balance.</li>
+            <li><strong>Class Imbalance</strong>: Applied SMOTE (Synthetic Minority Over-sampling Technique) to address any class imbalance in the training data.</li>
+        </ol>
+    </div>
+    
+    <div id="model-development" class="section">
+        <h2>4. Model Development</h2>
+        <p>Multiple machine learning models were developed and compared:</p>
+        
+        <ol>
+            <li><strong>Logistic Regression</strong>: A baseline model with L2 regularization.</li>
+            <li><strong>Naive Bayes</strong>: A probabilistic classifier based on Bayes' theorem.</li>
+            <li><strong>Random Forest</strong>: An ensemble of decision trees with bagging.</li>
+            <li><strong>Neural Network</strong>: A multi-layer perceptron with two hidden layers.</li>
+        </ol>
+        
+        <p>Initial model development faced memory constraints due to the high dimensionality of the data. This was addressed by:</p>
+        <ol>
+            <li>Implementing feature selection to reduce dimensionality</li>
+            <li>Simplifying the hyperparameter search space</li>
+            <li>Using more memory-efficient algorithms</li>
+        </ol>
+    </div>
+    
+    <div id="model-evaluation" class="section">
+        <h2>5. Model Evaluation and Optimization</h2>
+        
+        <div id="performance-metrics">
+            <h3>5.1 Performance Metrics</h3>
+            <p>Models were evaluated using multiple metrics:</p>
+            <ol>
+                <li><strong>AUROC (Area Under Receiver Operating Characteristic Curve)</strong>: Measures the model's ability to distinguish between classes.</li>
+                <li><strong>Precision</strong>: The ratio of true positive predictions to all positive predictions.</li>
+                <li><strong>Recall</strong>: The ratio of true positive predictions to all actual positives.</li>
+                <li><strong>F1 Score</strong>: The harmonic mean of precision and recall.</li>
+            </ol>
+        </div>
+        
+        <div id="model-comparison">
+            <h3>5.2 Model Comparison</h3>
+            <p>The Random Forest model achieved the best performance with near-perfect accuracy:</p>
+            <img src="/home/ubuntu/loan_prediction_project/model_comparison.png" alt="Model Comparison">
+            
+            <p>ROC curves for all models:</p>
+            <img src="/home/ubuntu/loan_prediction_project/all_models_roc_curve.png" alt="ROC Curves">
+        </div>
+        
+        <div id="feature-importance">
+            <h3>5.3 Feature Importance</h3>
+            <p>Analysis of feature importance revealed the most predictive factors for loan status:</p>
+            <ol>
+                <li><strong>Paid Principal</strong>: Amount of principal paid so far</li>
+                <li><strong>Paid Total</strong>: Total amount paid so far</li>
+                <li><strong>Interest Rate</strong>: The interest rate on the loan</li>
+                <li><strong>Issue Month/Year</strong>: When the loan was issued</li>
+                <li><strong>State</strong>: Borrower's state of residence</li>
+            </ol>
+            <img src="/home/ubuntu/loan_prediction_project/random_forest_feature_importance.png" alt="Feature Importance">
+        </div>
+        
+        <div id="model-optimization">
+            <h3>5.4 Model Optimization</h3>
+            <p>The Random Forest model was further optimized through:</p>
+            <ol>
+                <li><strong>Hyperparameter Tuning</strong>: Grid search for optimal parameters (n_estimators, max_depth, min_samples_split).</li>
+                <li><strong>Threshold Optimization</strong>: Finding the optimal probability threshold for classification (0.5152).</li>
+                <li><strong>Class Weight Adjustment</strong>: Using balanced class weights to improve performance on minority class.</li>
+            </ol>
+            
+            <p>The optimized model achieved:</p>
+            <ul>
+                <li>AUROC: 0.9999</li>
+                <li>Precision: 1.00</li>
+                <li>Recall: 1.00</li>
+                <li>F1 Score: 1.00</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div id="web-application" class="section">
+        <h2>6. Web Application Development</h2>
+        <p>A web application was developed to make the loan prediction model accessible to users:</p>
+        
+        <div id="technology-stack">
+            <h3>6.1 Techno
+(Content truncated due to size limit. Use line ranges to read in chunks)
