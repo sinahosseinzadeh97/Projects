@@ -1,4 +1,5 @@
 // src/app/api/projects/[id]/route.ts
+export const runtime = "nodejs";
 
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";

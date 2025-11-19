@@ -1,8 +1,8 @@
 // prisma/schema.prisma
 
-// Data source: SQLite connection
+// Data source: Supabase PostgreSQL connection
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -13,14 +13,18 @@ generator client {
 
 // Main Project model for the dashboard
 model Project {
-  id         String         @id @default(cuid())        // Unique project identifier
-  name       String                                      // Project name
-  status     ProjectStatus                               // Current project status
-  deadline   DateTime                                    // Project deadline
-  assignedTo String                                      // Assigned team member
-  budget     Float                                       // Project budget (e.g. 12000.50)
-  createdAt  DateTime       @default(now())              // Creation timestamp
-  updatedAt  DateTime       @updatedAt                   // Auto-updated timestamp
+  id         String         @id @default(cuid())   // Unique project identifier
+  name       String                               // Project name
+  status     ProjectStatus                        // Current project status
+  deadline   DateTime                             // Project deadline
+  assignedTo String                               // Assigned team member
+  budget     Float                                // Project budget
+  createdAt  DateTime       @default(now())       // Creation timestamp
+  updatedAt  DateTime       @updatedAt            // Auto-updated timestamp
+
+  @@index([status])
+  @@index([deadline])
+  @@index([assignedTo])
 }
 
 // Enum representing different project statuses
