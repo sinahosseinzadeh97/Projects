@@ -8,8 +8,7 @@ Built as a solution to the **“Full-Stack Developer Task – Mini SaaS Dashboar
 ## 🔗 Links
 
 - **Live demo (Vercel)**  
-  https://mini-saas-dashboard-ng2x1egqk-sinas-projects-b51567e9.vercel.app
-
+  https://mini-saas-dashboard-ten.vercel.app/dashboard
 - **GitHub repository**  
   https://github.com/sinahosseinzadeh97/Projects.git  
   > This dashboard lives in the `mini-saas-dashboard` folder of the repo.
