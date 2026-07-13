@@ -1,0 +1,25 @@
+# === FILE: .dockerignore ===
+.venv
+__pycache__
+*.pyc
+*.pyo
+.env
+.git
+.gitignore
+*.db
+*.sqlite
+sinistri_italy.db
+node_modules
+.DS_Store
+*.log
+tests/
+.pytest_cache
+.mypy_cache
+.ruff_cache
+terraform/
+scripts/
+docker-compose*.yml
+nginx/
+*.md
+assets/
+.gemini/

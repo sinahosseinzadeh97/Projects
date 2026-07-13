@@ -1,0 +1,311 @@
+============================================================================
+INFORMATIVA SUL TRATTAMENTO DEI DATI PERSONALI
+ai sensi dell'art. 13 del Regolamento (UE) 2016/679 (GDPR)
+e del D.Lgs. 196/2003 (Codice Privacy), come modificato dal D.Lgs. 101/2018
+============================================================================
+
+Versione: 1.0-IT-2026
+Data ultimo aggiornamento: [DATA]
+
+
+1. IDENTITÀ E DATI DI CONTATTO DEL TITOLARE DEL TRATTAMENTO
+----------------------------------------------------------------------------
+
+[Nome Compagnia di Assicurazioni S.p.A.]
+Sede legale: [Indirizzo], [CAP] [Città] ([Provincia])
+Codice Fiscale e P.IVA: [CODICE_FISCALE_AZIENDA]
+Iscrizione Albo IVASS n. [NUMERO_ALBO]
+Telefono: [NUMERO_TELEFONO]
+PEC: [INDIRIZZO_PEC]
+E-mail: privacy@compagnia.it
+Sito web: www.compagnia.it
+
+
+2. DATI DI CONTATTO DEL RESPONSABILE DELLA PROTEZIONE DEI DATI (DPO)
+----------------------------------------------------------------------------
+
+Il Titolare ha designato un Responsabile della Protezione dei Dati (DPO)
+ai sensi dell'art. 37 del GDPR, contattabile ai seguenti recapiti:
+
+DPO: [Nome e Cognome / Società]
+E-mail: dpo@compagnia.it
+PEC: [PEC_DPO]
+Indirizzo: [Indirizzo DPO], [CAP] [Città]
+
+
+3. FINALITÀ E BASE GIURIDICA DEL TRATTAMENTO
+----------------------------------------------------------------------------
+
+I Suoi dati personali sono trattati per le seguenti finalità:
+
+a) GESTIONE DEL SINISTRO — Acquisizione della denuncia di sinistro
+   (First Notice of Loss — FNOL) attraverso il sistema di assistenza
+   vocale automatizzata.
+
+   Base giuridica: Art. 6(1)(b) GDPR — esecuzione del contratto
+   assicurativo di cui Lei è parte.
+
+b) TRATTAMENTO DI DATI PARTICOLARI — Il trattamento può includere
+   dati relativi alla salute (lesioni personali, referti medici,
+   cure ricevute) ai sensi dell'art. 9 GDPR.
+
+   Base giuridica: Art. 9(2)(f) GDPR — accertamento, esercizio o
+   difesa di un diritto in sede giudiziaria; Art. 9(2)(g) GDPR —
+   motivi di interesse pubblico rilevante nel settore assicurativo
+   e previdenziale, come previsto dall'art. 2-sexies, comma 2,
+   lettera dd) del D.Lgs. 196/2003.
+
+c) REGISTRAZIONE VOCALE — Qualora la conversazione vocale venga
+   temporaneamente elaborata per la trascrizione, il trattamento
+   avviene esclusivamente per la durata della chiamata. L'audio
+   NON viene conservato: la trascrizione testuale è l'unico dato
+   persistente.
+
+   Base giuridica: Art. 6(1)(a) GDPR — consenso esplicito
+   dell'interessato.
+
+d) PREVENZIONE FRODI — Analisi dei dati del sinistro per
+   l'individuazione di anomalie e segnali di frode assicurativa.
+
+   Base giuridica: Art. 6(1)(f) GDPR — legittimo interesse del
+   Titolare alla prevenzione delle frodi.
+
+e) ADEMPIMENTI DI LEGGE — Comunicazioni obbligatorie ad autorità
+   di vigilanza (IVASS), autorità giudiziarie, CONSAP, INAIL.
+
+   Base giuridica: Art. 6(1)(c) GDPR — adempimento di un obbligo
+   legale.
+
+
+4. CATEGORIE DI DATI TRATTATI
+----------------------------------------------------------------------------
+
+Il sistema di acquisizione sinistri tratta le seguenti categorie
+di dati personali:
+
+- Dati anagrafici: nome, cognome, codice fiscale
+- Dati di contatto: numero di telefono, indirizzo e-mail,
+  indirizzo di residenza
+- Dati relativi al contratto: numero di polizza, ramo assicurativo,
+  coperture attive
+- Dati relativi al sinistro: data, luogo, dinamica dell'evento,
+  stima del danno, targa del veicolo, dati dei terzi coinvolti,
+  testimoni
+- Dati particolari (art. 9 GDPR): informazioni sullo stato di
+  salute (lesioni, cure mediche, referti)
+- Dati tecnici: indirizzo IP anonimizzato (hash SHA-256),
+  timestamp della sessione
+
+
+5. DESTINATARI O CATEGORIE DI DESTINATARI
+----------------------------------------------------------------------------
+
+I Suoi dati potranno essere comunicati a:
+
+- Periti e liquidatori incaricati della gestione del sinistro
+- Riassicuratori, nei limiti del contratto di riassicurazione
+- CONSAP — Fondo di Garanzia Vittime della Strada
+  (per sinistri con veicoli non assicurati o non identificati)
+- INAIL — Istituto Nazionale Assicurazione Infortuni sul Lavoro
+  (per sinistri con lesioni sul lavoro)
+- Autorità giudiziarie e forze dell'ordine, su richiesta
+- IVASS — Istituto per la Vigilanza sulle Assicurazioni
+  (adempimenti regolamentari)
+- Consulenti legali e tecnici del Titolare
+- Servizi di assistenza e pronto intervento (in caso di emergenza)
+
+I dati NON sono ceduti a terzi per finalità commerciali o di marketing.
+
+
+6. TRASFERIMENTO DI DATI VERSO PAESI TERZI
+----------------------------------------------------------------------------
+
+I Suoi dati personali sono trattati e conservati esclusivamente
+all'interno del territorio dell'Unione Europea.
+
+Il sistema di acquisizione vocale si avvale di servizi di
+intelligenza artificiale (Google Gemini) che elaborano i dati
+in tempo reale su server situati nel territorio UE.
+
+Non sono previsti trasferimenti di dati verso Paesi terzi al di
+fuori dello Spazio Economico Europeo (SEE). Qualora in futuro
+si rendesse necessario un trasferimento, questo avverrà
+esclusivamente in conformità al Capo V del GDPR (artt. 44-49),
+mediante decisione di adeguatezza della Commissione Europea o
+Clausole Contrattuali Tipo (SCC).
+
+
+7. PERIODO DI CONSERVAZIONE
+----------------------------------------------------------------------------
+
+I dati personali saranno conservati per i seguenti periodi:
+
+- Dati del sinistro: 10 (dieci) anni dalla data di definizione
+  del sinistro, in conformità all'art. 2946 del Codice Civile
+  (prescrizione ordinaria dei diritti derivanti dal contratto
+  di assicurazione).
+
+- Trascrizioni vocali: conservate per la durata necessaria alla
+  gestione del sinistro, e comunque non oltre il periodo di
+  conservazione del sinistro stesso.
+
+- Audio delle conversazioni: NON conservato. L'audio viene
+  elaborato in tempo reale per la trascrizione e immediatamente
+  eliminato al termine della sessione.
+
+- Log di audit GDPR: conservati per 10 (dieci) anni per
+  garantire la tracciabilità e l'accountability ai sensi
+  dell'art. 5(2) del GDPR.
+
+- Registri di consenso: conservati per 10 (dieci) anni dalla
+  data di acquisizione, come prova del consenso ai sensi
+  dell'art. 7(1) del GDPR.
+
+Decorso il periodo di conservazione, i dati saranno cancellati
+o anonimizzati in modo irreversibile.
+
+
+8. DIRITTI DELL'INTERESSATO (Artt. 15-22 GDPR)
+----------------------------------------------------------------------------
+
+In qualità di interessato, Lei ha il diritto di:
+
+a) ACCESSO (Art. 15): ottenere la conferma dell'esistenza o meno
+   di dati personali che La riguardano e di ottenerne copia.
+
+b) RETTIFICA (Art. 16): ottenere la rettifica dei dati personali
+   inesatti che La riguardano senza ingiustificato ritardo.
+
+c) CANCELLAZIONE (Art. 17): ottenere la cancellazione dei dati
+   personali che La riguardano, salvo che il trattamento sia
+   necessario per l'adempimento di un obbligo legale o per
+   l'accertamento, l'esercizio o la difesa di un diritto in
+   sede giudiziaria.
+
+d) LIMITAZIONE (Art. 18): ottenere la limitazione del trattamento
+   quando ricorra una delle condizioni di cui all'art. 18 GDPR.
+
+e) PORTABILITÀ (Art. 20): ricevere i dati personali che La
+   riguardano in un formato strutturato, di uso comune e
+   leggibile da dispositivo automatico, e trasmetterli a un
+   altro titolare del trattamento.
+
+f) OPPOSIZIONE (Art. 21): opporsi in qualsiasi momento al
+   trattamento dei dati personali che La riguardano, per motivi
+   connessi alla Sua situazione particolare, quando il
+   trattamento è basato sul legittimo interesse.
+
+g) REVOCA DEL CONSENSO (Art. 7(3)): revocare il consenso
+   in qualsiasi momento, senza pregiudicare la liceità del
+   trattamento basata sul consenso prestato prima della revoca.
+
+h) DECISIONI AUTOMATIZZATE (Art. 22): non essere sottoposto a
+   una decisione basata unicamente sul trattamento automatizzato,
+   compresa la profilazione, che produca effetti giuridici che
+   La riguardano.
+
+Per esercitare i Suoi diritti, può contattare:
+- E-mail: privacy@compagnia.it
+- PEC: [INDIRIZZO_PEC]
+- Posta: [Nome Compagnia] — Ufficio Privacy
+  [Indirizzo], [CAP] [Città]
+
+Il Titolare risponderà alla Sua richiesta senza ingiustificato
+ritardo e comunque entro 30 giorni dal ricevimento, prorogabili
+di ulteriori 60 giorni in caso di complessità della richiesta,
+ai sensi dell'art. 12(3) del GDPR.
+
+
+9. DIRITTO DI RECLAMO ALL'AUTORITÀ DI CONTROLLO
+----------------------------------------------------------------------------
+
+Qualora ritenga che il trattamento dei Suoi dati personali sia
+effettuato in violazione del GDPR, ha il diritto di proporre
+reclamo all'Autorità di controllo competente:
+
+Garante per la protezione dei dati personali
+Piazza Venezia, 11 — 00187 Roma
+Telefono: (+39) 06.696771
+E-mail: garante@gpdp.it
+PEC: protocollo@pec.gpdp.it
+Sito web: www.garanteprivacy.it
+
+Ha inoltre il diritto di proporre reclamo secondo le modalità
+indicate sul sito del Garante:
+www.garanteprivacy.it/web/guest/home/docweb/-/docweb-display/docweb/4535524
+
+
+10. NATURA OBBLIGATORIA O FACOLTATIVA DEL CONFERIMENTO
+----------------------------------------------------------------------------
+
+Il conferimento dei dati personali:
+
+- È NECESSARIO per i dati anagrafici, di contatto e relativi
+  al sinistro: il mancato conferimento impedirà al Titolare
+  di procedere con l'apertura e la gestione della pratica di
+  sinistro ai sensi del contratto assicurativo.
+
+- È FACOLTATIVO per i dati particolari (dati sulla salute):
+  il rifiuto al trattamento di tali dati non impedisce
+  l'apertura della pratica, ma potrebbe limitare la capacità
+  del Titolare di valutare e liquidare il sinistro nella sua
+  interezza, in particolare per quanto riguarda il danno
+  biologico e le lesioni personali.
+
+- È FACOLTATIVO per il consenso alla registrazione audio:
+  il rifiuto comporterà l'utilizzo esclusivo della modalità
+  testuale per l'acquisizione del sinistro.
+
+
+11. ESISTENZA DI PROCESSI DECISIONALI AUTOMATIZZATI
+----------------------------------------------------------------------------
+
+Il sistema di acquisizione sinistri utilizza tecnologie di
+intelligenza artificiale (modelli linguistici) per:
+
+- Trascrivere la conversazione vocale in testo
+- Estrarre e strutturare i dati del sinistro dalla narrazione
+  dell'assicurato
+- Classificare il tipo e la gravità del sinistro
+- Generare una checklist documentale
+- Identificare segnali di potenziale frode
+
+Tali processi automatizzati NON producono decisioni con effetti
+giuridici nei confronti dell'interessato. Ogni decisione sulla
+copertura assicurativa, sulla liquidazione del sinistro e
+sull'eventuale indennizzo è assunta da un operatore umano
+qualificato (liquidatore).
+
+L'interessato ha comunque il diritto di:
+- Ottenere l'intervento umano da parte del Titolare
+- Esprimere la propria opinione
+- Contestare la decisione
+
+ai sensi dell'art. 22(3) del GDPR.
+
+
+12. MISURE DI SICUREZZA
+----------------------------------------------------------------------------
+
+Il Titolare adotta misure tecniche e organizzative adeguate a
+garantire un livello di sicurezza appropriato al rischio, in
+conformità all'art. 32 del GDPR, tra cui:
+
+- Cifratura delle comunicazioni (TLS 1.3)
+- Autenticazione degli operatori tramite JWT
+- Controllo degli accessi basato su ruoli (RBAC)
+- Registro di audit completo per ogni accesso ai dati personali
+- Anonimizzazione degli indirizzi IP (hash SHA-256)
+- Eliminazione immediata dell'audio al termine della sessione
+- Backup cifrati con retention policy definita
+- Procedure di gestione delle violazioni dei dati (data breach)
+  ai sensi degli artt. 33-34 del GDPR
+
+
+============================================================================
+La presente informativa potrà essere aggiornata periodicamente.
+La versione più recente è sempre disponibile all'indirizzo:
+www.compagnia.it/privacy
+
+Per qualsiasi chiarimento: privacy@compagnia.it | dpo@compagnia.it
+============================================================================

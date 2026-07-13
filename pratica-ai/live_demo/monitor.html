@@ -1,0 +1,992 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PraticaAI — Monitor</title>
+  <meta name="description" content="Dashboard di monitoraggio in tempo reale per PraticaAI — sessioni, log, errori e quota API Gemini." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ========================================================
+       PraticaAI Monitoring Dashboard — Design System
+       ======================================================== */
+    :root {
+      --bg:       #0A0F1E;
+      --surface:  #111827;
+      --surface2: #1a2332;
+      --border:   #1F2937;
+      --text:     #F9FAFB;
+      --muted:    #6B7280;
+      --success:  #10B981;
+      --warning:  #F59E0B;
+      --error:    #EF4444;
+      --info:     #3B82F6;
+      --gold:     #B49850;
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --radius:   10px;
+      --shadow:   0 4px 24px rgba(0,0,0,0.35);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Scrollbar ────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+    /* ── Layout ───────────────────────────────── */
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      padding: 16px;
+      gap: 16px;
+      overflow: hidden;
+    }
+
+    /* ── Header ───────────────────────────────── */
+    .dash-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      padding: 0 4px;
+    }
+
+    .dash-header .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .dash-header .brand h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: -0.02em;
+    }
+
+    .dash-header .brand .live-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      animation: pulse-dot 2s ease-in-out infinite;
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .dash-header .meta {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dash-header .meta .uptime { font-family: var(--font-mono); }
+
+    #currentTime { color: var(--text); font-weight: 500; }
+
+    /* ── Metric Cards ─────────────────────────── */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+
+    .metric-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .metric-card:nth-child(1)::before { background: var(--info); }
+    .metric-card:nth-child(2)::before { background: var(--success); }
+    .metric-card:nth-child(3)::before { background: var(--error); }
+    .metric-card:nth-child(4)::before { background: var(--warning); }
+
+    .metric-card .label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .metric-card .value {
+      font-size: 32px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      line-height: 1;
+    }
+
+    .metric-card:nth-child(1) .value { color: var(--info); }
+    .metric-card:nth-child(2) .value { color: var(--success); }
+    .metric-card:nth-child(3) .value { color: var(--error); }
+    .metric-card:nth-child(4) .value { color: var(--warning); }
+
+    .metric-card .sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* Quota progress bar */
+    .quota-bar-wrap {
+      width: 100%;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .quota-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.5s ease, background 0.5s ease;
+      background: var(--warning);
+    }
+
+    .quota-bar-fill.danger { background: var(--error); }
+
+    /* ── Middle Row ───────────────────────────── */
+    .middle-row {
+      display: grid;
+      grid-template-columns: 60% 40%;
+      gap: 16px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* ── Bottom Row ──────────────────────────── */
+    .bottom-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      flex: 0.7;
+      min-height: 0;
+    }
+
+    /* ── Panel ────────────────────────────────── */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .panel-header h2 {
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-header h2 .icon { font-size: 16px; }
+
+    .panel-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0;
+    }
+
+    /* ── Filter Buttons ──────────────────────── */
+    .filters {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover { border-color: var(--muted); color: var(--text); }
+    .filter-btn.active { background: var(--info); border-color: var(--info); color: #fff; }
+
+    .action-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover { border-color: var(--muted); color: var(--text); }
+    .action-btn.pause-active { background: var(--warning); border-color: var(--warning); color: #000; }
+
+    /* ── Log Feed ─────────────────────────────── */
+    .log-list { list-style: none; }
+
+    .log-item {
+      display: grid;
+      grid-template-columns: 70px 64px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 8px 18px;
+      border-bottom: 1px solid rgba(31,41,55,0.5);
+      font-size: 13px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .log-item:hover { background: rgba(255,255,255,0.02); }
+
+    .log-time {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+      padding-top: 2px;
+    }
+
+    .log-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .log-badge.INFO    { background: rgba(59,130,246,0.15); color: var(--info); }
+    .log-badge.WARNING { background: rgba(245,158,11,0.15); color: var(--warning); }
+    .log-badge.ERROR   { background: rgba(239,68,68,0.15); color: var(--error); }
+    .log-badge.SUCCESS { background: rgba(16,185,129,0.15); color: var(--success); }
+
+    .log-msg {
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .log-msg .session-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--gold);
+      margin-left: 6px;
+    }
+
+    /* ── Sessions List ────────────────────────── */
+    .session-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(31,41,55,0.5);
+      transition: background 0.2s;
+    }
+
+    .session-item:hover { background: rgba(255,255,255,0.02); }
+
+    .session-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .session-dot.active    { background: var(--success); box-shadow: 0 0 6px var(--success); }
+    .session-dot.escalated { background: var(--warning); box-shadow: 0 0 6px var(--warning); }
+    .session-dot.idle      { background: var(--muted); }
+
+    .session-info { flex: 1; min-width: 0; }
+
+    .session-id {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .session-detail {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .session-status {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .session-status.collecting { background: rgba(59,130,246,0.15); color: var(--info); }
+    .session-status.escalated  { background: rgba(245,158,11,0.15); color: var(--warning); }
+    .session-status.complete   { background: rgba(16,185,129,0.15); color: var(--success); }
+
+    /* ── Error List ───────────────────────────── */
+    .error-item {
+      padding: 10px 18px;
+      border-bottom: 1px solid rgba(31,41,55,0.5);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .error-item:hover { background: rgba(239,68,68,0.05); }
+
+    .error-summary {
+      display: grid;
+      grid-template-columns: 70px 100px 1fr;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .error-time {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .error-type {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--error);
+    }
+
+    .error-preview {
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .error-detail {
+      display: none;
+      margin-top: 10px;
+      padding: 12px;
+      background: var(--bg);
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .error-item.expanded .error-detail { display: block; }
+
+    /* ── Quota Panel ──────────────────────────── */
+    .quota-panel-body {
+      padding: 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .quota-big-bar {
+      width: 100%;
+      height: 20px;
+      background: var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .quota-big-fill {
+      height: 100%;
+      border-radius: 10px;
+      background: linear-gradient(90deg, var(--success), var(--warning));
+      transition: width 0.6s ease;
+      position: relative;
+    }
+
+    .quota-big-fill.danger {
+      background: linear-gradient(90deg, var(--warning), var(--error));
+    }
+
+    .quota-big-label {
+      position: absolute;
+      right: 8px; top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .quota-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .quota-stat {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .quota-stat .qs-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .quota-stat .qs-value {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .quota-warning-msg {
+      background: rgba(245,158,11,0.1);
+      border: 1px solid rgba(245,158,11,0.3);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--warning);
+      font-size: 12px;
+      font-weight: 500;
+      display: none;
+    }
+
+    .quota-warning-msg.visible { display: block; }
+
+    /* ── Empty State ──────────────────────────── */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      color: var(--muted);
+      text-align: center;
+      gap: 8px;
+    }
+
+    .empty-state .icon { font-size: 32px; opacity: 0.5; }
+    .empty-state .msg { font-size: 13px; }
+
+    /* ── Responsive ───────────────────────────── */
+    @media (max-width: 1200px) {
+      .metrics-row { grid-template-columns: repeat(2, 1fr); }
+      .middle-row  { grid-template-columns: 1fr; }
+      .bottom-row  { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+
+    <!-- ═══ HEADER ═══ -->
+    <header class="dash-header">
+      <div class="brand">
+        <div class="live-dot"></div>
+        <h1>PraticaAI Monitor</h1>
+      </div>
+      <div class="meta">
+        <span id="currentTime"></span>
+        <span class="uptime">Uptime: <span id="uptimeVal">—</span></span>
+      </div>
+    </header>
+
+    <!-- ═══ TOP ROW: Metric Cards ═══ -->
+    <div class="metrics-row">
+      <div class="metric-card" id="metricSessions">
+        <div class="label">Sessioni attive</div>
+        <div class="value" id="statSessions">0</div>
+        <div class="sub">Connessioni WebSocket aperte</div>
+      </div>
+      <div class="metric-card" id="metricClaims">
+        <div class="label">Sinistri oggi</div>
+        <div class="value" id="statClaims">0</div>
+        <div class="sub">Pratiche elaborate oggi</div>
+      </div>
+      <div class="metric-card" id="metricErrors">
+        <div class="label">Errori API</div>
+        <div class="value" id="statErrors">0</div>
+        <div class="sub">Nell'ultima ora</div>
+      </div>
+      <div class="metric-card" id="metricQuota">
+        <div class="label">Quota Gemini</div>
+        <div class="value" id="statQuota">0<span style="font-size:16px;color:var(--muted)"> / 20</span></div>
+        <div class="quota-bar-wrap">
+          <div class="quota-bar-fill" id="quotaBarMini" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ MIDDLE ROW ═══ -->
+    <div class="middle-row">
+
+      <!-- Log in tempo reale -->
+      <div class="panel" id="logPanel">
+        <div class="panel-header">
+          <h2><span class="icon">📋</span> Log in tempo reale</h2>
+          <div class="filters">
+            <button class="filter-btn active" data-level="ALL">ALL</button>
+            <button class="filter-btn" data-level="ERROR">ERROR</button>
+            <button class="filter-btn" data-level="WARNING">WARNING</button>
+            <button class="filter-btn" data-level="INFO">INFO</button>
+            <span style="width:1px;height:20px;background:var(--border);margin:0 4px"></span>
+            <button class="action-btn" id="pauseBtn" title="Pausa">⏸ Pausa</button>
+            <button class="action-btn" id="clearBtn" title="Pulisci">🗑 Pulisci</button>
+            <button class="action-btn" id="exportBtn" title="Esporta log">📥 Esporta</button>
+          </div>
+        </div>
+        <div class="panel-body" id="logBody">
+          <ul class="log-list" id="logList">
+            <li class="empty-state" id="logEmpty">
+              <span class="icon">📋</span>
+              <span class="msg">In attesa di log…</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Sessioni attive -->
+      <div class="panel" id="sessionsPanel">
+        <div class="panel-header">
+          <h2><span class="icon">👥</span> Sessioni attive</h2>
+          <span id="sessionCount" style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">0</span>
+        </div>
+        <div class="panel-body" id="sessionsBody">
+          <div class="empty-state" id="sessionsEmpty">
+            <span class="icon">👥</span>
+            <span class="msg">Nessuna sessione attiva</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ BOTTOM ROW ═══ -->
+    <div class="bottom-row">
+
+      <!-- Errori recenti -->
+      <div class="panel" id="errorsPanel">
+        <div class="panel-header">
+          <h2><span class="icon">🚨</span> Errori recenti</h2>
+          <span id="errorCount" style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">0</span>
+        </div>
+        <div class="panel-body" id="errorsBody">
+          <div class="empty-state" id="errorsEmpty">
+            <span class="icon">✅</span>
+            <span class="msg">Nessun errore — tutto funziona</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quota API Gemini -->
+      <div class="panel" id="quotaPanel">
+        <div class="panel-header">
+          <h2><span class="icon">⚡</span> Quota API Gemini</h2>
+        </div>
+        <div class="panel-body quota-panel-body">
+          <div class="quota-big-bar">
+            <div class="quota-big-fill" id="quotaBigFill" style="width:0%">
+              <span class="quota-big-label" id="quotaBigLabel">0 / 20</span>
+            </div>
+          </div>
+          <div class="quota-info">
+            <div class="quota-stat">
+              <div class="qs-label">Richieste oggi</div>
+              <div class="qs-value" id="quotaUsed" style="color:var(--info)">0</div>
+            </div>
+            <div class="quota-stat">
+              <div class="qs-label">Limite giornaliero</div>
+              <div class="qs-value" id="quotaLimit" style="color:var(--text)">20</div>
+            </div>
+            <div class="quota-stat">
+              <div class="qs-label">Rimanenti</div>
+              <div class="qs-value" id="quotaRemaining" style="color:var(--success)">20</div>
+            </div>
+            <div class="quota-stat">
+              <div class="qs-label">Reset stimato</div>
+              <div class="qs-value" id="quotaReset" style="color:var(--muted);font-size:13px">00:00 PT</div>
+            </div>
+          </div>
+          <div class="quota-warning-msg" id="quotaWarning">
+            ⚠ Attenzione: la quota è quasi esaurita. Le richieste potrebbero fallire.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* ════════════════════════════════════════════════
+       PraticaAI Monitor — Client-side Logic
+       ════════════════════════════════════════════════ */
+
+    const API_BASE = '';
+    const POLL_INTERVAL = 5000;
+    let logPaused = false;
+    let currentFilter = 'ALL';
+    let allLogs = [];
+    let monitorWS = null;
+
+    // ── Italian Date/Time ──────────────────────
+    const GIORNI = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+    const MESI = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+
+    function updateClock() {
+      const now = new Date();
+      const giorno = GIORNI[now.getDay()];
+      const mese = MESI[now.getMonth()];
+      const ore = String(now.getHours()).padStart(2,'0');
+      const min = String(now.getMinutes()).padStart(2,'0');
+      document.getElementById('currentTime').textContent =
+        `${giorno} ${now.getDate()} ${mese}, ore ${ore}:${min}`;
+    }
+
+    function formatUptime(seconds) {
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = seconds % 60;
+      if (h > 0) return `${h}h ${m}m ${s}s`;
+      if (m > 0) return `${m}m ${s}s`;
+      return `${s}s`;
+    }
+
+    // ── Stats Polling ──────────────────────────
+    async function fetchStats() {
+      try {
+        const res = await fetch(`${API_BASE}/api/monitor/stats`);
+        if (!res.ok) return;
+        const data = await res.json();
+
+        document.getElementById('statSessions').textContent = data.sessioni_attive;
+        document.getElementById('statClaims').textContent = data.sinistri_oggi;
+        document.getElementById('statErrors').textContent = data.errori_ultima_ora;
+
+        // Quota
+        const used = data.quota_gemini_usata;
+        const limit = data.quota_gemini_limite;
+        const pct = Math.min(100, Math.round((used / limit) * 100));
+        const remaining = Math.max(0, limit - used);
+
+        document.getElementById('statQuota').innerHTML =
+          `${used}<span style="font-size:16px;color:var(--muted)"> / ${limit}</span>`;
+        const miniBar = document.getElementById('quotaBarMini');
+        miniBar.style.width = pct + '%';
+        miniBar.classList.toggle('danger', pct > 80);
+
+        const bigFill = document.getElementById('quotaBigFill');
+        bigFill.style.width = pct + '%';
+        bigFill.classList.toggle('danger', pct > 80);
+        document.getElementById('quotaBigLabel').textContent = `${used} / ${limit}`;
+
+        document.getElementById('quotaUsed').textContent = used;
+        document.getElementById('quotaLimit').textContent = limit;
+        document.getElementById('quotaRemaining').textContent = remaining;
+        document.getElementById('quotaRemaining').style.color =
+          remaining <= 4 ? 'var(--error)' : remaining <= 8 ? 'var(--warning)' : 'var(--success)';
+
+        document.getElementById('quotaWarning').classList.toggle('visible', pct > 80);
+
+        // Uptime
+        document.getElementById('uptimeVal').textContent = formatUptime(data.uptime_secondi);
+      } catch (e) {
+        console.error('Stats fetch error:', e);
+      }
+    }
+
+    // ── Sessions Polling ───────────────────────
+    async function fetchSessions() {
+      try {
+        const res = await fetch(`${API_BASE}/api/monitor/sessions`);
+        if (!res.ok) return;
+        const sessions = await res.json();
+
+        document.getElementById('sessionCount').textContent = sessions.length;
+        const body = document.getElementById('sessionsBody');
+        const empty = document.getElementById('sessionsEmpty');
+
+        if (sessions.length === 0) {
+          body.innerHTML = '';
+          body.appendChild(empty);
+          empty.style.display = 'flex';
+          return;
+        }
+
+        let html = '';
+        for (const s of sessions) {
+          const dotClass = s.status === 'escalated' ? 'escalated' :
+                           s.status === 'collecting' ? 'active' : 'idle';
+          html += `
+            <div class="session-item">
+              <div class="session-dot ${dotClass}"></div>
+              <div class="session-info">
+                <div class="session-id">${s.session_id}</div>
+                <div class="session-detail">${s.claim_type} · ${s.connected_at} · ${s.last_activity}</div>
+              </div>
+              <span class="session-status ${s.status}">${s.status}</span>
+            </div>`;
+        }
+        body.innerHTML = html;
+      } catch (e) {
+        console.error('Sessions fetch error:', e);
+      }
+    }
+
+    // ── Log Rendering ──────────────────────────
+    function renderLogEntry(entry) {
+      const ts = entry.timestamp ? entry.timestamp.split('T')[1]?.substring(0,8) || '' : '';
+      const sessionTag = entry.session_id
+        ? `<span class="session-tag">[${entry.session_id.substring(0,8)}]</span>` : '';
+      return `
+        <li class="log-item" data-level="${entry.level}">
+          <span class="log-time">${ts}</span>
+          <span class="log-badge ${entry.level}">${entry.level}</span>
+          <span class="log-msg">${escapeHtml(entry.message)}${sessionTag}</span>
+        </li>`;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function addLogEntry(entry) {
+      if (logPaused) {
+        allLogs.unshift(entry);
+        return;
+      }
+      allLogs.unshift(entry);
+
+      if (currentFilter !== 'ALL' && entry.level !== currentFilter) return;
+
+      const list = document.getElementById('logList');
+      const empty = document.getElementById('logEmpty');
+      if (empty) empty.remove();
+
+      list.insertAdjacentHTML('afterbegin', renderLogEntry(entry));
+
+      // Keep max 200 visible
+      while (list.children.length > 200) {
+        list.removeChild(list.lastChild);
+      }
+    }
+
+    function reRenderLogs() {
+      const list = document.getElementById('logList');
+      const filtered = currentFilter === 'ALL' ? allLogs : allLogs.filter(e => e.level === currentFilter);
+      if (filtered.length === 0) {
+        list.innerHTML = `<li class="empty-state" id="logEmpty"><span class="icon">📋</span><span class="msg">Nessun log per questo filtro</span></li>`;
+        return;
+      }
+      list.innerHTML = filtered.slice(0, 200).map(renderLogEntry).join('');
+    }
+
+    // ── Initial Log Fetch ──────────────────────
+    async function fetchInitialLogs() {
+      try {
+        const res = await fetch(`${API_BASE}/api/monitor/logs?limit=100&level=all`);
+        if (!res.ok) return;
+        const logs = await res.json();
+        allLogs = logs;
+        reRenderLogs();
+      } catch (e) {
+        console.error('Initial logs fetch error:', e);
+      }
+    }
+
+    // ── Errors Rendering ───────────────────────
+    async function fetchErrors() {
+      try {
+        const res = await fetch(`${API_BASE}/api/monitor/logs?limit=20&level=ERROR`);
+        if (!res.ok) return;
+        const errors = await res.json();
+
+        document.getElementById('errorCount').textContent = errors.length;
+        const body = document.getElementById('errorsBody');
+        const empty = document.getElementById('errorsEmpty');
+
+        if (errors.length === 0) {
+          body.innerHTML = '';
+          body.appendChild(empty);
+          empty.style.display = 'flex';
+          return;
+        }
+
+        let html = '';
+        for (const e of errors) {
+          const ts = e.timestamp ? e.timestamp.split('T')[1]?.substring(0,8) || '' : '';
+          const src = e.source || 'server.py';
+          html += `
+            <div class="error-item" onclick="this.classList.toggle('expanded')">
+              <div class="error-summary">
+                <span class="error-time">${ts}</span>
+                <span class="error-type">${src}</span>
+                <span class="error-preview">${escapeHtml(e.message)}</span>
+              </div>
+              <div class="error-detail">${JSON.stringify(e, null, 2)}</div>
+            </div>`;
+        }
+        body.innerHTML = html;
+      } catch (e) {
+        console.error('Errors fetch error:', e);
+      }
+    }
+
+    // ── WebSocket (real-time logs) ─────────────
+    function connectMonitorWS() {
+      const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const url = `${proto}//${location.host}/ws/monitor`;
+      monitorWS = new WebSocket(url);
+
+      monitorWS.onopen = () => {
+        console.log('Monitor WS connected');
+        // Send ping every 30s
+        setInterval(() => {
+          if (monitorWS && monitorWS.readyState === WebSocket.OPEN) {
+            monitorWS.send('ping');
+          }
+        }, 30000);
+      };
+
+      monitorWS.onmessage = (event) => {
+        try {
+          const entry = JSON.parse(event.data);
+          if (entry.type === 'pong') return;
+          addLogEntry(entry);
+
+          // Update error panel live
+          if (entry.level === 'ERROR') {
+            fetchErrors();
+          }
+        } catch (e) {
+          console.error('WS parse error:', e);
+        }
+      };
+
+      monitorWS.onclose = () => {
+        console.log('Monitor WS disconnected, reconnecting in 3s…');
+        setTimeout(connectMonitorWS, 3000);
+      };
+
+      monitorWS.onerror = (e) => {
+        console.error('Monitor WS error:', e);
+      };
+    }
+
+    // ── Filter Buttons ─────────────────────────
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.level;
+        reRenderLogs();
+      });
+    });
+
+    // ── Pause Button ───────────────────────────
+    document.getElementById('pauseBtn').addEventListener('click', function() {
+      logPaused = !logPaused;
+      this.classList.toggle('pause-active', logPaused);
+      this.textContent = logPaused ? '▶ Riprendi' : '⏸ Pausa';
+      if (!logPaused) reRenderLogs();
+    });
+
+    // ── Clear Button ───────────────────────────
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      allLogs = [];
+      document.getElementById('logList').innerHTML =
+        `<li class="empty-state" id="logEmpty"><span class="icon">📋</span><span class="msg">Log svuotati</span></li>`;
+    });
+
+    // ── Export Button ──────────────────────────
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const text = allLogs.map(e =>
+        `[${e.timestamp}] [${e.level}] ${e.message}${e.session_id ? ' [' + e.session_id + ']' : ''}`
+      ).join('\n');
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `praticaai-logs-${new Date().toISOString().split('T')[0]}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // ── Bootstrap ──────────────────────────────
+    updateClock();
+    setInterval(updateClock, 10000);
+
+    fetchStats();
+    fetchInitialLogs();
+    fetchSessions();
+    fetchErrors();
+
+    setInterval(fetchStats, POLL_INTERVAL);
+    setInterval(fetchSessions, POLL_INTERVAL);
+    setInterval(fetchErrors, 15000);
+
+    connectMonitorWS();
+  </script>
+</body>
+</html>

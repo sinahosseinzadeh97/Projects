@@ -1,0 +1,2508 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PraticaAI — Acquisizione Sinistri</title>
+    <meta name="description" content="Cockpit operativo FNOL per l'acquisizione sinistri assicurativi con agente virtuale vocale Sofia. Piattaforma insurtech italiana." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+/* ═══════════════════════════════════════════════════════════
+   PRATICAAI — Premium Italian Insurtech Design System
+   Inspiration: Linear.app + Stripe Dashboard + Italian Luxury
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* Backgrounds — warm dark, not cold */
+  --bg-base:        #0C0E14;
+  --bg-surface:     #13151E;
+  --bg-elevated:    #1A1D28;
+  --bg-border:      #252836;
+
+  /* Italian accent palette */
+  --pratica-gold:   #C9A84C;
+  --pratica-terra:  #C44B2F;
+  --pratica-verde:  #2DD4A0;
+  --pratica-blu:    #4F8EF7;
+
+  /* Text */
+  --text-primary:   #F0F0F5;
+  --text-secondary: #8B8FA8;
+  --text-muted:     #4A4D5E;
+
+  /* Transitions */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+  overflow: hidden;
+  height: 100vh;
+}
+
+button, input { font: inherit; }
+button { cursor: pointer; }
+
+/* ─── APP GRID ─── */
+.app-shell {
+  display: grid;
+  grid-template-rows: 48px auto 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ─── TOPBAR ─── */
+.topbar {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  background: rgba(12,14,20,0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--bg-border);
+  z-index: 100;
+  gap: 16px;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.logo-mark {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.logo-text {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  line-height: 1;
+}
+.logo-text .gold { color: var(--pratica-gold); }
+.logo-text .white { color: var(--text-primary); }
+
+.logo-underline {
+  width: 40px;
+  height: 2px;
+  background: var(--pratica-gold);
+  margin-top: 4px;
+  border-radius: 1px;
+}
+
+.logo-sub {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.topbar-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.session-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--bg-border);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-family: 'SF Mono', SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
+  color: var(--text-secondary);
+}
+
+.model-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--pratica-verde);
+  box-shadow: 0 0 8px rgba(45,212,160,0.4);
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(45,212,160,0.4); }
+  50% { opacity: 0.6; box-shadow: 0 0 4px rgba(45,212,160,0.2); }
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ivass-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--pratica-gold);
+}
+
+.operator-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--pratica-gold);
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--pratica-gold);
+  background: rgba(201,168,76,0.1);
+}
+
+/* ─── CALL STRIP ─── */
+.call-strip {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 36px;
+  background: linear-gradient(90deg, rgba(201,168,76,0.08) 0%, transparent 100%);
+  border-bottom: 1px solid rgba(201,168,76,0.2);
+}
+
+.call-strip.active { display: flex; }
+
+.call-strip-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rec-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pratica-terra);
+  animation: recPulse 1s ease-in-out infinite;
+}
+
+@keyframes recPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.call-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pratica-terra);
+}
+
+.call-timer {
+  font-family: 'SF Mono', SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
+  font-size: 12px;
+  color: var(--pratica-gold);
+}
+
+.call-strip-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.call-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  background: rgba(201,168,76,0.1);
+  color: var(--pratica-gold);
+  border: 1px solid rgba(201,168,76,0.2);
+}
+
+/* ─── MAIN WORKSPACE ─── */
+.workspace {
+  display: grid;
+  grid-template-columns: 280px 1fr 300px;
+  gap: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ─── SOFIA PANEL (LEFT) ─── */
+.sofia-panel {
+  background: var(--bg-surface);
+  border-right: 1px solid var(--bg-border);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.sofia-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 16px;
+  border-bottom: 1px solid var(--bg-border);
+}
+
+.avatar-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--bg-base);
+  border: 1px solid var(--bg-border);
+  display: grid;
+  place-items: center;
+  position: relative;
+  transition: box-shadow 0.3s var(--ease);
+}
+
+.avatar-circle.speaking {
+  box-shadow: 0 0 30px rgba(201,168,76,0.15), 0 0 60px rgba(201,168,76,0.05);
+}
+
+.avatar-circle svg {
+  width: 80px;
+  height: 40px;
+}
+
+.wave-path {
+  fill: none;
+  stroke: var(--pratica-gold);
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: d 0.3s var(--ease);
+}
+
+.sofia-name {
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.sofia-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.sofia-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(45,212,160,0.08);
+  color: var(--pratica-verde);
+  border: 1px solid rgba(45,212,160,0.2);
+  transition: all 0.3s var(--ease);
+}
+
+.sofia-state .state-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.sofia-state.speaking {
+  background: rgba(201,168,76,0.08);
+  color: var(--pratica-gold);
+  border-color: rgba(201,168,76,0.25);
+  animation: gentlePulse 2s ease-in-out infinite;
+}
+
+.sofia-state.processing {
+  background: rgba(79,142,247,0.08);
+  color: var(--pratica-blu);
+  border-color: rgba(79,142,247,0.2);
+}
+
+@keyframes gentlePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Transcript */
+.transcript-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.transcript-label {
+  padding: 12px 16px 8px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.transcript-feed {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 12px 8px;
+  scroll-behavior: smooth;
+}
+
+.transcript-feed::-webkit-scrollbar { width: 4px; }
+.transcript-feed::-webkit-scrollbar-track { background: transparent; }
+.transcript-feed::-webkit-scrollbar-thumb { background: var(--bg-border); border-radius: 4px; }
+
+.msg-bubble {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  margin-bottom: 4px;
+  border-radius: 6px;
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.msg-bubble.claimant {
+  background: rgba(255,255,255,0.03);
+  border-left: 2px solid rgba(255,255,255,0.1);
+}
+
+.msg-bubble.agent {
+  background: rgba(201,168,76,0.05);
+  border-left: 2px solid rgba(201,168,76,0.3);
+}
+
+.msg-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 9px;
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.msg-bubble.claimant .msg-avatar {
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--bg-border);
+}
+
+.msg-bubble.agent .msg-avatar {
+  background: rgba(201,168,76,0.15);
+  color: var(--pratica-gold);
+  border: 1px solid rgba(201,168,76,0.3);
+}
+
+.msg-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.msg-text {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  word-wrap: break-word;
+}
+
+.msg-time {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: right;
+  margin-top: 2px;
+}
+
+/* Input area */
+.sofia-input {
+  padding: 12px;
+  border-top: 1px solid var(--bg-border);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.sofia-input form {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+  align-items: center;
+}
+
+.mic-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--bg-border);
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: all 0.15s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.mic-btn:hover {
+  border-color: var(--pratica-gold);
+  color: var(--pratica-gold);
+}
+
+.mic-btn.recording {
+  background: var(--pratica-gold);
+  border-color: var(--pratica-gold);
+  color: var(--bg-base);
+  box-shadow: 0 0 20px rgba(201,168,76,0.3);
+}
+
+.mic-btn.recording::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--pratica-gold);
+  animation: micRipple 1.5s ease-out infinite;
+}
+
+@keyframes micRipple {
+  from { transform: scale(1); opacity: 0.4; }
+  to { transform: scale(1.6); opacity: 0; }
+}
+
+.mic-btn svg { width: 16px; height: 16px; }
+
+.text-input {
+  flex: 1;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--bg-border);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.15s var(--ease);
+}
+
+.text-input::placeholder { color: var(--text-muted); }
+.text-input:focus { border-color: var(--pratica-gold); }
+
+.send-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--bg-border);
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: all 0.15s var(--ease);
+}
+
+.send-btn:hover {
+  color: var(--pratica-gold);
+  border-color: var(--pratica-gold);
+}
+
+.send-btn svg { width: 14px; height: 14px; }
+
+/* ─── FASCICOLO (CENTER — HERO) ─── */
+.fascicolo-panel {
+  background: var(--bg-base);
+  padding: 24px;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.fascicolo-panel::-webkit-scrollbar { width: 6px; }
+.fascicolo-panel::-webkit-scrollbar-track { background: transparent; }
+.fascicolo-panel::-webkit-scrollbar-thumb { background: var(--bg-border); border-radius: 3px; }
+
+.doc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.doc-header-left {
+  border-left: 3px solid var(--pratica-gold);
+  padding-left: 16px;
+}
+
+.doc-kicker {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pratica-gold);
+  margin-bottom: 4px;
+}
+
+.doc-title {
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.doc-subtitle {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Progress circle */
+.progress-circle-wrap {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+}
+
+.progress-circle-wrap svg {
+  width: 64px;
+  height: 64px;
+  transform: rotate(-90deg);
+}
+
+.progress-bg {
+  fill: none;
+  stroke: var(--bg-border);
+  stroke-width: 4;
+}
+
+.progress-fg {
+  fill: none;
+  stroke: var(--pratica-gold);
+  stroke-width: 4;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s var(--ease);
+}
+
+.progress-text {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--pratica-gold);
+}
+
+/* Status badges */
+.status-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: all 0.3s var(--ease);
+}
+
+.status-badge.verde { background: rgba(45,212,160,0.1); color: var(--pratica-verde); border: 1px solid rgba(45,212,160,0.2); }
+.status-badge.gold { background: rgba(201,168,76,0.1); color: var(--pratica-gold); border: 1px solid rgba(201,168,76,0.2); }
+.status-badge.terra { background: rgba(196,75,47,0.1); color: var(--pratica-terra); border: 1px solid rgba(196,75,47,0.2); }
+.status-badge.blu { background: rgba(79,142,247,0.1); color: var(--pratica-blu); border: 1px solid rgba(79,142,247,0.2); }
+
+/* Fields grid */
+.fields-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.fields-grid .full-width {
+  grid-column: 1 / -1;
+}
+
+.field-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--bg-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  border-left: 2px solid transparent;
+  transition: all 0.25s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.field-card.filled {
+  border-left-color: rgba(201,168,76,0.4);
+  background: rgba(201,168,76,0.03);
+}
+
+.field-card.missing-field {
+  border-left-color: var(--pratica-terra);
+}
+
+.field-card.urgent-field {
+  border-left-color: var(--pratica-terra);
+  background: rgba(196,75,47,0.04);
+}
+
+.field-card-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.field-card.filled .field-card-label {
+  color: var(--text-secondary);
+}
+
+.field-card-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.field-card.missing-field .field-card-value,
+.field-card:not(.filled) .field-card-value {
+  color: var(--text-muted);
+}
+
+.field-card.missing-field .field-card-value {
+  color: var(--pratica-terra);
+}
+
+.field-card-source {
+  font-size: 10px;
+  color: var(--pratica-gold);
+  font-style: italic;
+  margin-top: 4px;
+  opacity: 0;
+  transition: opacity 0.2s var(--ease);
+}
+
+.field-card.filled .field-card-source {
+  opacity: 1;
+}
+
+/* Gold flash on fill */
+@keyframes goldFlash {
+  0% { background: rgba(201,168,76,0.12); }
+  100% { background: rgba(201,168,76,0.03); }
+}
+
+.field-card.just-filled {
+  animation: goldFlash 0.6s ease-out;
+}
+
+/* Separator */
+.section-separator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.section-separator::before,
+.section-separator::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--pratica-gold), transparent);
+  opacity: 0.3;
+}
+
+.section-separator span {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pratica-gold);
+  white-space: nowrap;
+}
+
+/* Italian fields */
+.italian-fields-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+/* CARD/CONSAP chips */
+.regime-chips {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.regime-chip {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid var(--bg-border);
+  background: var(--bg-surface);
+  transition: all 0.3s var(--ease);
+}
+
+.regime-chip.eligible {
+  background: rgba(45,212,160,0.06);
+  border-color: rgba(45,212,160,0.2);
+  color: var(--pratica-verde);
+}
+
+.regime-chip.pending {
+  color: var(--text-muted);
+}
+
+.regime-chip.warning {
+  background: rgba(201,168,76,0.06);
+  border-color: rgba(201,168,76,0.2);
+  color: var(--pratica-gold);
+}
+
+.regime-chip-icon {
+  font-size: 16px;
+}
+
+/* ─── OPERATORE PANEL (RIGHT) ─── */
+.operatore-panel {
+  background: var(--bg-surface);
+  border-left: 1px solid var(--bg-border);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px;
+  gap: 12px;
+}
+
+.operatore-panel::-webkit-scrollbar { width: 4px; }
+.operatore-panel::-webkit-scrollbar-track { background: transparent; }
+.operatore-panel::-webkit-scrollbar-thumb { background: var(--bg-border); border-radius: 4px; }
+
+/* Disposition card */
+.disposition-card {
+  border-radius: 8px;
+  padding: 14px;
+  border: 1px solid var(--bg-border);
+  transition: all 0.3s var(--ease);
+}
+
+.disposition-card.emergency {
+  background: rgba(196,75,47,0.1);
+  border-color: rgba(196,75,47,0.3);
+  animation: dispositionPulse 2s ease-in-out 2;
+}
+
+@keyframes dispositionPulse {
+  0%, 100% { border-color: rgba(196,75,47,0.3); }
+  50% { border-color: rgba(196,75,47,0.6); }
+}
+
+.disposition-card.in-progress {
+  background: rgba(79,142,247,0.08);
+  border-color: rgba(79,142,247,0.2);
+}
+
+.disposition-card.ready {
+  background: rgba(45,212,160,0.08);
+  border-color: rgba(45,212,160,0.2);
+}
+
+.disposition-icon { font-size: 16px; margin-bottom: 6px; }
+
+.disposition-title {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.disposition-card.emergency .disposition-title { color: var(--pratica-terra); }
+.disposition-card.in-progress .disposition-title { color: var(--pratica-blu); }
+.disposition-card.ready .disposition-title { color: var(--pratica-verde); }
+
+.disposition-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+/* Next question card */
+.next-question-card {
+  background: rgba(201,168,76,0.06);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 8px;
+  padding: 14px;
+  position: relative;
+}
+
+.next-question-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pratica-gold);
+  margin-bottom: 8px;
+}
+
+.next-question-text {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-size: 10px;
+  padding: 2px 8px;
+  transition: all 0.15s var(--ease);
+}
+
+.copy-btn:hover {
+  color: var(--pratica-gold);
+  border-color: var(--pratica-gold);
+}
+
+/* Missing items */
+.missing-section {
+  border-radius: 8px;
+  padding: 14px;
+  border: 1px solid var(--bg-border);
+  background: var(--bg-elevated);
+}
+
+.missing-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.missing-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.missing-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  animation: chipIn 0.2s ease-out;
+}
+
+@keyframes chipIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.missing-chip.critical {
+  background: rgba(196,75,47,0.12);
+  color: var(--pratica-terra);
+  border: 1px solid rgba(196,75,47,0.2);
+}
+
+.missing-chip.warning {
+  background: rgba(201,168,76,0.1);
+  color: var(--pratica-gold);
+  border: 1px solid rgba(201,168,76,0.2);
+}
+
+/* Documents checklist */
+.docs-section {
+  border-radius: 8px;
+  padding: 14px;
+  border: 1px solid var(--bg-border);
+  background: var(--bg-elevated);
+}
+
+.docs-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.doc-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: all 0.3s var(--ease);
+}
+
+.doc-item.confirmed { color: var(--pratica-verde); }
+
+.doc-item-icon {
+  width: 16px;
+  text-align: center;
+  font-size: 12px;
+}
+
+/* SIU Panel */
+.siu-panel {
+  display: none;
+  border-radius: 8px;
+  padding: 14px;
+  background: rgba(196,75,47,0.08);
+  border: 1px solid rgba(196,75,47,0.25);
+  animation: siuSlideIn 0.3s ease-out;
+}
+
+@keyframes siuSlideIn {
+  from { opacity: 0; transform: translateX(10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.siu-panel.visible { display: block; }
+
+.siu-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--pratica-terra);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.siu-signal {
+  display: inline-flex;
+  padding: 3px 8px;
+  margin: 2px;
+  border-radius: 4px;
+  font-size: 10px;
+  background: rgba(196,75,47,0.1);
+  color: var(--pratica-terra);
+  border: 1px solid rgba(196,75,47,0.2);
+}
+
+.siu-panel.visible {
+  animation: siuPulse 2s ease-in-out 2;
+}
+
+@keyframes siuPulse {
+  0%, 100% { border-color: rgba(196,75,47,0.25); }
+  50% { border-color: rgba(196,75,47,0.5); }
+}
+
+/* CTA Button */
+.cta-button {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border: none;
+  background: linear-gradient(135deg, #C9A84C, #B4962C);
+  color: var(--bg-base);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.15s var(--ease);
+  margin-top: auto;
+}
+
+.cta-button:hover {
+  filter: brightness(1.1);
+  transform: scale(1.01);
+}
+
+/* ─── Buttons row (new intake / reset) ─── */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--bg-border);
+}
+
+.action-btn {
+  flex: 1;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid var(--bg-border);
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  transition: all 0.15s var(--ease);
+}
+
+.action-btn:hover {
+  border-color: var(--pratica-gold);
+  color: var(--pratica-gold);
+}
+
+.action-btn.primary {
+  background: rgba(201,168,76,0.1);
+  border-color: rgba(201,168,76,0.3);
+  color: var(--pratica-gold);
+}
+
+/* ─── DIALOG ─── */
+.packet-dialog {
+  width: min(860px, calc(100vw - 48px));
+  border: 1px solid var(--bg-border);
+  border-radius: 12px;
+  box-shadow: 0 30px 90px rgba(0,0,0,0.62);
+  padding: 0;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.packet-dialog::backdrop {
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--bg-border);
+}
+
+.dialog-header h2 {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.dialog-close-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--bg-border);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  padding: 6px 12px;
+  transition: all 0.15s var(--ease);
+}
+
+.dialog-close-btn:hover {
+  border-color: var(--pratica-gold);
+  color: var(--pratica-gold);
+}
+
+.packet-dialog pre {
+  white-space: pre-wrap;
+  margin: 0;
+  padding: 20px;
+  color: var(--text-secondary);
+  font: 12px/1.6 'SF Mono', SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
+  max-height: 68vh;
+  overflow: auto;
+}
+
+/* ─── FLOATING MONITOR BUTTON ─── */
+.monitor-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,0.3);
+  background: var(--bg-surface);
+  color: var(--pratica-gold);
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  transition: all 0.2s var(--ease);
+}
+
+.monitor-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(201,168,76,0.3);
+  border-color: var(--pratica-gold);
+}
+
+.monitor-fab::after {
+  content: 'Monitoring Dashboard';
+  position: absolute;
+  right: calc(100% + 8px);
+  white-space: nowrap;
+  font-size: 11px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--bg-border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: var(--text-secondary);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s var(--ease);
+}
+
+.monitor-fab:hover::after { opacity: 1; }
+
+/* ─── SCROLLBAR GLOBAL ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg-border); border-radius: 3px; }
+
+/* ─── CLAIM STATUS BANNER (hidden, used by JS) ─── */
+#claimStatusBanner { display: none; }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+
+      <!-- ═══ TOPBAR ═══ -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="logo-mark">
+            <div class="logo-text"><span class="gold">PRATICA</span><span class="white">AI</span></div>
+            <div class="logo-underline"></div>
+          </div>
+          <span class="logo-sub">Acquisizione Sinistri</span>
+        </div>
+        <div class="topbar-center">
+          <span class="session-chip" id="sessionChip">SIN-2026-00001</span>
+          <span class="model-indicator">
+            <span class="pulse-dot"></span>
+            <span id="modelLabel">gemini-live</span>
+          </span>
+        </div>
+        <div class="topbar-right">
+          <span class="ivass-badge">IVASS Reg. 40/2018</span>
+          <div class="operator-avatar">OP</div>
+        </div>
+      </header>
+
+      <!-- ═══ CALL STRIP ═══ -->
+      <div class="call-strip" id="callStrip">
+        <div class="call-strip-left">
+          <div class="rec-dot"></div>
+          <span class="call-label">● CHIAMATA IN CORSO</span>
+          <span class="call-timer" id="callTimer">00:00</span>
+        </div>
+        <div class="call-strip-right">
+          <span class="call-chip" id="callTypeChip">—</span>
+          <span class="call-chip" id="callLocationChip">—</span>
+        </div>
+      </div>
+
+      <!-- ═══ MAIN WORKSPACE ═══ -->
+      <section class="workspace" aria-label="Cockpit acquisizione sinistri">
+
+        <!-- ─── SOFIA PANEL (LEFT) ─── -->
+        <aside class="sofia-panel">
+          <div class="sofia-avatar-section">
+            <div class="avatar-circle" id="avatarCircle">
+              <svg viewBox="0 0 80 40" id="waveformSvg">
+                <path class="wave-path" id="waveformPath" d="M 0 20 Q 10 20 20 20 Q 30 20 40 20 Q 50 20 60 20 Q 70 20 80 20" />
+              </svg>
+            </div>
+            <div class="sofia-name">Agente Sofia</div>
+            <div class="sofia-meta">it-IT · Gemini Live</div>
+            <div class="sofia-state" id="sofiaState">
+              <span class="state-dot"></span>
+              <span id="sofiaStateText">In ascolto</span>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button id="newIntakeButton" class="action-btn primary" type="button">Nuova acquisizione</button>
+            <button id="resetButton" class="action-btn" type="button">Ripristina</button>
+          </div>
+
+          <div class="transcript-section">
+            <div class="transcript-label">TRASCRIZIONE IN DIRETTA</div>
+            <div class="transcript-feed" id="transcript" aria-live="polite"></div>
+          </div>
+
+          <div class="sofia-input">
+            <button id="micButton" class="mic-btn" type="button" aria-label="Inizia registrazione vocale">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="1" width="6" height="11" rx="3" />
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                <line x1="12" y1="19" x2="12" y2="23" />
+                <line x1="8" y1="23" x2="16" y2="23" />
+              </svg>
+            </button>
+            <form id="textForm">
+              <input id="textInput" class="text-input" type="text" autocomplete="off" placeholder="Scrivi un messaggio..." aria-label="Scrivi la risposta dell'assicurato" />
+              <button type="submit" class="send-btn" aria-label="Invia risposta">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13" />
+                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </aside>
+
+        <!-- ─── FASCICOLO (CENTER) ─── -->
+        <main class="fascicolo-panel">
+          <div class="doc-header">
+            <div class="doc-header-left">
+              <div class="doc-kicker">FASCICOLO SINISTRO</div>
+              <h1 class="doc-title" id="fascicoloId">SIN-2026-00847</h1>
+              <div class="doc-subtitle" id="fascicoloDate">Pratica aperta il 18 giugno 2026 · ore 11:49</div>
+            </div>
+            <div class="progress-circle-wrap" id="progressCircle">
+              <svg viewBox="0 0 64 64">
+                <circle class="progress-bg" cx="32" cy="32" r="28" />
+                <circle class="progress-fg" id="progressArc" cx="32" cy="32" r="28"
+                  stroke-dasharray="175.93"
+                  stroke-dashoffset="175.93" />
+              </svg>
+              <div class="progress-text" id="progressText">0%</div>
+            </div>
+          </div>
+
+          <div class="status-row" id="statusRow">
+            <span class="status-badge blu" id="claimStatusBadge">In acquisizione</span>
+          </div>
+
+          <!-- Hidden banner for backward compat -->
+          <div id="claimStatusBanner" style="display:none;">
+            <span id="claimStatusBadgeOld" class="status-pill"></span>
+          </div>
+
+          <div class="fields-grid" id="claimFields">
+            <!-- Rendered by JS -->
+          </div>
+
+          <div class="section-separator"><span>DATI ITALIANI</span></div>
+
+          <div class="italian-fields-grid" id="italianFieldsGrid">
+            <div class="field-card" id="card-codice-fiscale">
+              <div class="field-card-label">Codice Fiscale</div>
+              <div class="field-card-value" id="field-codice-fiscale">—</div>
+              <div class="field-card-source">—</div>
+            </div>
+            <div class="field-card" id="card-targa-veicolo">
+              <div class="field-card-label">Targa Veicolo</div>
+              <div class="field-card-value" id="field-targa-veicolo">—</div>
+              <div class="field-card-source">—</div>
+            </div>
+            <div class="field-card" id="card-codice-cid">
+              <div class="field-card-label">CAI/CID</div>
+              <div class="field-card-value" id="field-codice-cid">—</div>
+              <div class="field-card-source">—</div>
+            </div>
+            <div class="field-card" id="card-provincia">
+              <div class="field-card-label">Provincia</div>
+              <div class="field-card-value" id="field-provincia">—</div>
+              <div class="field-card-source">—</div>
+            </div>
+            <div class="field-card" id="card-cap">
+              <div class="field-card-label">CAP</div>
+              <div class="field-card-value" id="field-cap">—</div>
+              <div class="field-card-source">—</div>
+            </div>
+            <div class="field-card" id="card-numero-verbale">
+              <div class="field-card-label">N. Verbale</div>
+              <div class="field-card-value" id="field-numero-verbale">—</div>
+              <div class="field-card-source">—</div>
+            </div>
+          </div>
+
+          <div class="regime-chips">
+            <div class="regime-chip pending" id="cardChip">
+              <span class="regime-chip-icon">🔄</span>
+              <div>
+                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.7;">Risarcimento Diretto (CARD)</div>
+                <div id="field-card-eligible" style="font-weight:600;">—</div>
+              </div>
+            </div>
+            <div class="regime-chip pending" id="consapChip">
+              <span class="regime-chip-icon">🔄</span>
+              <div>
+                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.7;">CONSAP</div>
+                <div id="field-consap" style="font-weight:600;">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SIU Signals (hidden by default) -->
+          <div class="siu-panel" id="siuSignalsPanel">
+            <div class="siu-title">⚠ SEGNALI SIU RILEVATI</div>
+            <div id="siuSignalsList"></div>
+          </div>
+        </main>
+
+        <!-- ─── OPERATORE PANEL (RIGHT) ─── -->
+        <aside class="operatore-panel" id="operatorePanel">
+          <div class="disposition-card in-progress" id="dispositionCard">
+            <div class="disposition-icon">📋</div>
+            <div class="disposition-title" id="dispositionTitle">RACCOLTA IN CORSO</div>
+            <div class="disposition-desc" id="dispositionDesc">Raccolta dati del sinistro in attesa di completamento.</div>
+          </div>
+
+          <div class="next-question-card" id="nextQuestionCard">
+            <div class="next-question-label">PROSSIMA DOMANDA</div>
+            <div class="next-question-text" id="nextQuestionText">Chiedere il prossimo dato mancante.</div>
+            <button class="copy-btn" id="copyQuestionBtn" type="button">Copia</button>
+          </div>
+
+          <div class="missing-section" id="missingSection">
+            <div class="missing-label">ELEMENTI MANCANTI</div>
+            <div class="missing-chips" id="missingChips">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <div class="docs-section" id="docsSection">
+            <div class="docs-label">DOCUMENTI RICHIESTI</div>
+            <div id="docsList">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <div class="siu-panel" id="siuPanelRight" style="display:none;">
+            <!-- Alternate SIU panel on right -->
+          </div>
+
+          <!-- Hidden handoff for backward compat -->
+          <dl id="handoff" style="display:none;"></dl>
+          <div id="packetProgress" style="display:none;">0%</div>
+          <div id="timeline" style="display:none;" aria-live="polite"></div>
+
+          <button class="cta-button" id="openPacket" type="button">Apri anteprima fascicolo →</button>
+        </aside>
+
+      </section>
+    </div>
+
+    <!-- ═══ PACKET DIALOG ═══ -->
+    <dialog id="packetDialog" class="packet-dialog">
+      <div class="dialog-header">
+        <h2>Fascicolo Liquidatore — Anteprima</h2>
+        <button id="closePacket" class="dialog-close-btn" type="button">Chiudi</button>
+      </div>
+      <pre id="packetMarkdown"></pre>
+    </dialog>
+
+    <!-- ═══ FLOATING MONITOR ═══ -->
+    <button class="monitor-fab" onclick="window.open('/monitor', '_blank')" title="Apri Dashboard Monitor" aria-label="Apri Dashboard Monitor">📊</button>
+
+    <script>
+/* ═══════════════════════════════════════════════════════════════════════
+   PRATICAAI — Complete Application Logic
+   All original data logic preserved, visual layer completely replaced.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+const transcriptEl = document.querySelector("#transcript");
+const claimFieldsEl = document.querySelector("#claimFields");
+const timelineEl = document.querySelector("#timeline");
+const handoffEl = document.querySelector("#handoff");
+const packetMarkdownEl = document.querySelector("#packetMarkdown");
+const packetDialog = document.querySelector("#packetDialog");
+const packetProgress = document.querySelector("#packetProgress");
+const micButton = document.querySelector("#micButton");
+const newIntakeButton = document.querySelector("#newIntakeButton");
+const resetButton = document.querySelector("#resetButton");
+const textForm = document.querySelector("#textForm");
+const textInput = document.querySelector("#textInput");
+const modelLabel = document.querySelector("#modelLabel");
+
+/* ─── NEW UI ELEMENTS ─── */
+const sessionChipEl = document.querySelector("#sessionChip");
+const callStrip = document.querySelector("#callStrip");
+const callTimerEl = document.querySelector("#callTimer");
+const callTypeChipEl = document.querySelector("#callTypeChip");
+const callLocationChipEl = document.querySelector("#callLocationChip");
+const avatarCircle = document.querySelector("#avatarCircle");
+const sofiaState = document.querySelector("#sofiaState");
+const sofiaStateText = document.querySelector("#sofiaStateText");
+const waveformPath = document.querySelector("#waveformPath");
+const fascicoloIdEl = document.querySelector("#fascicoloId");
+const fascicoloDateEl = document.querySelector("#fascicoloDate");
+const progressArc = document.querySelector("#progressArc");
+const progressText = document.querySelector("#progressText");
+const statusRowEl = document.querySelector("#statusRow");
+const dispositionCard = document.querySelector("#dispositionCard");
+const dispositionTitle = document.querySelector("#dispositionTitle");
+const dispositionDesc = document.querySelector("#dispositionDesc");
+const nextQuestionText = document.querySelector("#nextQuestionText");
+const missingChipsEl = document.querySelector("#missingChips");
+
+const DEFAULT_API_ORIGIN = "http://127.0.0.1:4177";
+const API_ORIGIN = window.location.protocol === "file:" ? DEFAULT_API_ORIGIN : window.location.origin;
+const WS_ORIGIN = API_ORIGIN.replace(/^http/, "ws");
+
+if (window.location.protocol === "file:") {
+  window.location.replace(`${API_ORIGIN}/index.html`);
+}
+
+/* ─── Italian display label mappings ─── */
+
+const CLAIM_TYPE_LABELS = {
+  'rc_auto': 'RC Auto',
+  'kasko': 'Kasko',
+  'furto_veicolo': 'Furto Veicolo',
+  'incendio': 'Incendio e Scoppio',
+  'furto_casa': 'Furto Abitazione',
+  'acqua_condotta': 'Acqua Condotta',
+  'infortuni': 'Infortuni',
+  'rc_generale': 'RC Generale',
+  'tutela_legale': 'Tutela Legale',
+  'cristalli': 'Cristalli',
+  'grandine': 'Grandine',
+  'viaggio': 'Assicurazione Viaggio',
+  'other': 'Altro',
+};
+
+const SEVERITY_LABELS = {
+  'low': 'Bassa',
+  'medium': 'Media',
+  'high': 'Alta',
+  'critical': 'Critica',
+};
+
+const STATUS_LABELS = {
+  'in_acquisizione': 'In acquisizione',
+  'in_attesa_documenti': 'In attesa documenti',
+  'in_lavorazione': 'In lavorazione',
+  'in_perizia': 'In perizia',
+  'definito': 'Definito',
+  'rigettato': 'Rigettato',
+  'sospeso_siu': '⚠ SIU',
+  'valid': 'Valido',
+  'incomplete': 'Incompleto',
+  'invalid': 'Non valido',
+  'escalate': 'Escalation',
+};
+
+const ROUTING_LABELS = {
+  'ready_for_adjuster': 'Pronto per liquidatore',
+  'pending_documents': 'In attesa documenti',
+  'escalate_to_supervisor': 'Escalation supervisore',
+  'flag_for_siu': '⚠ Segnalato SIU',
+  'emergency_routing': '🆘 Emergenza',
+  'card_gestionario': 'CARD — Risarcimento diretto',
+  'rc_terzi_tradizionale': 'Procedura ordinaria RC',
+  'consap': 'CONSAP — Fondo Garanzia',
+  'emergency_escalation': '🆘 Escalation emergenza',
+  'needs_docs': 'In attesa documenti',
+  'special_investigation': 'Indagine speciale SIU',
+};
+
+const DOC_TYPE_LABELS = {
+  'denuncia_di_sinistro': 'Denuncia di sinistro',
+  'modulo_cai_cid': 'Modulo CAI/CID',
+  'verbale_polizia': 'Verbale di polizia',
+  'verbale_carabinieri': 'Verbale carabinieri',
+  'fattura_riparazione': 'Fattura di riparazione',
+  'preventivo_riparazione': 'Preventivo riparazione',
+  'referto_medico': 'Referto medico',
+  'denuncia_furto': 'Denuncia di furto',
+  'foto_danni': 'Fotografie dei danni',
+  'relazione_perito': 'Relazione del perito',
+  'atto_di_citazione': 'Atto di citazione',
+};
+
+/* ─── State ─── */
+
+let liveSocket = null;
+let audioContext = null;
+let inputProcessor = null;
+let inputSource = null;
+let audioStream = null;
+let isRecording = false;
+let nextPlaybackTime = 0;
+let sessionId = null;
+let state = null;
+let closeAfterAgentTurn = false;
+let escalationActive = false;
+let callStartTime = null;
+let callTimerInterval = null;
+
+const initialFields = [
+  { title: "Identità", fields: [["claimant", "Nome Assicurato"], ["policy", "Numero di Polizza"], ["contact", "Contatto"]] },
+  { title: "Sinistro", fields: [["type", "Tipo di Sinistro"], ["date", "Data del Sinistro"], ["time", "Data di Denuncia"], ["location", "Luogo del Sinistro"], ["description", "Descrizione del Danno"]] },
+  { title: "Sicurezza", fields: [["injuries", "Lesioni"], ["hazards", "Pericoli presenti"], ["medical", "Intervento medico"]] },
+  { title: "Prove", fields: [["police", "N. verbale/denuncia"], ["photos", "Prove Disponibili"], ["tow", "Info rimozione"], ["otherDriver", "Controparte"]] },
+];
+
+const emptyState = {
+  route: "needs_docs",
+  progress: 0,
+  fields: Object.fromEntries(
+    initialFields.flatMap((group) =>
+      group.fields.map(([id, label]) => [
+        id,
+        { label, value: `Mancante: ${label.toLowerCase()}`, status: "missing", source: "—" },
+      ])
+    )
+  ),
+  transcript: [{ speaker: "Agente Sofia", text: `Connessione al backend di acquisizione su ${API_ORIGIN}...` }],
+  events: [{ tone: "warning", title: "Connessione in corso", detail: `In attesa di ${API_ORIGIN}/api/sessions.`, rule: "API-000" }],
+  handoff: {
+    "Riepilogo": "Sessione backend non ancora avviata.",
+    "Priorità": "In attesa",
+    "Azioni richieste": "Avviare una nuova sessione di acquisizione.",
+    "Allegati": "Nessuno",
+    "Prossima azione": "Connettersi al backend API.",
+  },
+  packet_markdown: "# Fascicolo Liquidatore — Anteprima\n\nIn attesa della sessione backend.",
+};
+
+const routeLabels = {
+  emergency_escalation: "🆘 Escalation emergenza",
+  needs_docs: "In attesa documenti",
+  special_investigation: "Indagine speciale SIU",
+  ready_for_adjuster: "Pronto per liquidatore",
+};
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function now() {
+  return new Date().toLocaleString('it-IT', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+}
+
+function nowTime() {
+  return new Date().toLocaleTimeString('it-IT', { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+}
+
+function setState(nextState) {
+  state = nextState || emptyState;
+  if (state.model) {
+    modelLabel.textContent = state.model;
+  }
+  render();
+}
+
+function render() {
+  renderTranscript();
+  renderFields();
+  renderTimeline();
+  renderHandoff();
+  renderPacket();
+  renderItalianExtras();
+  renderProgressCircle();
+  renderDisposition();
+  renderCallStrip();
+  renderMissingChips();
+}
+
+/* ─── NEW RENDER FUNCTIONS ─── */
+
+function renderProgressCircle() {
+  const pct = Math.max(0, Math.min(100, Number(state.progress || 0)));
+  const circumference = 2 * Math.PI * 28; // r=28
+  const offset = circumference - (pct / 100) * circumference;
+  progressArc.style.strokeDashoffset = offset;
+  progressText.textContent = `${pct}%`;
+}
+
+function renderDisposition() {
+  const guidance = buildOperatorGuidance();
+  const route = state.route || "needs_docs";
+
+  // Disposition card
+  dispositionCard.className = 'disposition-card';
+  if (route === 'emergency_escalation' || route === 'emergency_routing') {
+    dispositionCard.classList.add('emergency');
+    dispositionCard.querySelector('.disposition-icon').textContent = '🆘';
+    dispositionTitle.textContent = 'ESCALATION EMERGENZA';
+    dispositionDesc.textContent = guidance.priority;
+  } else if (route === 'ready_for_adjuster') {
+    dispositionCard.classList.add('ready');
+    dispositionCard.querySelector('.disposition-icon').textContent = '✅';
+    dispositionTitle.textContent = 'PRONTO PER LIQUIDATORE';
+    dispositionDesc.textContent = 'Il fascicolo è pronto per l\'assegnazione al liquidatore.';
+  } else {
+    dispositionCard.classList.add('in-progress');
+    dispositionCard.querySelector('.disposition-icon').textContent = '📋';
+    dispositionTitle.textContent = 'RACCOLTA IN CORSO';
+    dispositionDesc.textContent = guidance.readinessCopy;
+  }
+
+  // Next question
+  nextQuestionText.textContent = guidance.nextAction;
+
+  // Escalation banner
+  if (escalationActive) {
+    dispositionCard.classList.remove('in-progress', 'ready');
+    dispositionCard.classList.add('emergency');
+    dispositionCard.querySelector('.disposition-icon').textContent = '⚠';
+    dispositionTitle.textContent = 'ESCALATION RICHIESTA';
+    dispositionDesc.textContent = 'Operatore umano in arrivo.';
+  }
+}
+
+function renderMissingChips() {
+  const guidance = buildOperatorGuidance();
+  missingChipsEl.innerHTML = guidance.missingItems
+    .map((item, i) => {
+      const cls = i < 3 ? 'critical' : 'warning';
+      return `<span class="missing-chip ${cls}">${escapeHtml(item)}</span>`;
+    })
+    .join('');
+}
+
+function renderCallStrip() {
+  if (isRecording || (liveSocket && liveSocket.readyState === WebSocket.OPEN)) {
+    callStrip.classList.add('active');
+    // Update type and location chips
+    const typeField = state.fields?.type;
+    if (typeField && typeField.status !== 'missing') {
+      const displayType = CLAIM_TYPE_LABELS[typeField.value] || typeField.value;
+      callTypeChipEl.textContent = displayType;
+    }
+    const locField = state.fields?.location;
+    if (locField && locField.status !== 'missing') {
+      callLocationChipEl.textContent = locField.value;
+    }
+  } else {
+    callStrip.classList.remove('active');
+  }
+}
+
+function startCallTimer() {
+  callStartTime = Date.now();
+  if (callTimerInterval) clearInterval(callTimerInterval);
+  callTimerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - callStartTime) / 1000);
+    const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    const secs = String(elapsed % 60).padStart(2, '0');
+    callTimerEl.textContent = `${mins}:${secs}`;
+  }, 1000);
+}
+
+function stopCallTimer() {
+  if (callTimerInterval) {
+    clearInterval(callTimerInterval);
+    callTimerInterval = null;
+  }
+}
+
+/* ─── WAVEFORM ANIMATION ─── */
+let waveAnimFrame = null;
+let wavePhase = 0;
+
+function animateWaveform(active) {
+  if (!active) {
+    cancelAnimationFrame(waveAnimFrame);
+    waveformPath.setAttribute('d', 'M 0 20 Q 10 20 20 20 Q 30 20 40 20 Q 50 20 60 20 Q 70 20 80 20');
+    avatarCircle.classList.remove('speaking');
+    return;
+  }
+  avatarCircle.classList.add('speaking');
+  function step() {
+    wavePhase += 0.08;
+    const amp = 8 + Math.sin(wavePhase * 0.5) * 4;
+    const y1 = 20 + Math.sin(wavePhase) * amp;
+    const y2 = 20 + Math.sin(wavePhase + 1) * (amp * 0.8);
+    const y3 = 20 + Math.sin(wavePhase + 2) * amp;
+    const y4 = 20 + Math.sin(wavePhase + 3) * (amp * 0.6);
+    waveformPath.setAttribute('d', `M 0 20 Q 10 ${y1} 20 ${y2} Q 30 ${y3} 40 20 Q 50 ${y4} 60 ${y1} Q 70 ${y2} 80 20`);
+    waveAnimFrame = requestAnimationFrame(step);
+  }
+  step();
+}
+
+function setSofiaState(stateKey) {
+  sofiaState.className = 'sofia-state';
+  switch (stateKey) {
+    case 'listening':
+      sofiaStateText.textContent = 'In ascolto';
+      sofiaState.style.cssText = '';
+      animateWaveform(false);
+      break;
+    case 'speaking':
+      sofiaStateText.textContent = 'Sta parlando';
+      sofiaState.classList.add('speaking');
+      animateWaveform(true);
+      break;
+    case 'processing':
+      sofiaStateText.textContent = 'Elaborazione...';
+      sofiaState.classList.add('processing');
+      animateWaveform(false);
+      break;
+  }
+}
+
+/* ─── TRANSCRIPT RENDER ─── */
+function renderTranscript() {
+  transcriptEl.innerHTML = state.transcript
+    .map((turn) => {
+      const isAgent = turn.speaker === "Agent" || turn.speaker === "Agente Sofia";
+      const initials = isAgent ? "AI" : "AS";
+      const cls = isAgent ? "agent" : "claimant";
+      return `
+        <div class="msg-bubble ${cls}">
+          <div class="msg-avatar">${initials}</div>
+          <div class="msg-content">
+            <div class="msg-text">${escapeHtml(turn.text)}</div>
+            <div class="msg-time">${escapeHtml(turn.time || nowTime())}</div>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+  transcriptEl.scrollTop = transcriptEl.scrollHeight;
+}
+
+/* ─── FIELDS RENDER (new card style) ─── */
+function renderFields() {
+  const fieldLayout = [
+    { row: [["type", "Tipo sinistro"], ["date", "Data sinistro"]] },
+    { row: [["claimant", "Nome assicurato"], ["policy", "Numero polizza"]] },
+    { row: [["location", "Luogo del sinistro"], ["contact", "Contatto"]] },
+    { row: [["description", "Descrizione del danno"]], fullWidth: true },
+  ];
+
+  let html = '';
+  for (const group of fieldLayout) {
+    for (const [id, label] of group.row) {
+      const field = state.fields[id] || { label, value: `Mancante: ${label.toLowerCase()}`, status: "missing", source: "—" };
+      let displayValue = field.value;
+      if (id === "type" && CLAIM_TYPE_LABELS[displayValue]) {
+        displayValue = CLAIM_TYPE_LABELS[displayValue];
+      }
+
+      const isFilled = field.status === 'complete' || field.status === 'pending' || field.status === 'urgent';
+      const isMissing = field.status === 'missing';
+      const isUrgent = field.status === 'urgent';
+      let cardClass = 'field-card';
+      if (isFilled && !isUrgent) cardClass += ' filled';
+      if (isMissing) cardClass += ' missing-field';
+      if (isUrgent) cardClass += ' urgent-field filled';
+      if (group.fullWidth) cardClass += ' full-width';
+
+      const sourceText = field.source && field.source !== '—' ? `Sofia · ${field.source}` : '';
+      const displayVal = isMissing && displayValue.startsWith('Mancante:') ? '—' : displayValue;
+      if (isMissing && !displayValue.startsWith('Mancante:') && displayValue.startsWith('Missing:')) {
+        // English fallback
+      }
+
+      html += `
+        <div class="${cardClass}" data-field-id="${id}">
+          <div class="field-card-label">${escapeHtml(label)}</div>
+          <div class="field-card-value">${escapeHtml(isMissing ? (isUrgent ? displayValue : '—') : displayVal)}</div>
+          <div class="field-card-source">${escapeHtml(sourceText)}</div>
+        </div>
+      `;
+    }
+  }
+  claimFieldsEl.innerHTML = html;
+
+  // Update fascicolo header
+  if (sessionId) {
+    const shortId = sessionId.split('-').slice(0, 3).join('-').toUpperCase();
+    fascicoloIdEl.textContent = `SIN-${shortId.slice(0,13)}`;
+    sessionChipEl.textContent = `SIN-${shortId.slice(0,13)}`;
+  }
+}
+
+/* ─── Italian-specific field rendering ─── */
+
+function setField(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value || '—';
+
+  // Also update card styling
+  const cardEl = document.getElementById(`card-${id.replace('field-', '')}`);
+  if (cardEl && value && value !== '—') {
+    cardEl.classList.add('filled');
+  }
+}
+
+function updateStatusBadge(statusKey) {
+  const badge = document.getElementById('claimStatusBadge');
+  if (!statusKey || !badge) return;
+  const label = STATUS_LABELS[statusKey] || statusKey;
+  badge.textContent = label;
+  badge.className = 'status-badge';
+  if (statusKey === 'definito' || statusKey === 'valid') {
+    badge.classList.add('verde');
+  } else if (statusKey === 'rigettato' || statusKey === 'invalid') {
+    badge.classList.add('terra');
+  } else if (statusKey === 'sospeso_siu' || statusKey === 'escalate') {
+    badge.classList.add('terra');
+  } else if (statusKey === 'in_perizia') {
+    badge.classList.add('blu');
+  } else if (statusKey === 'in_attesa_documenti' || statusKey === 'incomplete') {
+    badge.classList.add('gold');
+  } else {
+    badge.classList.add('blu');
+  }
+}
+
+function showSiuSignals(signals) {
+  const panel = document.getElementById('siuSignalsPanel');
+  const list = document.getElementById('siuSignalsList');
+  if (!panel || !list) return;
+  if (!signals || signals.length === 0) {
+    panel.classList.remove('visible');
+    panel.style.display = 'none';
+    return;
+  }
+  list.innerHTML = signals.map(s => `<span class="siu-signal">${escapeHtml(s)}</span>`).join('');
+  panel.classList.add('visible');
+  panel.style.display = 'block';
+}
+
+function renderItalianExtras() {
+  if (!state) return;
+
+  setField('field-codice-fiscale', state.codice_fiscale);
+  setField('field-targa-veicolo', state.targa_veicolo);
+  setField('field-provincia', state.provincia);
+  setField('field-cap', state.cap);
+  setField('field-numero-verbale', state.numero_verbale_polizia);
+  setField('field-codice-cid', state.codice_cid);
+
+  // CARD/CONSAP
+  const cardChip = document.getElementById('cardChip');
+  const consapChip = document.getElementById('consapChip');
+  const cardEl = document.getElementById('field-card-eligible');
+  const consapEl = document.getElementById('field-consap');
+
+  if (state.card_eligible === true) {
+    cardEl.textContent = '✅ Idoneo';
+    cardChip.className = 'regime-chip eligible';
+    cardChip.querySelector('.regime-chip-icon').textContent = '✅';
+  } else if (state.card_eligible === false) {
+    cardEl.textContent = '❌ Non idoneo';
+    cardChip.className = 'regime-chip';
+    cardChip.querySelector('.regime-chip-icon').textContent = '❌';
+  } else {
+    cardEl.textContent = '—';
+  }
+
+  if (state.consap_routing === true) {
+    consapEl.textContent = '⚠ Applicabile';
+    consapChip.className = 'regime-chip warning';
+    consapChip.querySelector('.regime-chip-icon').textContent = '⚠';
+  } else if (state.consap_routing === false) {
+    consapEl.textContent = 'Non applicabile';
+  } else {
+    consapEl.textContent = '—';
+  }
+
+  updateStatusBadge(state.stato_sinistro || state.intake_status);
+
+  if (state.siu_flagged) {
+    showSiuSignals(state.siu_signals || []);
+  } else {
+    showSiuSignals([]);
+  }
+
+  if (state.estimated_loss_eur) {
+    setField('field-estimated-loss',
+      '€ ' + Number(state.estimated_loss_eur).toLocaleString('it-IT', {minimumFractionDigits: 2}));
+  }
+}
+
+/* ─── Operator guidance (timeline) ─── */
+
+function renderTimeline() {
+  // Timeline is kept for backward compat but hidden — data flows to new UI
+}
+
+function buildOperatorGuidance() {
+  const route = state.route || "needs_docs";
+  const handoff = state.handoff || {};
+  const missingEvent = [...(state.events || [])].reverse().find((event) => event.rule === "INTAKE-001" && event.title === "Missing intake facts");
+  const missingItems = missingEvent?.detail
+    ? missingEvent.detail.split(",").map((item) => item.trim()).filter(Boolean)
+    : Object.values(state.fields || {})
+        .filter((field) => field.status === "missing")
+        .map((field) => field.label)
+        .slice(0, 6);
+  const requiredActions = splitList(handoff["Azioni richieste"] || handoff["Required actions"]);
+  const routeTone = route === "emergency_escalation" ? "danger" : route === "ready_for_adjuster" ? "success" : "warning";
+  const readinessCopy =
+    route === "ready_for_adjuster"
+      ? "Il fascicolo è pronto per l'assegnazione al liquidatore."
+      : requiredActions.length
+        ? `Raccogliere o confermare: ${requiredActions.slice(0, 2).join(", ")}.`
+        : "Continuare a raccogliere le informazioni mancanti evidenziate.";
+  return {
+    routeLabel: ROUTING_LABELS[route] || routeLabels[route] || route,
+    routeTone,
+    priority: handoff["Priorità"] || handoff.Priority || "In attesa dei dati del sinistro.",
+    nextAction: handoff["Prossima azione"] || handoff["Next best action"] || "Chiedere il prossimo dato mancante.",
+    missingItems: missingItems.length ? missingItems : ["Nessun elemento bloccante"],
+    readinessCopy,
+    auditEvents: state.events || [],
+  };
+}
+
+function splitList(value) {
+  return String(value || "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function renderHandoff() {
+  handoffEl.innerHTML = Object.entries(state.handoff)
+    .map(([label, value]) => `<div class="handoff-row"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`)
+    .join("");
+  packetProgress.textContent = `${state.progress}%`;
+}
+
+function renderPacket() {
+  packetMarkdownEl.textContent = state.packet_markdown || "# Fascicolo Liquidatore\n\nNessun fascicolo generato.";
+}
+
+function appendLocalError(message) {
+  setState({
+    ...state,
+    transcript: [...state.transcript, { speaker: "Agente Sofia", text: message, time: nowTime() }],
+    events: [...state.events, { tone: "danger", title: "Errore backend API", detail: message, rule: "API-ERR", time: nowTime() }],
+  });
+}
+
+function sameTranscriptTurn(left, right) {
+  const leftText = String(left?.text || "").trim();
+  const rightText = String(right?.text || "").trim();
+  if (!leftText || !rightText || left?.speaker !== right?.speaker) return false;
+  return leftText === rightText || leftText.includes(rightText) || rightText.includes(leftText);
+}
+
+function mergeLiveTranscript(authoritative, local) {
+  const merged = [...(authoritative || [])];
+  for (const turn of local || []) {
+    if (!turn.streaming || !String(turn.text || "").trim()) continue;
+    if (merged.some((item) => sameTranscriptTurn(item, turn))) continue;
+    merged.push(turn);
+  }
+  return merged;
+}
+
+function applyServerState(nextState) {
+  setState({
+    ...nextState,
+    transcript: mergeLiveTranscript(nextState.transcript, state?.transcript),
+  });
+}
+
+function upsertStreamingTurn(speaker, text, final = false) {
+  if (!String(text || "").trim()) return;
+  const normalizedSpeaker = (speaker === "Agent") ? "Agente Sofia" : (speaker === "Claimant" ? "Assicurato" : speaker);
+  const transcript = [...state.transcript];
+  const last = transcript[transcript.length - 1];
+  if (last && last.speaker === normalizedSpeaker && last.streaming) {
+    transcript[transcript.length - 1] = { speaker: normalizedSpeaker, text, time: last.time, streaming: !final };
+  } else if (final && last && !last.streaming && sameTranscriptTurn(last, { speaker: normalizedSpeaker, text })) {
+    return;
+  } else {
+    transcript.push({ speaker: normalizedSpeaker, text, time: nowTime(), streaming: !final });
+  }
+  setState({ ...state, transcript });
+
+  // Update Sofia state
+  if (normalizedSpeaker === "Agente Sofia") {
+    setSofiaState(final ? 'listening' : 'speaking');
+  }
+}
+
+function claimantAskedToClose(text) {
+  return /\b(that'?s all|nothing else|no,?\s*that'?s it|that is it|i'?m done|goodbye|bye|è tutto|basta così|non ho altro|arrivederci|ho finito)\b/i.test(text);
+}
+
+function agentClosedConversation(text) {
+  return /\b(have a good|adjuster will|will be in touch|claim packet|initial intake|next steps|liquidatore|fascicolo|buona giornata|prossimi passi)\b/i.test(text);
+}
+
+function applyRealtimeHints(text) {
+  const lower = text.toLowerCase();
+  const nextFields = { ...state.fields };
+  const nextEvents = [...state.events];
+  let nextRoute = state.route;
+  let changed = false;
+
+  const update = (id, value, status = "pending", source = "audio in diretta") => {
+    const current = nextFields[id];
+    if (!current || current.value === value) return;
+    nextFields[id] = { ...current, value, status, source };
+    changed = true;
+  };
+
+  const event = (rule, title, detail, tone = "warning") => {
+    const key = `${rule}:${title}`;
+    if (nextEvents.some((item) => `${item.rule}:${item.title}` === key)) return;
+    nextEvents.push({ rule, title, detail, tone, time: nowTime() });
+    changed = true;
+  };
+
+  const phone = text.match(/\b(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]\d{3}[-.\s]\d{4}\b/) || text.match(/\b\+?39\s?\d{2,4}[\s.-]?\d{4,8}\b/);
+  if (phone) {
+    update("contact", phone[0], "pending", "trascrizione in diretta");
+    event("LIVE-INFO", "Contatto rilevato", "Numero di telefono individuato nell'audio.", "success");
+  }
+
+  const policy = text.match(/\b(?:polizza|policy|auto|home|claim)\s*(?:numero|number|#|is|:)?\s*([A-Z0-9][A-Z0-9-]{3,})\b/i);
+  if (policy && /\d/.test(policy[1])) {
+    update("policy", policy[1].toUpperCase(), "pending", "trascrizione in diretta");
+    event("LIVE-INFO", "Numero polizza rilevato", "Identificativo polizza individuato nell'audio.", "success");
+  }
+
+  const name = text.match(/\b(?:mi chiamo|sono|my name is|this is)\s+([a-zà-ú]+(?:\s+[a-zà-ú]+){0,1})(?=\s+(?:e|and|con|with|from|calling|telefono|polizza|policy|$))/i)
+    || text.match(/\b(?:i am|i'm)\s+([a-z]+(?:\s+[a-z]+){0,1})(?=\s+(?:and|with|from|calling|phone|policy|$))/i);
+  if (name) {
+    update("claimant", toTitleCase(name[1]), "pending", "trascrizione in diretta");
+    event("LIVE-INFO", "Nome assicurato rilevato", "Nome candidato individuato nell'audio.", "success");
+  }
+
+  const cf = text.match(/\b([A-Z]{6}\d{2}[A-EHLMPRST]\d{2}[A-Z]\d{3}[A-Z])\b/i);
+  if (cf) {
+    update("codice_fiscale_hint", cf[1].toUpperCase(), "pending", "trascrizione in diretta");
+    event("LIVE-INFO", "Codice fiscale rilevato", "Codice fiscale individuato nell'audio.", "success");
+  }
+
+  const targa = text.match(/\b([A-Z]{2}\s?\d{3}\s?[A-Z]{2})\b/i);
+  if (targa) {
+    update("targa_hint", targa[1].toUpperCase().replace(/\s/g, ''), "pending", "trascrizione in diretta");
+    event("LIVE-INFO", "Targa rilevata", "Targa veicolo individuata nell'audio.", "success");
+  }
+
+  if (/\b(hit|rear ended|rear-ended|crash|accident|collision|side[- ]?swiped|tamponamento|incidente|scontro|collisione|investimento)/.test(lower)) {
+    update("type", "rc_auto", "pending", "trascrizione in diretta");
+    update("description", compactText(text), "pending", "trascrizione in diretta");
+    event("LIVE-CLASSIFY", "Segnale incidente stradale", "Linguaggio relativo a collisione rilevato nell'audio.", "warning");
+  } else if (/\b(flood|water|leak|pipe|basement|sump|allagamento|perdita|tubo|acqua|infiltrazione)/.test(lower)) {
+    update("type", "acqua_condotta", "pending", "trascrizione in diretta");
+    update("description", compactText(text), "pending", "trascrizione in diretta");
+    event("LIVE-CLASSIFY", "Segnale danno da acqua", "Linguaggio relativo a danni idrici rilevato nell'audio.", "warning");
+  } else if (/\b(stolen|theft|robbed|missing laptop|taken|rubato|furto|sottratto|sparito)/.test(lower)) {
+    update("type", "furto_veicolo", "pending", "trascrizione in diretta");
+    update("description", compactText(text), "pending", "trascrizione in diretta");
+    event("LIVE-CLASSIFY", "Segnale furto", "Linguaggio relativo a furto rilevato nell'audio.", "warning");
+  }
+
+  const safetyText = stripNegatedSafety(lower);
+  if (/\b(neck pain|injur|hurt|ambulance|hospital|urgent care|bleeding|pain|ferito|ospedale|ambulanza|soccorso|emorragia|dolore|pronto soccorso|118)/.test(safetyText)) {
+    update("injuries", compactText(text), "urgent", "trascrizione in diretta");
+    event("SAFE-002", "Segnale lesioni rilevato", "L'audio menziona lesioni o necessità di intervento medico.", "danger");
+    nextRoute = "emergency_escalation";
+    changed = true;
+  } else if (safetyText !== lower) {
+    update("injuries", "Nessuna lesione dichiarata", "pending", "trascrizione in diretta");
+    event("SAFE-OK", "Nessuna lesione", "L'audio nega lesioni o problemi medici.", "success");
+  }
+
+  if (/\b(police|officer|report|case number|incident number|carabinieri|polizia|verbale|denuncia|vigili)/.test(lower)) {
+    update("police", compactText(text), "pending", "trascrizione in diretta");
+    event("DOC-001", "Segnale verbale/denuncia", "Linguaggio relativo a forze dell'ordine rilevato nell'audio.", "warning");
+  }
+
+  if (/\b(photo|photos|picture|video|receipt|estimate|tow|towed|storage|foto|fotografie|filmato|ricevuta|preventivo|carro attrezzi|carrozzeria)/.test(lower)) {
+    update("photos", compactText(text), "pending", "trascrizione in diretta");
+    if (/\b(tow|towed|storage|carro attrezzi|rimozione|deposito)/.test(lower)) {
+      update("tow", compactText(text), "pending", "trascrizione in diretta");
+    }
+    event("DOC-001", "Segnale prove documentali", "Linguaggio relativo a prove o documenti rilevato nell'audio.", "warning");
+  }
+
+  const location = text.match(/\b(?:in|su|a|on|at|near|via|piazza|corso|viale)\s+([A-Z0-9][A-Za-zÀ-ú0-9 .'-]*(?:street|st|road|rd|avenue|ave|highway|hwy|i-\d+|via|piazza|corso|viale|strada|km\s*\d+))/i);
+  if (location) {
+    update("location", location[1].trim(), "pending", "trascrizione in diretta");
+    event("LIVE-INFO", "Luogo rilevato", "Luogo del sinistro individuato nell'audio.", "success");
+  }
+
+  if (/\b(today|yesterday|last night|this morning|minutes ago|\d{1,2}:\d{2}|oggi|ieri|ieri sera|stamattina|minuti fa)/.test(lower)) {
+    update("date", compactText(text), "pending", "trascrizione in diretta");
+    event("LIVE-INFO", "Data sinistro rilevata", "Data o ora del sinistro individuata nell'audio.", "success");
+  }
+
+  if (changed) {
+    const completed = Object.values(nextFields).filter((field) => field.status === "complete" || field.status === "urgent" || field.status === "pending").length;
+    setState({
+      ...state,
+      route: nextRoute,
+      fields: nextFields,
+      events: nextEvents.slice(-14),
+      progress: Math.max(state.progress, Math.round((completed / Object.keys(nextFields).length) * 100)),
+    });
+  }
+}
+
+function stripNegatedSafety(text) {
+  return text
+    .replace(/\b(?:no|not|none|without|denies|denied|nessun[oa]?|senza|nega|negato)\s+(?:one\s+)?(?:was\s+)?(?:injur\w*|hurt|pain|medical attention|ambulance|hospital|unsafe|hazard\w*|danger|ferit\w*|lesion\w*|ospedale|ambulanza|dolore)\b/gi, " ")
+    .replace(/\b(?:injur\w*|hurt|pain|medical attention|ambulance|hospital|unsafe|hazard\w*|danger|ferit\w*|lesion\w*|ospedale|ambulanza|dolore)\s+(?:was|were|is|are|è|sono)?\s*(?:reported\s+)?(?:no|none|not reported|denied|negat\w*|nessun\w*)\b/gi, " ");
+}
+
+function compactText(text) {
+  const trimmed = text.trim().replace(/\s+/g, " ");
+  return trimmed.length > 96 ? `${trimmed.slice(0, 93)}...` : trimmed;
+}
+
+function toTitleCase(value) {
+  return value
+    .trim()
+    .split(/\s+/)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .join(" ");
+}
+
+/* ─── API & session management ─── */
+
+async function api(path, options = {}) {
+  const response = await fetch(`${API_ORIGIN}${path}`, {
+    headers: { "Content-Type": "application/json" },
+    ...options,
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(payload.detail || `Richiesta fallita con stato ${response.status}`);
+  }
+  return payload;
+}
+
+async function createSession() {
+  stopLiveVoice(false);
+  escalationActive = false;
+  setSofiaState('processing');
+  textInput.disabled = true;
+  setState(emptyState);
+  try {
+    const payload = await api("/api/sessions", { method: "POST" });
+    sessionId = payload.session_id;
+    setState(payload.state);
+    modelLabel.textContent = payload.model;
+    setSofiaState('listening');
+    textInput.disabled = false;
+    textInput.focus();
+    // Update fascicolo date
+    const now = new Date();
+    fascicoloDateEl.textContent = `Pratica aperta il ${now.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })} · ore ${now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}`;
+  } catch (error) {
+    setSofiaState('listening');
+    appendLocalError(error.message);
+  }
+}
+
+async function sendClaimantTurn(text) {
+  if (liveSocket && liveSocket.readyState === WebSocket.OPEN) {
+    liveSocket.send(JSON.stringify({ type: "text", text }));
+    upsertStreamingTurn("Assicurato", text, true);
+    return;
+  }
+  if (!sessionId) {
+    appendLocalError("Nessuna sessione backend attiva. Avviare prima una nuova acquisizione.");
+    return;
+  }
+  upsertStreamingTurn("Assicurato", text, true);
+  setSofiaState('processing');
+  textInput.disabled = true;
+  try {
+    const payload = await api("/api/message", {
+      method: "POST",
+      body: JSON.stringify({ session_id: sessionId, text }),
+    });
+    setState(payload.state);
+    modelLabel.textContent = payload.model;
+    setSofiaState('listening');
+  } catch (error) {
+    setSofiaState('listening');
+    appendLocalError(error.message);
+  } finally {
+    textInput.disabled = false;
+    textInput.focus();
+  }
+}
+
+/* ─── Live voice ─── */
+
+async function startLiveVoice() {
+  if (!navigator.mediaDevices?.getUserMedia || !window.AudioContext) {
+    appendLocalError("Questo browser non può acquisire audio dal microfono. Utilizzare la casella di testo.");
+    return;
+  }
+  try {
+    await connectLiveVoice();
+    audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioContext = audioContext || new AudioContext();
+    await audioContext.resume();
+    inputSource = audioContext.createMediaStreamSource(audioStream);
+    inputProcessor = audioContext.createScriptProcessor(4096, 1, 1);
+    inputProcessor.onaudioprocess = (event) => {
+      event.outputBuffer.getChannelData(0).fill(0);
+      if (!liveSocket || liveSocket.readyState !== WebSocket.OPEN) return;
+      const input = event.inputBuffer.getChannelData(0);
+      const pcm16 = resampleToPcm16(input, audioContext.sampleRate, 16000);
+      liveSocket.send(JSON.stringify({ type: "audio", data: arrayBufferToBase64(pcm16.buffer) }));
+    };
+    inputSource.connect(inputProcessor);
+    inputProcessor.connect(audioContext.destination);
+    isRecording = true;
+    micButton.classList.add("recording");
+    micButton.setAttribute("aria-label", "Interrompi registrazione vocale");
+    setSofiaState('listening');
+    startCallTimer();
+    renderCallStrip();
+  } catch (error) {
+    const denied = error.name === "NotAllowedError" || /denied|permission/i.test(error.message);
+    appendLocalError(
+      denied
+        ? "Accesso al microfono negato dal browser o da macOS. Si prega di consentire l'accesso al microfono per http://127.0.0.1:4177, oppure utilizzare la casella di testo."
+        : `Voce in diretta fallita: ${error.message}`
+    );
+    stopLiveVoice(false);
+  }
+}
+
+function stopLiveVoice(sendClose = true) {
+  isRecording = false;
+  closeAfterAgentTurn = false;
+  escalationActive = false;
+  micButton.classList.remove("recording");
+  micButton.setAttribute("aria-label", "Inizia registrazione vocale");
+  inputProcessor?.disconnect();
+  inputSource?.disconnect();
+  audioStream?.getTracks().forEach((track) => track.stop());
+  inputProcessor = null;
+  inputSource = null;
+  audioStream = null;
+  if (sendClose) {
+    liveSocket?.send(JSON.stringify({ type: "close" }));
+  }
+  liveSocket?.close();
+  liveSocket = null;
+  stopCallTimer();
+  animateWaveform(false);
+  setSofiaState('listening');
+  renderCallStrip();
+}
+
+async function connectLiveVoice() {
+  if (liveSocket && liveSocket.readyState === WebSocket.OPEN) return;
+  liveSocket = new WebSocket(`${WS_ORIGIN}/ws/live`);
+  liveSocket.onopen = () => {
+    setSofiaState('listening');
+    modelLabel.textContent = 'Gemini Live';
+  };
+  liveSocket.onmessage = (event) => {
+    const message = JSON.parse(event.data);
+    if (message.type === "session") {
+      sessionId = message.session_id;
+      modelLabel.textContent = message.model;
+    } else if (message.type === "transcript") {
+      upsertStreamingTurn(message.speaker, message.text, message.final);
+      if (message.speaker === "Claimant" || message.speaker === "Assicurato") {
+        applyRealtimeHints(message.text);
+        if (message.final && !escalationActive && claimantAskedToClose(message.text)) {
+          closeAfterAgentTurn = true;
+        }
+      }
+      if ((message.speaker === "Agent" || message.speaker === "Agente Sofia") && message.final && closeAfterAgentTurn && !escalationActive && agentClosedConversation(message.text)) {
+        window.setTimeout(() => stopLiveVoice(), 800);
+      }
+    } else if (message.type === "audio") {
+      playPcm24(message.data);
+      setSofiaState('speaking');
+    } else if (message.type === "state") {
+      applyServerState(message.state);
+    } else if (message.type === "interrupted") {
+      nextPlaybackTime = audioContext?.currentTime || 0;
+    } else if (message.type === "error") {
+      appendLocalError(message.message);
+    } else if (message.type === "escalation_flag") {
+      escalationActive = true;
+      closeAfterAgentTurn = false;
+      setState({
+        ...state,
+        events: [...state.events, {
+          tone: "danger",
+          title: "Escalation emergenza attivata",
+          detail: message.message || "Operatore umano notificato",
+          rule: "ESC-001",
+          time: nowTime(),
+        }],
+      });
+    }
+  };
+  liveSocket.onclose = () => {
+    if (isRecording) setSofiaState('listening');
+  };
+  liveSocket.onerror = () => appendLocalError("Errore WebSocket voce in diretta. Controllare il server backend.");
+  await new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error("Connessione voce in diretta scaduta.")), 8000);
+    liveSocket.addEventListener("open", () => {
+      clearTimeout(timeout);
+      resolve();
+    }, { once: true });
+    liveSocket.addEventListener("error", () => {
+      clearTimeout(timeout);
+      reject(new Error("Errore di connessione voce in diretta."));
+    }, { once: true });
+  });
+}
+
+/* ─── Audio utilities ─── */
+
+function resampleToPcm16(input, inputRate, outputRate) {
+  const ratio = inputRate / outputRate;
+  const outputLength = Math.floor(input.length / ratio);
+  const output = new Float32Array(outputLength);
+  for (let i = 0; i < outputLength; i += 1) {
+    const index = i * ratio;
+    const before = Math.floor(index);
+    const after = Math.min(before + 1, input.length - 1);
+    const weight = index - before;
+    output[i] = input[before] * (1 - weight) + input[after] * weight;
+  }
+  return floatToPcm16(output);
+}
+
+function floatToPcm16(float32) {
+  const pcm = new Int16Array(float32.length);
+  for (let i = 0; i < float32.length; i += 1) {
+    const sample = Math.max(-1, Math.min(1, float32[i]));
+    pcm[i] = sample < 0 ? sample * 0x8000 : sample * 0x7fff;
+  }
+  return pcm;
+}
+
+function arrayBufferToBase64(buffer) {
+  let binary = "";
+  const bytes = new Uint8Array(buffer);
+  for (let i = 0; i < bytes.byteLength; i += 1) binary += String.fromCharCode(bytes[i]);
+  return btoa(binary);
+}
+
+function base64ToInt16Array(base64) {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+  return new Int16Array(bytes.buffer);
+}
+
+function playPcm24(base64) {
+  audioContext = audioContext || new AudioContext();
+  const pcm = base64ToInt16Array(base64);
+  const audioBuffer = audioContext.createBuffer(1, pcm.length, 24000);
+  const channel = audioBuffer.getChannelData(0);
+  for (let i = 0; i < pcm.length; i += 1) channel[i] = pcm[i] / 32768;
+  const source = audioContext.createBufferSource();
+  source.buffer = audioBuffer;
+  source.connect(audioContext.destination);
+  const startAt = Math.max(audioContext.currentTime, nextPlaybackTime);
+  source.start(startAt);
+  nextPlaybackTime = startAt + audioBuffer.duration;
+}
+
+/* ─── Event listeners ─── */
+
+micButton.addEventListener("click", () => {
+  if (isRecording) stopLiveVoice();
+  else startLiveVoice();
+});
+
+newIntakeButton.addEventListener("click", createSession);
+resetButton.addEventListener("click", createSession);
+
+textForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const value = textInput.value.trim();
+  if (!value) return;
+  textInput.value = "";
+  sendClaimantTurn(value);
+});
+
+document.querySelector("#openPacket").addEventListener("click", () => packetDialog.showModal());
+document.querySelector("#closePacket").addEventListener("click", () => packetDialog.close());
+
+document.querySelector("#copyQuestionBtn").addEventListener("click", () => {
+  const text = nextQuestionText.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector("#copyQuestionBtn");
+    btn.textContent = '✓';
+    setTimeout(() => btn.textContent = 'Copia', 1500);
+  });
+});
+
+/* ─── Initialize ─── */
+createSession();
+    </script>
+  </body>
+</html>

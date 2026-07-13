@@ -1,0 +1,17 @@
+.env
+.env.local
+*.db
+*.sqlite
+sinistri_italy.db
+__pycache__/
+.venv/
+*.pyc
+.DS_Store
+nginx/ssl/
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/environments/*.tfvars
+node_modules/
+*.log
+pratica_ai_db/
