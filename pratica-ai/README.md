@@ -4,6 +4,15 @@
 
 > *"Dal telefono al fascicolo. In 5 minuti."*
 
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?logo=fastapi&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
+![Google Gemini](https://img.shields.io/badge/Gemini-Live-4285F4?logo=google&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-eu--south--1-FF9900?logo=amazonaws&logoColor=white)
+![GDPR](https://img.shields.io/badge/GDPR-Compliant-green)
+![IVASS](https://img.shields.io/badge/IVASS-Reg.40%2F2018-gold)
+![License](https://img.shields.io/badge/License-MIT-blue)
+
 ---
 
 ## Cos'è PraticaAI
@@ -33,6 +42,13 @@ Il risultato? Un fascicolo completo — con dati anagrafici, circostanze, veicol
 1. **📞 L'assicurato chiama** e descrive il sinistro a voce, come farebbe con un operatore umano
 2. **🤖 Sofia (AI) raccoglie, struttura e valida** tutti i dati necessari — tipo sinistro, parti coinvolte, circostanze, documenti
 3. **📋 Il liquidatore riceve il fascicolo completo** — strutturato, validato, con segnalazioni SIU e indicazione CARD/CONSAP
+
+---
+
+## Demo
+
+> 🎥 Video demo disponibile su richiesta
+> 📧 Contatto: sinahosseinzadeh20@gmail.com
 
 ---
 
